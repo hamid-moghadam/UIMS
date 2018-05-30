@@ -15,7 +15,6 @@ namespace UIMS.Web.Data.Extentions
             foreach (var entry in changeTracker.Entries())
             {
                 if (!(entry.Entity is ITracker baseAudit)) continue;
-
                 var now = DateTime.UtcNow;
                 switch (entry.State)
                 {
@@ -25,6 +24,8 @@ namespace UIMS.Web.Data.Extentions
                         break;
 
                     case EntityState.Added:
+                        if (entry.Entity is IEnable baseEnable)
+                            baseEnable.Enable = true;
                         baseAudit.Created = now;
                         break;
                 }

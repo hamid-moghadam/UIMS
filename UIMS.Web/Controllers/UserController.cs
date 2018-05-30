@@ -32,9 +32,9 @@ namespace UIMS.Web.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(PaginationViewModel<UserViewModel>), 200)]
-        public async Task<IActionResult> GetAll(int? pageSize = 5, int? page = 1)
+        public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            var users = await _userService.GetAll<UserViewModel>(page.Value, pageSize.Value);
+            var users = await _userService.GetAll<UserViewModel>(page, pageSize);
 
             return Ok(users);
         }
@@ -68,6 +68,11 @@ namespace UIMS.Web.Controllers
                 ModelState.AddModelError("Wrong User or Password", "نام کاربری یا کلمه عبور اشتباه است");
                 return BadRequest(ModelState);
             }
+            if (!user.Enable)
+            {
+                ModelState.AddModelError("User Is Disabled", "کاربر غیر فعال شده است.");
+                return BadRequest(ModelState);
+            }
 
             var token = GetJWTToken(user, await _userService.GetRolesAsync(user));
             var userVM = _mapper.Map<UserViewModel>(user);
@@ -77,19 +82,28 @@ namespace UIMS.Web.Controllers
 
 
         [HttpPost]
+        [Authorize]
         [SwaggerResponse(200, typeof(UserViewModel), "موفق")]
         [SwaggerResponse(400, typeof(UserViewModel), "شماره همراه یا تلفن یا ای دی صحیح نیست")]
         public async Task<IActionResult> Update([FromBody]UserUpdateViewModel userVM)
         {
-            var id = UserId;
+            int id = UserId;
+            if (userVM.AdminEditPermitted && Roles.Contains("admin"))
+                id = userVM.Id;
 
             if (!ModelState.IsValid || id == 0)
                 return BadRequest(ModelState);
-            if (userVM.PhoneNumber != null && !userVM.PhoneNumber.IsPhoneNumber())
-            {
-                ModelState.AddModelError("PhoneNumber", "شماره همراه وارد شده صحیح نمی باشد.");
-                return BadRequest(ModelState);
-            }
+
+            //if (userVM.PhoneNumber != null && !userVM.PhoneNumber.IsNumber())
+            //{
+            //    ModelState.AddModelError("PhoneNumber", "شماره همراه وارد شده صحیح نمی باشد.");
+            //    return BadRequest(ModelState);
+            //}
+            //if (!userVM.MelliCode.IsNumber())
+            //{
+            //    ModelState.AddModelError("MelliCodeError", "کد ملی باید عدد باشد");
+            //    return BadRequest(ModelState);
+            //}
             var user = await _userService.GetAsync(x=>x.Id == id);
 
             user = _mapper.Map(userVM, user);
@@ -102,7 +116,7 @@ namespace UIMS.Web.Controllers
 
             await _userService.UpdateUserAsync(user);
             await _userService.SaveChangesAsync();
-            return Ok(userVM);
+            return Ok();
         }
 
 
@@ -111,6 +125,9 @@ namespace UIMS.Web.Controllers
         [SwaggerResponse(400, typeof(string), "ناموفق")]
         public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordViewModel passwordVM)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var user = await _userService.GetAsync(x=>x.Id == UserId);
             var result = await _userService.ChangePasswordAsync(user, passwordVM.OldPassword, passwordVM.NewPassword);
             if (!result.Succeeded)
@@ -120,7 +137,7 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
             await _userService.SaveChangesAsync();
-            return Ok("پسورد با موفقیت تغییر یافت");
+            return Ok();
         }
 
 
@@ -143,25 +160,6 @@ namespace UIMS.Web.Controllers
             return Ok();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddAdmin([FromBody]UserInsertViewModel addUserVM)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-
-        //    var user = _mapper.Map<AppUser>(addUserVM);
-
-        //    if (await _userService.IsExistsAsync(user))
-        //    {
-        //        ModelState.AddModelError("Error", "مشخصات کاربری قبلا در سیستم ثبت شده است.");
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    await _userService.CreateUserAsync(user, addUserVM.Password, "admin");
-        //    await _userService.SaveChangesAsync();
-
-        //    return Ok(new { token = GetJWTToken(user, new List<string>() { "admin" }) });
-        //}
 
         //[Authorize(Roles ="admin")]
         [HttpPost]
@@ -169,12 +167,18 @@ namespace UIMS.Web.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
             string userType = addUserVM.Type.ToLower();
             if (userType != "admin" && userType != "supervisor")
             {
                 ModelState.AddModelError("Type Error", "The Type Must Be Either admin or supervisor");
                 return BadRequest(ModelState);
             }
+            //if (!addUserVM.MelliCode.IsNumber())
+            //{
+            //    ModelState.AddModelError("MelliCodeError", "کد ملی باید عدد باشد");
+            //    return BadRequest(ModelState);
+            //}
 
             var user = _mapper.Map<AppUser>(addUserVM);
 

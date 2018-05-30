@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using UIMS.Web.Models.Interfaces;
 
 namespace UIMS.Web.Models
 {
-    public class Presentation : BaseModelTracker
+    public class Presentation : BaseModelTracker,IEnable
     {
 
         [MaxLength(10)]
@@ -41,6 +42,6 @@ namespace UIMS.Web.Models
 
 
         public virtual ICollection<StudentPresentation> Students { get; set; }
-
+        public bool Enable { get; set ; }
     }
 }

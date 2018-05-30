@@ -12,7 +12,7 @@ namespace UIMS.Web.DTO
         public string OldPassword { get; set; }
 
         [Required]
-        [MinLength(6)]
+        [MinLength(5)]
         public string NewPassword { get; set; }
     }
 }

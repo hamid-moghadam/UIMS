@@ -9,6 +9,6 @@ namespace UIMS.Web.DTO
     public class EmployeeUpdateViewModel:BaseUpdateViewModel
     {
         [MaxLength(80)]
-        public string Post { get; set; }
+        public string EmployeePost { get; set; }
     }
 }

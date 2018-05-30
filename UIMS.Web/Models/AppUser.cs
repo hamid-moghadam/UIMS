@@ -8,7 +8,7 @@ using UIMS.Web.Models.Interfaces;
 
 namespace UIMS.Web.Models
 {
-    public class AppUser : IdentityUser<int>,ITracker,IKey<int>
+    public class AppUser : IdentityUser<int>,ITracker,IKey<int>,IEnable
     {
         public DateTime Created { get; set; }
 

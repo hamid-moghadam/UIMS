@@ -26,9 +26,9 @@ namespace UIMS.Web.Services
         }
 
 
-        public async Task<TViewModel> GetAsync(int id) => await Entity.ProjectTo<TViewModel>().SingleOrDefaultAsync(x => x.Id == id);
+        public virtual async Task<TViewModel> GetAsync(int id) => await Entity.ProjectTo<TViewModel>().SingleOrDefaultAsync(x => x.Id == id);
 
-        public async Task<TModel> GetAsync(Expression<Func<TModel, bool>> expression) => await Entity.SingleOrDefaultAsync(expression);
+        public virtual async Task<TModel> GetAsync(Expression<Func<TModel, bool>> expression) => await Entity.SingleOrDefaultAsync(expression);
 
         //public async Task<TModel> GetAsync(int id) => await Entity.SingleOrDefaultAsync(x => x.Id == id);
 
@@ -49,7 +49,7 @@ namespace UIMS.Web.Services
             return await Entity.AnyAsync(expression);
             //return true;
         }
-
+       
 
         public async Task<TModel> AddAsync(TInsertModel model)
         {
@@ -58,7 +58,7 @@ namespace UIMS.Web.Services
 
         }
 
-        public TModel Update(TModel model)
+        public virtual TModel Update(TModel model)
         {
             return Entity.Update(model).Entity;
         }

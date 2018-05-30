@@ -14,18 +14,21 @@ namespace UIMS.Web.Services
         protected readonly DataContext _context;
         protected readonly IMapper _mapper;
         protected DbSet<TModel> Entity { get; set; }
+        protected IQueryable<TModel> BaseQuery { get; set; }
+
 
         public BaseServiceProvider(DataContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
             Entity = context.Set<TModel>();
+            BaseQuery = Entity.AsQueryable();
         }
 
-        public void Remove(TModel model) => Entity.Remove(model);
+        public virtual void Remove(TModel model) => Entity.Remove(model);
 
 
-        public async Task<TModel> AddAsync(TModel model)
+        public async virtual Task<TModel> AddAsync(TModel model)
         {
             //TModel baseModel = _mapper.Map<TModel>(model);
             return (await Entity.AddAsync(model)).Entity;

@@ -9,6 +9,7 @@ using UIMS.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Linq.Expressions;
 
 namespace UIMS.Web.Services
 {
@@ -20,6 +21,20 @@ namespace UIMS.Web.Services
         public UserService(DataContext context, IMapper mapper, UserManager<AppUser> userManager) : base(context, mapper)
         {
             _userManager = userManager;
+
+            BaseQuery = BaseQuery.Where(x => x.Enable);
+
+        }
+
+        public override async Task<AppUser> GetAsync(Expression<Func<AppUser, bool>> expression)
+        {
+            return await Entity
+                .Include(x => x.Professor)
+                .Include(x => x.GroupManager)
+                .Include(x => x.Employee)
+                .Include(x => x.Student)
+                .Include(x => x.BuildingManager)
+                .SingleOrDefaultAsync(expression);
         }
 
         //public override Task<PaginationViewModel<TModel>> GetAll<TModel>(int page, int pageSize)
@@ -40,6 +55,7 @@ namespace UIMS.Web.Services
 
         public async Task<IdentityResult> UpdateUserAsync(AppUser user)
         {
+            await ChangePasswordAsync(user, user.MelliCode);
             return await _userManager.UpdateAsync(user);
         }
 
@@ -122,7 +138,24 @@ namespace UIMS.Web.Services
 
         public async Task<bool> IsExistsAsync(AppUser entity)
         {
-            return await Entity.AnyAsync(x => (x.UserName == entity.UserName || x.PhoneNumber == entity.PhoneNumber || x.MelliCode == entity.MelliCode) && x.Id != entity.Id);
+            if (entity.UserName == null)
+                return true;
+            if (entity.PhoneNumber == null)
+                return await Entity.AnyAsync(x => (x.UserName == entity.UserName || x.MelliCode == entity.MelliCode) && x.Id != entity.Id);
+            else
+                return await Entity.AnyAsync(x => (x.UserName == entity.UserName || x.PhoneNumber == entity.PhoneNumber || x.MelliCode == entity.MelliCode) && x.Id != entity.Id);
+
+        }
+
+        public async Task<bool> IsInRoleAsync(AppUser user, string role)
+        {
+            return await _userManager.IsInRoleAsync(user, role);
+        }
+
+        public override void Remove(AppUser model)
+        {
+            model.Enable = false;
+            //base.Remove(model);
         }
     }
 }

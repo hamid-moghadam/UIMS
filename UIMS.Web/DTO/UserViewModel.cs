@@ -12,6 +12,8 @@ namespace UIMS.Web.DTO
 
         public string FullName { get; set; }
 
+        public string PhoneNumber { get; set; }
+
         public bool Enable { get; set; }
 
         public ICollection<Message> SentMessages { get; set; }
@@ -19,18 +21,18 @@ namespace UIMS.Web.DTO
         public ICollection<MessageReceiver> ReceivedMessages { get; set; }
 
 
-        public BuildingManager BuildingManager { get; set; }
+        //public BuildingManager BuildingManager { get; set; }
 
 
-        public EmployeeViewModel Employee { get; set; }
+        //public EmployeeViewModel Employee { get; set; }
 
-        public GroupManager GroupManager { get; set; }
-
-
-        public Professor Professor { get; set; }
+        //public GroupManager GroupManager { get; set; }
 
 
-        public Student Student { get; set; }
+        //public Professor Professor { get; set; }
+
+
+        //public Student Student { get; set; }
 
     }
 }

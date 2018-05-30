@@ -8,7 +8,7 @@ namespace UIMS.Web.Extentions
 {
     public static class StringExtentions
     {
-        public static bool IsPhoneNumber(this string number)
+        public static bool IsNumber(this string number)
         {
             return Regex.IsMatch(number, @"^[0-9]+$");
         }

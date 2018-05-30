@@ -4,15 +4,18 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using UIMS.Web.Models;
+using UIMS.Web.Models.Attributes;
 
 namespace UIMS.Web.DTO
 {
     public class UserUpdateViewModel:BaseModel
     {
-        [MaxLength(10)]
+        [Number]
+        [StringLength(10,MinimumLength =10)]
         public string MelliCode { get; set; }
 
-        [MaxLength(11)]
+        [Number]
+        [StringLength(11, MinimumLength = 11)]
         public string PhoneNumber { get; set; }
 
         [MaxLength(50)]
@@ -21,6 +24,7 @@ namespace UIMS.Web.DTO
         [MaxLength(80)]
         public string Family { get; set; }
 
+        public bool AdminEditPermitted { get; set; }
         //[MinLength(6)]
         //public string Password { get; set; }
 

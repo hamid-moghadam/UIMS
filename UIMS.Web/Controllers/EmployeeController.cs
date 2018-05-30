@@ -31,9 +31,9 @@ namespace UIMS.Web.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(PaginationViewModel<EmployeeViewModel>), 200)]
-        public async Task<IActionResult> GetAll(int? pageSize = 5, int? page = 1)
+        public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            var employees = await _employeeService.GetAll(page.Value, pageSize.Value);
+            var employees = await _employeeService.GetAll(page, pageSize);
 
             return Ok(employees);
         }
@@ -42,7 +42,10 @@ namespace UIMS.Web.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            return Ok(await _employeeService.GetAsync(id));
+            var employee = await _employeeService.GetAsync(id);
+            if (employee == null)
+                return NotFound();
+            return Ok();
         }
 
 
@@ -54,17 +57,24 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var employee = _mapper.Map<Employee>(employeeInsertVM);
-
-            if (await _userService.IsExistsAsync(employee.User))
+            var employeeUser = _mapper.Map<AppUser>(employeeInsertVM);
+            var user = await _userService.GetAsync(x => x.MelliCode == employeeInsertVM.MelliCode);
+            if (user == null)
             {
-                ModelState.AddModelError("User", "User Exists");
-                return BadRequest(ModelState);
+                employeeUser.UserName = employeeUser.MelliCode;
+                await _userService.CreateUserAsync(employeeUser,employeeUser.MelliCode,"employee");
+            }
+            else
+            {
+                bool isUserInEmployeeRole = await _userService.IsInRoleAsync(user, "employee");
+                if (isUserInEmployeeRole)
+                    return BadRequest("این کاربر قبلا با نقش  کارمند در سیستم ثبت شده است.");
+
+                user.Employee = employeeUser.Employee;
+                await _userService.AddRoleToUserAsync(employeeUser, "employee");
             }
 
-            await _employeeService.AddAsync(employee);
-            await _employeeService.SaveChangesAsync();
-
+            await _userService.SaveChangesAsync();
             return Ok();
         }
 
@@ -91,16 +101,16 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var employeeUpdate = _mapper.Map<Employee>(employeeUpdateVM);
+            var user = await _userService.GetAsync(x => x.Id == UserId);
+            user = _mapper.Map(employeeUpdateVM, user);
 
-            if (await _userService.IsExistsAsync(employeeUpdate.User))
+            if (await _userService.IsExistsAsync(user))
             {
                 ModelState.AddModelError("User", "User Exists");
                 return BadRequest(ModelState);
             }
 
-            _employeeService.Update(employeeUpdate);
-
+            await _userService.UpdateUserAsync(user);
             await _employeeService.SaveChangesAsync();
 
             return Ok();

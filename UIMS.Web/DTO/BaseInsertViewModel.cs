@@ -4,19 +4,24 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using UIMS.Web.Models;
+using UIMS.Web.Models.Attributes;
 
 namespace UIMS.Web.DTO
 {
     public class BaseInsertViewModel:BaseModel
     {
-        [MaxLength(10)]
-        public string UserMelliCode { get; set; }
+        [Required]
+        [Number]
+        [StringLength(10,MinimumLength =10)]
+        public string MelliCode { get; set; }
 
+        [Required]
         [MaxLength(50)]
-        public string UserName { get; set; }
+        public string Name { get; set; }
 
+        [Required]
         [MaxLength(80)]
-        public string UserFamily { get; set; }
+        public string Family { get; set; }
 
     }
 }
