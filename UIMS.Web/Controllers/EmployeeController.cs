@@ -45,7 +45,7 @@ namespace UIMS.Web.Controllers
             var employee = await _employeeService.GetAsync(id);
             if (employee == null)
                 return NotFound();
-            return Ok();
+            return Ok(employee);
         }
 
 
@@ -71,7 +71,7 @@ namespace UIMS.Web.Controllers
                     return BadRequest("این کاربر قبلا با نقش  کارمند در سیستم ثبت شده است.");
 
                 user.Employee = employeeUser.Employee;
-                await _userService.AddRoleToUserAsync(employeeUser, "employee");
+                await _userService.AddRoleToUserAsync(user, "employee");
             }
 
             await _userService.SaveChangesAsync();
@@ -87,6 +87,7 @@ namespace UIMS.Web.Controllers
             if (employee == null)
                 return NotFound();
 
+            await _userService.RemoveRoleAsync(employee.User, "employee");
             _employeeService.Remove(employee);
             await _employeeService.SaveChangesAsync();
 

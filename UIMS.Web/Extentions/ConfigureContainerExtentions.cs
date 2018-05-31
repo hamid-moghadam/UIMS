@@ -112,9 +112,20 @@ namespace UIMS.Web.Extentions
             //serviceCollection.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
 
             serviceCollection.AddScoped(typeof(IBaseServiceProvider<>), typeof(BaseServiceProvider<>));
+            //test done
             serviceCollection.AddScoped<UserService>();
             serviceCollection.AddScoped<EmployeeService>();
             serviceCollection.AddScoped<BuildingService>();
+            //-- test done
+
+            serviceCollection.AddScoped<BuildingManagerService>();
+            serviceCollection.AddScoped<DegreeService>();
+            serviceCollection.AddScoped<FieldService>();
+            serviceCollection.AddScoped<GroupManagerService>();
+            serviceCollection.AddScoped<ProfessorService>();
+            serviceCollection.AddScoped<SemesterService>();
+            serviceCollection.AddScoped<StudentService>();
+
         }
 
         public static void AddTransientServices(this IServiceCollection serviceCollection)

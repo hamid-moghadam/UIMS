@@ -7,6 +7,6 @@ namespace UIMS.Web.DTO
 {
     public class GroupManagerUpdateViewModel:BaseUpdateViewModel
     {
-        public int? GroupManagerFieldId { get; set; }
+        //public int? GroupManagerFieldId { get; set; }
     }
 }

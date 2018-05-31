@@ -46,7 +46,7 @@ namespace UIMS.Web.Controllers
             var student = await _studentService.GetAsync(id);
             if (student == null)
                 return NotFound();
-            return Ok();
+            return Ok(student);
         }
 
 
@@ -58,10 +58,10 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var isCodeExists = await _studentService.IsExistsAsync(x => x.Code == studentInsertVM.Code);
-            if (!isCodeExists)
+            var isCodeExists = await _studentService.IsExistsAsync(x => x.Code == studentInsertVM.StudentCode);
+            if (isCodeExists)
             {
-                ModelState.AddModelError("Building", "شماره دانشجویی قبلا در سیستم ثبت شده است.");
+                ModelState.AddModelError("Student", "شماره دانشجویی قبلا در سیستم ثبت شده است.");
                 return BadRequest(ModelState);
             }
 
@@ -79,7 +79,7 @@ namespace UIMS.Web.Controllers
                     return BadRequest("این کاربر قبلا با نقش  دانشجو در سیستم ثبت شده است.");
 
                 user.Student = student.Student;
-                await _userService.AddRoleToUserAsync(student, "student");
+                await _userService.AddRoleToUserAsync(user, "student");
             }
 
             await _userService.SaveChangesAsync();
@@ -95,6 +95,7 @@ namespace UIMS.Web.Controllers
             if (student == null)
                 return NotFound();
 
+            await _userService.RemoveRoleAsync(student.User, "student");
             _studentService.Remove(student);
             await _studentService.SaveChangesAsync();
 

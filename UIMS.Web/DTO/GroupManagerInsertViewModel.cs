@@ -8,7 +8,9 @@ namespace UIMS.Web.DTO
 {
     public class GroupManagerInsertViewModel:BaseInsertViewModel
     {
+        //public int? FieldId { get; set; }
+
         [Required]
-        public int? GroupManagerFieldId { get; set; }
+        public List<int> FieldsId { get; set; }
     }
 }

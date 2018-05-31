@@ -35,8 +35,8 @@ namespace UIMS.Web.Services
 
         public override void Remove(BuildingManager model)
         {
-            _userService.Remove(model.User);
-            //base.Remove(model);
+            //model.User
+            base.Remove(model);
         }
 
     }

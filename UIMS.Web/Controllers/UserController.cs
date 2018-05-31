@@ -212,6 +212,20 @@ namespace UIMS.Web.Controllers
             return Ok(new { token = GetJWTToken(user, await _userService.GetRolesAsync(user)) });
         }
 
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            var user = await _userService.GetAsync(x => x.Id == id);
+
+            if (user == null)
+                return NotFound();
+
+            _userService.Remove(user);
+            await _userService.SaveChangesAsync();
+
+            return Ok();
+        }
+
 
         [NonAction]
         public string GetJWTToken(AppUser user, List<string> role)

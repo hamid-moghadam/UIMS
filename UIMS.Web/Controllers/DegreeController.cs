@@ -84,6 +84,10 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
 
             var degree = await _degreeService.GetAsync(x => x.Id == degreeUpdateVM.Id);
+
+            if (degree == null)
+                return NotFound();
+
             if (await _degreeService.IsExistsAsync(x => x.Name == degreeUpdateVM.Name && x.Id != degreeUpdateVM.Id))
             {
                 ModelState.AddModelError("Degree Exists", "این مقطع قبلا در سیستم ثبت شده است.");

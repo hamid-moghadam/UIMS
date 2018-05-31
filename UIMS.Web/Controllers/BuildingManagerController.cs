@@ -13,7 +13,7 @@ using UIMS.Web.Models;
 namespace UIMS.Web.Controllers
 {
     [Produces("application/json")]
-    [Route("api/BuildingManager")]
+    //[Route("api/BuildingManager")]
     public class BuildingManagerController : ApiController
     {
         private readonly IMapper _mapper;
@@ -48,7 +48,7 @@ namespace UIMS.Web.Controllers
             var manager = await _buildingManagerService.GetAsync(id);
             if (manager == null)
                 return NotFound();
-            return Ok();
+            return Ok(manager);
         }
 
 
@@ -81,7 +81,7 @@ namespace UIMS.Web.Controllers
                     return BadRequest("این کاربر قبلا با نقش  مدیر ساختمان در سیستم ثبت شده است.");
 
                 user.BuildingManager = manager.BuildingManager;
-                await _userService.AddRoleToUserAsync(manager, "buildingManager");
+                await _userService.AddRoleToUserAsync(user, "buildingManager");
             }
 
             await _userService.SaveChangesAsync();
@@ -97,6 +97,7 @@ namespace UIMS.Web.Controllers
             if (buildingManager == null)
                 return NotFound();
 
+            await _userService.RemoveRoleAsync(buildingManager.User, "buildingManager");
             _buildingManagerService.Remove(buildingManager);
             await _buildingManagerService.SaveChangesAsync();
 
@@ -120,7 +121,7 @@ namespace UIMS.Web.Controllers
                     return BadRequest(ModelState);
                 }
             }
-            
+
 
             var user = await _userService.GetAsync(x => x.Id == UserId);
             user = _mapper.Map(buildingManagerUpdateVM, user);

@@ -35,19 +35,19 @@ namespace UIMS.Web.Controllers
         [ProducesResponseType(typeof(PaginationViewModel<ProfessorViewModel>), 200)]
         public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            var managers = await _professorService.GetAll(page, pageSize);
+            var professors = await _professorService.GetAll(page, pageSize);
 
-            return Ok(managers);
+            return Ok(professors);
         }
 
         [SwaggerResponse(200, typeof(ProfessorViewModel))]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var manager = await _professorService.GetAsync(id);
-            if (manager == null)
+            var professor = await _professorService.GetAsync(id);
+            if (professor == null)
                 return NotFound();
-            return Ok();
+            return Ok(professor);
         }
 
 
@@ -59,12 +59,13 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var professor = _mapper.Map<AppUser>(professorInsertVM);
+            var professorUser = _mapper.Map<AppUser>(professorInsertVM);
             var user = await _userService.GetAsync(x => x.MelliCode == professorInsertVM.MelliCode);
             if (user == null)
             {
-                professor.UserName = professor.MelliCode;
-                await _userService.CreateUserAsync(professor, professor.MelliCode, "professor");
+                professorUser.UserName = professorUser.MelliCode;
+                professorUser.Professor = new Professor(); 
+                await _userService.CreateUserAsync(professorUser, professorUser.MelliCode, "professor");
             }
             else
             {
@@ -72,8 +73,9 @@ namespace UIMS.Web.Controllers
                 if (isUserInManagerRole)
                     return BadRequest("این کاربر قبلا با نقش  استاد در سیستم ثبت شده است.");
 
-                user.Professor = professor.Professor;
-                await _userService.AddRoleToUserAsync(professor, "professor");
+                //user.Professor = professorUser.Professor;
+                user.Professor = new Professor();
+                await _userService.AddRoleToUserAsync(user, "professor");
             }
 
             await _userService.SaveChangesAsync();
@@ -89,6 +91,7 @@ namespace UIMS.Web.Controllers
             if (professor == null)
                 return NotFound();
 
+            await _userService.RemoveRoleAsync(professor.User, "professor");
             _professorService.Remove(professor);
             await _professorService.SaveChangesAsync();
 

@@ -13,7 +13,7 @@ namespace UIMS.Web.Controllers
 {
     [Produces("application/json")]
     //[Route("api/Field")]
-    public class FieldController : Controller
+    public class FieldController : ApiController
     {
         private readonly FieldService _fieldService;
 
@@ -45,8 +45,8 @@ namespace UIMS.Web.Controllers
             return Ok();
         }
 
-        [SwaggerResponse(200, typeof(FieldViewModel))]
         [HttpGet("{id}")]
+        [SwaggerResponse(200, typeof(FieldViewModel))]
         public async Task<IActionResult> Get(int id)
         {
             var field = await _fieldService.GetAsync(id);

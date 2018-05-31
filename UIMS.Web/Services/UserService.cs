@@ -53,6 +53,11 @@ namespace UIMS.Web.Services
             return await _userManager.AddToRoleAsync(user, role);
         }
 
+        public async Task<IdentityResult> RemoveRoleAsync(AppUser user, string role)
+        {
+            return await _userManager.RemoveFromRoleAsync(user, role);
+        }
+
         public async Task<IdentityResult> UpdateUserAsync(AppUser user)
         {
             await ChangePasswordAsync(user, user.MelliCode);

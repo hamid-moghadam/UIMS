@@ -15,7 +15,7 @@ namespace UIMS.Web.Models
         public virtual Degree Degree { get; set; }
 
 
-        public int GroupManagerId { get; set; }
+        public int? GroupManagerId { get; set; }
 
         public virtual GroupManager GroupManager { get; set; }
 
