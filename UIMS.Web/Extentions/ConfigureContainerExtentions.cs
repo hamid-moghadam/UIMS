@@ -22,8 +22,13 @@ namespace UIMS.Web.Extentions
         public static void AddDbContext(this IServiceCollection serviceCollection,
             string dataConnectionString = null, string authConnectionString = null)
         {
+            //serviceCollection.AddDbContext<DataContext>(options =>
+            //    options.UseSqlServer(dataConnectionString ?? GetDataConnectionStringFromConfig()));
+
             serviceCollection.AddDbContext<DataContext>(options =>
-                options.UseSqlServer(dataConnectionString ?? GetDataConnectionStringFromConfig()));
+                options.UseNpgsql(dataConnectionString ?? GetDataConnectionStringFromConfig()));
+
+            serviceCollection.AddEntityFrameworkNpgsql();
         }
 
         public static void AddIdentity(this IServiceCollection serviceCollection)

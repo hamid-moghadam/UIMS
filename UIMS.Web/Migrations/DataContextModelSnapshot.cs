@@ -8,18 +8,17 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 using UIMS.Web.Data;
 
-namespace UIMS.Web.Data.Migrations
+namespace UIMS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("13970302112509_InitDb")]
-    partial class InitDb
+    partial class DataContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -102,7 +101,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("UIMS.Model.AppRole", b =>
+            modelBuilder.Entity("UIMS.Web.Models.AppRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -120,13 +119,12 @@ namespace UIMS.Web.Data.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("UIMS.Model.AppUser", b =>
+            modelBuilder.Entity("UIMS.Web.Models.AppUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -192,21 +190,19 @@ namespace UIMS.Web.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MelliCode")
-                        .IsUnique()
-                        .HasFilter("[MelliCode] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("UIMS.Model.Building", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Building", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -225,7 +221,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("Building");
                 });
 
-            modelBuilder.Entity("UIMS.Model.BuildingClass", b =>
+            modelBuilder.Entity("UIMS.Web.Models.BuildingClass", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -246,7 +242,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("BuildingClass");
                 });
 
-            modelBuilder.Entity("UIMS.Model.BuildingManager", b =>
+            modelBuilder.Entity("UIMS.Web.Models.BuildingManager", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -270,7 +266,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("BuildingManager");
                 });
 
-            modelBuilder.Entity("UIMS.Model.Course", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -288,13 +284,12 @@ namespace UIMS.Web.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Course");
                 });
 
-            modelBuilder.Entity("UIMS.Model.CourseField", b =>
+            modelBuilder.Entity("UIMS.Web.Models.CourseField", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -316,7 +311,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("CourseField");
                 });
 
-            modelBuilder.Entity("UIMS.Model.Degree", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Degree", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -333,7 +328,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("Degree");
                 });
 
-            modelBuilder.Entity("UIMS.Model.Employee", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -355,7 +350,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("Employee");
                 });
 
-            modelBuilder.Entity("UIMS.Model.Field", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Field", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -364,7 +359,7 @@ namespace UIMS.Web.Data.Migrations
 
                     b.Property<int>("DegreeId");
 
-                    b.Property<int>("GroupManagerId");
+                    b.Property<int?>("GroupManagerId");
 
                     b.Property<DateTime>("Modified");
 
@@ -380,7 +375,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("Field");
                 });
 
-            modelBuilder.Entity("UIMS.Model.GroupManager", b =>
+            modelBuilder.Entity("UIMS.Web.Models.GroupManager", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -399,7 +394,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("GroupManager");
                 });
 
-            modelBuilder.Entity("UIMS.Model.Message", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Message", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -433,7 +428,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("Message");
                 });
 
-            modelBuilder.Entity("UIMS.Model.MessageReceiver", b =>
+            modelBuilder.Entity("UIMS.Web.Models.MessageReceiver", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -457,7 +452,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("MessageReceiver");
                 });
 
-            modelBuilder.Entity("UIMS.Model.MessageType", b =>
+            modelBuilder.Entity("UIMS.Web.Models.MessageType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -474,7 +469,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("MessageType");
                 });
 
-            modelBuilder.Entity("UIMS.Model.Presentation", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Presentation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -489,6 +484,8 @@ namespace UIMS.Web.Data.Migrations
                     b.Property<DateTime>("Created");
 
                     b.Property<int>("Day");
+
+                    b.Property<bool>("Enable");
 
                     b.Property<string>("End")
                         .HasMaxLength(5);
@@ -507,8 +504,7 @@ namespace UIMS.Web.Data.Migrations
                     b.HasIndex("BuildingClassId");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("CourseFieldId");
 
@@ -519,7 +515,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("Presentation");
                 });
 
-            modelBuilder.Entity("UIMS.Model.Professor", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Professor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -538,12 +534,14 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("Professor");
                 });
 
-            modelBuilder.Entity("UIMS.Model.Semester", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Semester", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("Created");
+
+                    b.Property<bool>("Enable");
 
                     b.Property<DateTime>("Modified");
 
@@ -555,7 +553,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("Semester");
                 });
 
-            modelBuilder.Entity("UIMS.Model.Student", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Student", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -572,8 +570,7 @@ namespace UIMS.Web.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -581,7 +578,7 @@ namespace UIMS.Web.Data.Migrations
                     b.ToTable("Student");
                 });
 
-            modelBuilder.Entity("UIMS.Model.StudentPresentation", b =>
+            modelBuilder.Entity("UIMS.Web.Models.StudentPresentation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -605,7 +602,7 @@ namespace UIMS.Web.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("UIMS.Model.AppRole")
+                    b.HasOne("UIMS.Web.Models.AppRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -613,7 +610,7 @@ namespace UIMS.Web.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("UIMS.Model.AppUser")
+                    b.HasOne("UIMS.Web.Models.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -621,7 +618,7 @@ namespace UIMS.Web.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("UIMS.Model.AppUser")
+                    b.HasOne("UIMS.Web.Models.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -629,12 +626,12 @@ namespace UIMS.Web.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("UIMS.Model.AppRole")
+                    b.HasOne("UIMS.Web.Models.AppRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("UIMS.Model.AppUser")
+                    b.HasOne("UIMS.Web.Models.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -642,152 +639,151 @@ namespace UIMS.Web.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("UIMS.Model.AppUser")
+                    b.HasOne("UIMS.Web.Models.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("UIMS.Model.BuildingClass", b =>
+            modelBuilder.Entity("UIMS.Web.Models.BuildingClass", b =>
                 {
-                    b.HasOne("UIMS.Model.Building", "Building")
+                    b.HasOne("UIMS.Web.Models.Building", "Building")
                         .WithMany("BuildingClasses")
                         .HasForeignKey("BuildingId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("UIMS.Model.BuildingManager", b =>
+            modelBuilder.Entity("UIMS.Web.Models.BuildingManager", b =>
                 {
-                    b.HasOne("UIMS.Model.Building", "Building")
+                    b.HasOne("UIMS.Web.Models.Building", "Building")
                         .WithOne("BuildingManager")
-                        .HasForeignKey("UIMS.Model.BuildingManager", "BuildingId")
+                        .HasForeignKey("UIMS.Web.Models.BuildingManager", "BuildingId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("UIMS.Model.AppUser", "User")
+                    b.HasOne("UIMS.Web.Models.AppUser", "User")
                         .WithOne("BuildingManager")
-                        .HasForeignKey("UIMS.Model.BuildingManager", "UserId")
+                        .HasForeignKey("UIMS.Web.Models.BuildingManager", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("UIMS.Model.CourseField", b =>
+            modelBuilder.Entity("UIMS.Web.Models.CourseField", b =>
                 {
-                    b.HasOne("UIMS.Model.Course", "Course")
+                    b.HasOne("UIMS.Web.Models.Course", "Course")
                         .WithMany("Fields")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("UIMS.Model.Field", "Field")
+                    b.HasOne("UIMS.Web.Models.Field", "Field")
                         .WithMany("Courses")
                         .HasForeignKey("FieldId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("UIMS.Model.Employee", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Employee", b =>
                 {
-                    b.HasOne("UIMS.Model.AppUser", "User")
+                    b.HasOne("UIMS.Web.Models.AppUser", "User")
                         .WithOne("Employee")
-                        .HasForeignKey("UIMS.Model.Employee", "UserId")
+                        .HasForeignKey("UIMS.Web.Models.Employee", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("UIMS.Model.Field", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Field", b =>
                 {
-                    b.HasOne("UIMS.Model.Degree", "Degree")
+                    b.HasOne("UIMS.Web.Models.Degree", "Degree")
                         .WithMany("Fields")
                         .HasForeignKey("DegreeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("UIMS.Model.GroupManager", "GroupManager")
+                    b.HasOne("UIMS.Web.Models.GroupManager", "GroupManager")
                         .WithMany("Fields")
-                        .HasForeignKey("GroupManagerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("GroupManagerId");
                 });
 
-            modelBuilder.Entity("UIMS.Model.GroupManager", b =>
+            modelBuilder.Entity("UIMS.Web.Models.GroupManager", b =>
                 {
-                    b.HasOne("UIMS.Model.AppUser", "User")
+                    b.HasOne("UIMS.Web.Models.AppUser", "User")
                         .WithOne("GroupManager")
-                        .HasForeignKey("UIMS.Model.GroupManager", "UserId")
+                        .HasForeignKey("UIMS.Web.Models.GroupManager", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("UIMS.Model.Message", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Message", b =>
                 {
-                    b.HasOne("UIMS.Model.MessageType")
+                    b.HasOne("UIMS.Web.Models.MessageType")
                         .WithMany("Messages")
                         .HasForeignKey("MessageTypeId");
 
-                    b.HasOne("UIMS.Model.Semester", "Semester")
+                    b.HasOne("UIMS.Web.Models.Semester", "Semester")
                         .WithMany("Messages")
                         .HasForeignKey("SemesterId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("UIMS.Model.AppUser", "Sender")
+                    b.HasOne("UIMS.Web.Models.AppUser", "Sender")
                         .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("UIMS.Model.MessageReceiver", b =>
+            modelBuilder.Entity("UIMS.Web.Models.MessageReceiver", b =>
                 {
-                    b.HasOne("UIMS.Model.Message", "Message")
+                    b.HasOne("UIMS.Web.Models.Message", "Message")
                         .WithMany("Receivers")
                         .HasForeignKey("MessageId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("UIMS.Model.AppUser", "User")
+                    b.HasOne("UIMS.Web.Models.AppUser", "User")
                         .WithMany("ReceivedMessages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("UIMS.Model.Presentation", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Presentation", b =>
                 {
-                    b.HasOne("UIMS.Model.BuildingClass", "BuildingClass")
+                    b.HasOne("UIMS.Web.Models.BuildingClass", "BuildingClass")
                         .WithMany("Presentations")
                         .HasForeignKey("BuildingClassId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("UIMS.Model.CourseField", "CourseField")
+                    b.HasOne("UIMS.Web.Models.CourseField", "CourseField")
                         .WithMany("Presentations")
                         .HasForeignKey("CourseFieldId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("UIMS.Model.Professor", "Professor")
+                    b.HasOne("UIMS.Web.Models.Professor", "Professor")
                         .WithMany("Presentations")
                         .HasForeignKey("ProfessorId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("UIMS.Model.Semester", "Semester")
+                    b.HasOne("UIMS.Web.Models.Semester", "Semester")
                         .WithMany("Presentations")
                         .HasForeignKey("SemesterId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("UIMS.Model.Professor", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Professor", b =>
                 {
-                    b.HasOne("UIMS.Model.AppUser", "User")
+                    b.HasOne("UIMS.Web.Models.AppUser", "User")
                         .WithOne("Professor")
-                        .HasForeignKey("UIMS.Model.Professor", "UserId")
+                        .HasForeignKey("UIMS.Web.Models.Professor", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("UIMS.Model.Student", b =>
+            modelBuilder.Entity("UIMS.Web.Models.Student", b =>
                 {
-                    b.HasOne("UIMS.Model.AppUser", "User")
+                    b.HasOne("UIMS.Web.Models.AppUser", "User")
                         .WithOne("Student")
-                        .HasForeignKey("UIMS.Model.Student", "UserId")
+                        .HasForeignKey("UIMS.Web.Models.Student", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("UIMS.Model.StudentPresentation", b =>
+            modelBuilder.Entity("UIMS.Web.Models.StudentPresentation", b =>
                 {
-                    b.HasOne("UIMS.Model.Presentation", "Presentation")
+                    b.HasOne("UIMS.Web.Models.Presentation", "Presentation")
                         .WithMany("Students")
                         .HasForeignKey("PresentationId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("UIMS.Model.Student", "Student")
+                    b.HasOne("UIMS.Web.Models.Student", "Student")
                         .WithMany("Classes")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade);

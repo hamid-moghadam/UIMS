@@ -13,7 +13,9 @@ namespace UIMS.Web.Data
         {
             var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
 
-            optionsBuilder.UseSqlServer(DataConnectionString);
+            //optionsBuilder.UseSqlServer(DataConnectionString);
+
+            optionsBuilder.UseNpgsql(DataConnectionString);
 
             return new DataContext(optionsBuilder.Options);
         }

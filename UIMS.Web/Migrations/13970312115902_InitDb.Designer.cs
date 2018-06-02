@@ -8,17 +8,18 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 using UIMS.Web.Data;
 
-namespace UIMS.Web.Data.Migrations
+namespace UIMS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("13970312115902_InitDb")]
+    partial class InitDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .HasAnnotation("ProductVersion", "2.0.2-rtm-10011");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -119,8 +120,7 @@ namespace UIMS.Web.Data.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -191,16 +191,14 @@ namespace UIMS.Web.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MelliCode")
-                        .IsUnique()
-                        .HasFilter("[MelliCode] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -287,8 +285,7 @@ namespace UIMS.Web.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Course");
                 });
@@ -508,8 +505,7 @@ namespace UIMS.Web.Data.Migrations
                     b.HasIndex("BuildingClassId");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("CourseFieldId");
 
@@ -575,8 +571,7 @@ namespace UIMS.Web.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();
