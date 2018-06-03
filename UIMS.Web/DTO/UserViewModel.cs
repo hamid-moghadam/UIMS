@@ -14,25 +14,25 @@ namespace UIMS.Web.DTO
 
         public string PhoneNumber { get; set; }
 
-        public bool Enable { get; set; }
+        //public bool Enable { get; set; }
 
-        public ICollection<Message> SentMessages { get; set; }
+        //public ICollection<Message> SentMessages { get; set; }
 
-        public ICollection<MessageReceiver> ReceivedMessages { get; set; }
-
-
-        //public BuildingManager BuildingManager { get; set; }
+        //public ICollection<MessageReceiver> ReceivedMessages { get; set; }
 
 
-        //public EmployeeViewModel Employee { get; set; }
-
-        //public GroupManager GroupManager { get; set; }
+        public BuildingManagerViewModel BuildingManager { get; set; }
 
 
-        //public Professor Professor { get; set; }
+        public EmployeeViewModel Employee { get; set; }
+
+        public GroupManagerViewModel GroupManager { get; set; }
 
 
-        //public Student Student { get; set; }
+        public ProfessorViewModel Professor { get; set; }
+
+
+        public StudentViewModel Student { get; set; }
 
     }
 }

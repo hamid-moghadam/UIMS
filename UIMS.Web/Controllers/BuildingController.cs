@@ -39,6 +39,13 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (baseInsertVM.BuildingManagerId.HasValue)
+            {
+                var isManagerHasBuilding = await _buildingManagerService.IsExistsAsync(x => x.Id == baseInsertVM.BuildingManagerId.Value && x.BuildingId != 0);
+                ModelState.AddModelError("BuildingManager", "مدیر ساختمان مورد نظر برای ساختمانی دیگر ثبت شده است.");
+                return BadRequest(ModelState);
+            }
+
             await _buildingService.AddAsync(baseInsertVM);
             await _buildingService.SaveChangesAsync();
             return Ok();

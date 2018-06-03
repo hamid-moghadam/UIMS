@@ -12,5 +12,6 @@ namespace UIMS.Web.Extentions
         {
             return Regex.IsMatch(number, @"^[0-9]+$");
         }
+
     }
 }

@@ -11,7 +11,7 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
         public AutoMapperConfiguration()
         {
             ForAllMaps((x, y) => y.ForAllMembers(member => member.UseDestinationValue()));
-            //ForAllMaps((x, y) => y.ForAllMembers(member => member.Condition(src => src != null)));
+            ForAllMaps((x, y) => y.ForAllMembers(member => member.Condition(src => src != null)));
 
             CreateMap<AppUser, UserInsertViewModel>().ReverseMap();
             CreateMap<AppUser, EmployeeInsertViewModel>().ReverseMap();

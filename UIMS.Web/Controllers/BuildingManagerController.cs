@@ -112,20 +112,22 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (buildingManagerUpdateVM.BuildingManagerBuildingId.HasValue)
-            {
-                var isBuildingExists = await _buildingService.IsExistsAsync(x => x.Id == buildingManagerUpdateVM.BuildingManagerBuildingId.Value);
-                if (!isBuildingExists)
-                {
-                    ModelState.AddModelError("Building", "این ساختمان در سیستم ثبت نشده است.");
-                    return BadRequest(ModelState);
-                }
-            }
+            //var buildingId = buildingManagerUpdateVM.BuildingManagerBuildingId.HasValue ? buildingManagerUpdateVM.BuildingManagerBuildingId.Value : user.BuildingManager.BuildingId;
+            //if (buildingManagerUpdateVM.BuildingManagerBuildingId.HasValue)
+            //{
+            //    var isBuildingExists = await _buildingService.IsExistsAsync(x => x.Id == buildingId);
+            //    if (!isBuildingExists)
+            //    {
+            //        ModelState.AddModelError("Building", "این ساختمان در سیستم ثبت نشده است.");
+            //        return BadRequest(ModelState);
+            //    }
+            //}
+            //converting when BuildingId is null not working and change BuildingID to 0
+            //user.BuildingManager.BuildingId = buildingId;
 
 
             var user = await _userService.GetAsync(x => x.Id == UserId);
             user = _mapper.Map(buildingManagerUpdateVM, user);
-
             if (await _userService.IsExistsAsync(user))
             {
                 ModelState.AddModelError("User", "این کاربر قبلا در سیستم ثبت شده است.");
