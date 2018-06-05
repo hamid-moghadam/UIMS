@@ -10,7 +10,7 @@ namespace UIMS.Web.Models
         public int UserId { get; set; }
         public virtual AppUser User { get; set; }
 
-        public int BuildingId { get; set; }
+        public int? BuildingId { get; set; }
 
         public virtual Building Building { get; set; }
     }

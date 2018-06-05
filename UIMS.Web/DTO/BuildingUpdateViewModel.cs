@@ -12,6 +12,6 @@ namespace UIMS.Web.DTO
         [MaxLength(100)]
         public string Name { get; set; }
 
-        public int? BuildingManagerId { get; set; }
+        //public int? BuildingManagerId { get; set; }
     }
 }

@@ -88,15 +88,15 @@ namespace UIMS.Web.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (buildingUpdateVM.BuildingManagerId.HasValue)
-            {
-                var isManagerExists = await _buildingManagerService.IsExistsAsync(x => x.Id == buildingUpdateVM.BuildingManagerId.Value && x.User.Enable);
-                if (!isManagerExists)
-                {
-                    ModelState.AddModelError("BuildingManager", "مدیر ساختمان مورد نظر در سیستم ثبت نشده است و یا غیر فعال است.");
-                    return BadRequest(ModelState);
-                }
-            }
+            //if (buildingUpdateVM.BuildingManagerId.HasValue)
+            //{
+            //    var isManagerExists = await _buildingManagerService.IsExistsAsync(x => x.Id == buildingUpdateVM.BuildingManagerId.Value && x.User.Enable);
+            //    if (!isManagerExists)
+            //    {
+            //        ModelState.AddModelError("BuildingManager", "مدیر ساختمان مورد نظر در سیستم ثبت نشده است و یا غیر فعال است.");
+            //        return BadRequest(ModelState);
+            //    }
+            //}
 
             var building = await _buildingService.GetAsync(x => x.Id == buildingUpdateVM.Id);
             if (building == null)

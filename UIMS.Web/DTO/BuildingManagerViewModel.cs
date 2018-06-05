@@ -11,5 +11,7 @@ namespace UIMS.Web.DTO
         public string UserMelliCode { get; set; }
 
         public string UserFullName { get; set; }
+
+        public BuildingViewModel Building  { get; set; }
     }
 }

@@ -8,20 +8,15 @@ using UIMS.Web.Models.Attributes;
 
 namespace UIMS.Web.DTO
 {
-    public class BaseInsertViewModel
+    public class CourseUpdateViewModel:BaseModel
     {
-        [Required]
+
         [Number]
-        [StringLength(10,MinimumLength =10)]
-        public string MelliCode { get; set; }
+        [MaxLength(10)]
+        public string Code { get; set; }
 
-        [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Name { get; set; }
-
-        [Required]
-        [MaxLength(80)]
-        public string Family { get; set; }
 
     }
 }

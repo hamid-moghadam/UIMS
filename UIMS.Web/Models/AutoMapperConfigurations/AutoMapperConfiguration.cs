@@ -22,29 +22,50 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
 
             CreateMap<AppUser, UserViewModel>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-            CreateMap<AppUser, UserUpdateViewModel>()
-                .ReverseMap()
-                .ForMember(x => x.Id, source => source.Ignore());
-            CreateMap<AppUser, EmployeeUpdateViewModel>()
-                .ReverseMap()
-                .ForMember(x => x.Id, source => source.Ignore());
-            CreateMap<AppUser, BuildingManagerUpdateViewModel>()
-                .ReverseMap()
-                .ForMember(x => x.Id, source => source.Ignore());
-            CreateMap<AppUser, GroupManagerUpdateViewModel>()
-                .ReverseMap()
-                .ForMember(x => x.Id, source => source.Ignore());
-            CreateMap<AppUser, ProfessorUpdateViewModel>()
-                .ReverseMap()
-                .ForMember(x => x.Id, source => source.Ignore());
-            CreateMap<AppUser, StudentUpdateViewModel>()
-                .ReverseMap()
-                .ForMember(x => x.Id, source => source.Ignore());
 
 
-            CreateMap<Building, BuildingInsertViewModel>().ReverseMap();
-            CreateMap<Building, BuildingViewModel>();
-            CreateMap<Building, BuildingUpdateViewModel>().ReverseMap();
+            //CreateMap<AppUser, UserUpdateViewModel>()
+            //    .ReverseMap()
+            //    .ForMember(x => x.Id, source => source.Ignore());
+            //CreateMap<AppUser, EmployeeUpdateViewModel>()
+            //    .ReverseMap()
+            //    .ForMember(x => x.Id, source => source.Ignore());
+
+            CreateMap<UserUpdateViewModel, AppUser>()
+                .ForMember(x => x.Id, source => source.Ignore())
+                .ReverseMap();
+            CreateMap<EmployeeUpdateViewModel, AppUser>()
+                .ForMember(x => x.Id, source => source.Ignore())
+                .ReverseMap();
+
+
+            CreateMap<BuildingManagerUpdateViewModel,AppUser>()
+                .ForMember(x => x.Id, source => source.Ignore())
+                .ReverseMap();
+            //CreateMap<AppUser, BuildingManagerUpdateViewModel>()
+            //    .ReverseMap()
+            //    .ForMember(x => x.Id, source => source.Ignore());
+            //CreateMap<AppUser, GroupManagerUpdateViewModel>()
+            //    .ReverseMap()
+            //    .ForMember(x => x.Id, source => source.Ignore());
+            //CreateMap<AppUser, ProfessorUpdateViewModel>()
+            //    .ReverseMap()
+            //    .ForMember(x => x.Id, source => source.Ignore());
+            //CreateMap<AppUser, StudentUpdateViewModel>()
+            //    .ReverseMap()
+            //    .ForMember(x => x.Id, source => source.Ignore());
+
+            CreateMap<GroupManagerUpdateViewModel, AppUser>()
+                .ForMember(x => x.Id, source => source.Ignore())
+                .ReverseMap();
+            CreateMap<ProfessorUpdateViewModel, AppUser>()
+                .ForMember(x => x.Id, source => source.Ignore())
+                .ReverseMap();
+            CreateMap<StudentUpdateViewModel, AppUser>()
+                .ForMember(x => x.Id, source => source.Ignore())
+                .ReverseMap();
+
+
 
 
             CreateMap<Employee, EmployeeViewModel>();
@@ -57,19 +78,30 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
 
             CreateMap<Student, StudentViewModel>();
 
+            CreateMap<Building, BuildingInsertViewModel>().ReverseMap();
+            CreateMap<Building, BuildingViewModel>();
+            CreateMap<BuildingUpdateViewModel,Building>().ReverseMap();
 
             CreateMap<Degree, DegreeViewModel>();
             CreateMap<Degree, DegreeInsertViewModel>().ReverseMap();
-            CreateMap<Degree, DegreeUpdateViewModel>().ReverseMap();
+            CreateMap<DegreeUpdateViewModel,Degree>().ReverseMap();
 
             CreateMap<Field, FieldViewModel>();
             CreateMap<Field, FieldInsertViewModel>().ReverseMap();
-            CreateMap<Field, FieldUpdateViewModel>().ReverseMap();
+            CreateMap<FieldUpdateViewModel,Field>().ReverseMap();
 
             CreateMap<Semester, SemesterViewModel>();
             CreateMap<Semester, SemesterInsertViewModel>().ReverseMap();
-            CreateMap<Semester, SemesterUpdateViewModel>().ReverseMap();
+            CreateMap<SemesterUpdateViewModel,Semester>().ReverseMap();
 
+            CreateMap<Course, CourseViewModel>();
+            CreateMap<Course, CourseInsertViewModel>().ReverseMap();
+            CreateMap<CourseUpdateViewModel,Course>().ReverseMap();
+
+
+            CreateMap<BuildingClass, BuildingClassViewModel>();
+            CreateMap<BuildingClass, BuildingClassInsertViewModel>().ReverseMap();
+            CreateMap<BuildingClassUpdateViewModel, BuildingClass>().ReverseMap();
         }
 
     }

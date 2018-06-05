@@ -6,10 +6,14 @@ using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class BuildingViewModel:BaseModel
+    public class CourseViewModel:BaseModel
     {
+        public string Code { get; set; }
+
+
         public string Name { get; set; }
 
-        public BuildingManagerViewModel BuildingManager { get; set; }
+        //public ICollection<FieldViewModel> Fields  { get; set; }
+
     }
 }

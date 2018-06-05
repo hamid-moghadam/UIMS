@@ -9,6 +9,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using UIMS.Web.DTO;
 using AutoMapper;
 using UIMS.Web.Models;
+using UIMS.Web.Extentions;
+using NPOI.SS.UserModel;
 
 namespace UIMS.Web.Controllers
 {
@@ -115,6 +117,35 @@ namespace UIMS.Web.Controllers
             await _employeeService.SaveChangesAsync();
 
             return Ok();
+        }
+
+        [HttpPost]
+        public ActionResult Upload(IFormFileCollection formFile)
+        {
+            if (formFile == null || !formFile.Any())
+            {
+                ModelState.AddModelError("File Not Found", "فایلی آپلود نشده است");
+                return BadRequest();
+            }
+
+            IFormFile file = formFile[0];
+            
+            var employees = _employeeService.GetAllByExcel(file);
+
+            foreach (var employeeInsertVM in employees)
+            {
+                var isEmployeeExists = _employeeService.IsExistsAsync(x => x.Post == employeeInsertVM.EmployeePost).Result;
+                var isUserExists = _userService.IsExistsAsync(x => x.MelliCode == employeeInsertVM.MelliCode).Result;
+
+                if (isUserExists || isEmployeeExists)
+                    continue;
+
+                var user = _mapper.Map<AppUser>(employeeInsertVM);
+                user.UserName = user.MelliCode;
+                var result = _userService.CreateUserAsync(user, user.MelliCode, "employee").Result;
+
+            }
+            return Ok(_userService.SaveChanges());
         }
     }
 }

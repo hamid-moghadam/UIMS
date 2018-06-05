@@ -17,6 +17,7 @@ namespace UIMS.Web.Controllers
     {
         protected int UserId => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
+        protected bool HasToken => int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier).Value,out int a);
 
         protected List<string> Roles => User.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value.Split(',').ToList();
         //protected List<string> Roles => User.FindFirst(ClaimTypes.NameIdentifier).Value);

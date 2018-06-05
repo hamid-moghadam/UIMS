@@ -8,6 +8,9 @@ using UIMS.Web.Data;
 using UIMS.Web.DTO;
 using UIMS.Web.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using UIMS.Web.Extentions;
+using NPOI.SS.UserModel;
 
 namespace UIMS.Web.Services
 {
@@ -37,6 +40,38 @@ namespace UIMS.Web.Services
         {
             //_userService.Remove(model.User);
             base.Remove(model);
+        }
+
+        public List<EmployeeInsertViewModel> GetAllByExcel(IFormFile file)
+        {
+            List<EmployeeInsertViewModel> employees = new List<EmployeeInsertViewModel>(5);
+            var rows = new ExcelExtentions().GetRows(file);
+
+            foreach (var row in rows)
+            {
+                if (row.Cells.Any(d => d.CellType == CellType.Blank) || row.Cells.Count != 4) continue;
+
+                string name = row.GetCell(0).ToString();
+                string family = row.GetCell(1).ToString();
+                string melliCode = row.GetCell(2).ToString();
+                string post = row.GetCell(3).ToString();
+
+                if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(family) || string.IsNullOrEmpty(melliCode) || string.IsNullOrEmpty(post))
+                    continue;
+
+                if (!melliCode.IsNumber())
+                    continue;
+
+                employees.Add(new EmployeeInsertViewModel()
+                {
+                    Name = name,
+                    Family = family,
+                    MelliCode = melliCode,
+                    EmployeePost = post
+                });
+            }
+            return employees;
+
         }
 
     }

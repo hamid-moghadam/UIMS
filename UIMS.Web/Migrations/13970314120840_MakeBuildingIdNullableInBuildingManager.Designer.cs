@@ -11,9 +11,10 @@ using UIMS.Web.Data;
 namespace UIMS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("13970314120840_MakeBuildingIdNullableInBuildingManager")]
+    partial class MakeBuildingIdNullableInBuildingManager
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

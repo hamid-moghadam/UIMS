@@ -9,6 +9,8 @@ using UIMS.Web.Services;
 using UIMS.Web.DTO;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using UIMS.Web.Models;
+using UIMS.Web.Extentions;
+using NPOI.SS.UserModel;
 
 namespace UIMS.Web.Controllers
 {
@@ -113,15 +115,15 @@ namespace UIMS.Web.Controllers
             }
 
             //var buildingId = buildingManagerUpdateVM.BuildingManagerBuildingId.HasValue ? buildingManagerUpdateVM.BuildingManagerBuildingId.Value : user.BuildingManager.BuildingId;
-            //if (buildingManagerUpdateVM.BuildingManagerBuildingId.HasValue)
-            //{
-            //    var isBuildingExists = await _buildingService.IsExistsAsync(x => x.Id == buildingId);
-            //    if (!isBuildingExists)
-            //    {
-            //        ModelState.AddModelError("Building", "این ساختمان در سیستم ثبت نشده است.");
-            //        return BadRequest(ModelState);
-            //    }
-            //}
+            if (buildingManagerUpdateVM.BuildingManagerBuildingId.HasValue)
+            {
+                var isBuildingExists = await _buildingService.IsExistsAsync(x => x.Id == buildingManagerUpdateVM.BuildingManagerBuildingId.Value);
+                if (!isBuildingExists)
+                {
+                    ModelState.AddModelError("Building", "این ساختمان در سیستم ثبت نشده است.");
+                    return BadRequest(ModelState);
+                }
+            }
             //converting when BuildingId is null not working and change BuildingID to 0
             //user.BuildingManager.BuildingId = buildingId;
 
@@ -140,6 +142,33 @@ namespace UIMS.Web.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        public ActionResult Upload(IFormFileCollection formFile)
+        {
+            if (formFile == null || !formFile.Any())
+            {
+                ModelState.AddModelError("File Not Found", "فایلی آپلود نشده است");
+                return BadRequest();
+            }
+
+            IFormFile file = formFile[0];
+            
+            var managers = _buildingManagerService.GetAllByExcel(file);
+
+            foreach (var manager in managers)
+            {
+                var isUserExists = _userService.IsExistsAsync(x => x.MelliCode == manager.MelliCode).Result;
+
+                if (isUserExists)
+                    continue;
+
+                var user = _mapper.Map<AppUser>(manager);
+                user.UserName = user.MelliCode;
+                var result = _userService.CreateUserAsync(user, user.MelliCode, "buildingManager").Result;
+
+            }
+            return Ok(_userService.SaveChanges());
+        }
 
 
     }

@@ -8,6 +8,9 @@ using UIMS.Web.DTO;
 using UIMS.Web.Models;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using UIMS.Web.Extentions;
+using NPOI.SS.UserModel;
 
 namespace UIMS.Web.Services
 {
@@ -39,5 +42,34 @@ namespace UIMS.Web.Services
             base.Remove(model);
         }
 
+        public List<BuildingManagerInsertViewModel> GetAllByExcel(IFormFile file)
+        {
+            List<BuildingManagerInsertViewModel> managers = new List<BuildingManagerInsertViewModel>(5);
+            var rows = new ExcelExtentions().GetRows(file);
+
+            foreach (var row in rows)
+            {
+                if (row.Cells.Any(d => d.CellType == CellType.Blank) || row.Cells.Count != 3) continue;
+
+                string name = row.GetCell(0).ToString();
+                string family = row.GetCell(1).ToString();
+                string melliCode = row.GetCell(2).ToString();
+
+                if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(family) || string.IsNullOrEmpty(melliCode))
+                    continue;
+
+                if (!melliCode.IsNumber())
+                    continue;
+
+                managers.Add(new BuildingManagerInsertViewModel()
+                {
+                    Name = name,
+                    Family = family,
+                    MelliCode = melliCode,
+                });
+            }
+
+            return managers;
+        }
     }
 }

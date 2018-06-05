@@ -150,56 +150,15 @@ namespace UIMS.Web.Controllers
         [HttpPost]
         public ActionResult Upload(IFormFileCollection formFile)
         {
-            List<StudentInsertViewModel> students = new List<StudentInsertViewModel>(5);
-            
-            IFormFile file = formFile[0];
-            if (file != null && file.Length > 0)
+            if (formFile == null || !formFile.Any())
             {
-                string sFileExtension = Path.GetExtension(file.FileName).ToLower();
-                ISheet sheet;
-                using (var stream = new FileStream(file.FileName, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                    stream.Position = 0;
-                    if (sFileExtension == ".xls")
-                    {
-                        HSSFWorkbook hssfwb = new HSSFWorkbook(stream); //This will read the Excel 97-2000 formats  
-                        sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook  
-                    }
-                    else
-                    {
-                        XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
-                        sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook   
-                    }
-                    IRow headerRow = sheet.GetRow(0); //Get Header Row
-                    int cellCount = headerRow.LastCellNum;
-                    for (int i = (sheet.FirstRowNum + 1); i <= sheet.LastRowNum; i++) //Read Excel File
-                    {
-                        IRow row = sheet.GetRow(i);
-                        if (row == null) continue;
-                        if (row.Cells.Any(d => d.CellType == CellType.Blank) || row.Cells.Count != 4) continue;
-
-                        string name = row.GetCell(0).ToString();
-                        string family = row.GetCell(1).ToString();
-                        string melliCode = row.GetCell(2).ToString();
-                        string studentCode = row.GetCell(3).ToString();
-
-                        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(family) || string.IsNullOrEmpty(melliCode) || string.IsNullOrEmpty(studentCode))
-                            continue;
-
-                        if (!melliCode.IsNumber() || !studentCode.IsNumber())
-                            continue;
-
-                        students.Add(new StudentInsertViewModel()
-                        {
-                             Name = name,
-                             Family = family,
-                             MelliCode = melliCode,
-                             StudentCode = studentCode
-                        });
-                    }
-                }
+                ModelState.AddModelError("File Not Found", "فایلی آپلود نشده است");
+                return BadRequest();
             }
+
+            IFormFile file = formFile[0];
+            var students = _studentService.GetAllByExcel(file);
+
             foreach (var studentInsertVM in students)
             {
                 var isStudentExists = _studentService.IsExistsAsync(x => x.Code == studentInsertVM.StudentCode).Result;
@@ -216,5 +175,6 @@ namespace UIMS.Web.Controllers
             return Ok(_userService.SaveChanges());
         }
 
+        
     }
 }

@@ -9,6 +9,8 @@ using UIMS.Web.Services;
 using UIMS.Web.DTO;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using UIMS.Web.Models;
+using UIMS.Web.Extentions;
+using NPOI.SS.UserModel;
 
 namespace UIMS.Web.Controllers
 {
@@ -149,5 +151,35 @@ namespace UIMS.Web.Controllers
 
             return Ok();
         }
+
+        [HttpPost]
+        public ActionResult Upload(IFormFileCollection formFile)
+        {
+            if (formFile == null || !formFile.Any())
+            {
+                ModelState.AddModelError("File Not Found", "فایلی آپلود نشده است");
+                return BadRequest();
+            }
+
+            IFormFile file = formFile[0];
+            
+            var managers = _groupManagerService.GetAllByExcel(file);
+
+            foreach (var manager in managers)
+            {
+                var isUserExists = _userService.IsExistsAsync(x => x.MelliCode == manager.MelliCode).Result;
+
+                if (isUserExists)
+                    continue;
+
+                var user = _mapper.Map<AppUser>(manager);
+                user.UserName = user.MelliCode;
+                user.GroupManager = new GroupManager() { };
+                var result = _userService.CreateUserAsync(user, user.MelliCode, "groupManager").Result;
+
+            }
+            return Ok(_userService.SaveChanges());
+        }
+
     }
 }

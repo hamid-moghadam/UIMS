@@ -7,6 +7,6 @@ namespace UIMS.Web.DTO
 {
     public class BuildingManagerUpdateViewModel:BaseUpdateViewModel
     {
-        //public int? BuildingManagerBuildingId { get; set; }
+        public int? BuildingManagerBuildingId { get; set; }
     }
 }

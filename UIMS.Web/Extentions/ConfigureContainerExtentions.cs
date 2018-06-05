@@ -130,6 +130,8 @@ namespace UIMS.Web.Extentions
             serviceCollection.AddScoped<ProfessorService>();
             serviceCollection.AddScoped<SemesterService>();
             serviceCollection.AddScoped<StudentService>();
+            serviceCollection.AddScoped<CourseService>();
+            serviceCollection.AddScoped<BuildingClassService>();
 
         }
 
