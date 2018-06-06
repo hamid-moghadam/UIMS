@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UIMS.Web.DTO;
+using UIMS.Web.Extentions;
 
 namespace UIMS.Web.Models.AutoMapperConfigurations
 {
@@ -102,6 +103,15 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
             CreateMap<BuildingClass, BuildingClassViewModel>();
             CreateMap<BuildingClass, BuildingClassInsertViewModel>().ReverseMap();
             CreateMap<BuildingClassUpdateViewModel, BuildingClass>().ReverseMap();
+
+            CreateMap<CourseField, CourseFieldViewModel>();
+            CreateMap<CourseField, CourseFieldInsertViewModel>().ReverseMap();
+            CreateMap<CourseFieldUpdateViewModel, CourseField>().ReverseMap();
+
+            CreateMap<Presentation, PresentationViewModel>()
+                .ForMember(x => x.Day, source => source.MapFrom(x => x.Day.GetDayName()));
+            CreateMap<Presentation, PresentationInsertViewModel>().ReverseMap();
+            CreateMap<PresentationUpdateViewModel, Presentation>().ReverseMap();
         }
 
     }

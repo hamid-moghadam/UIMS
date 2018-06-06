@@ -6,6 +6,7 @@ using AutoMapper;
 using UIMS.Web.Data;
 using UIMS.Web.DTO;
 using UIMS.Web.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace UIMS.Web.Services
 {
@@ -13,6 +14,11 @@ namespace UIMS.Web.Services
     {
         public SemesterService(DataContext context, IMapper mapper) : base(context, mapper)
         {
+        }
+
+        public async Task<Semester> GetCurrent()
+        {
+            return await Entity.SingleOrDefaultAsync(x => x.Enable);
         }
     }
 }

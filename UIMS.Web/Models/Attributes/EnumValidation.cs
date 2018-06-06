@@ -3,23 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using UIMS.Web.Extentions;
-using UIMS.Web.Services;
 
 namespace UIMS.Web.Models.Attributes
 {
-    public class Number : ValidationAttribute
+    public class EnumValidation:ValidationAttribute
     {
-        
+
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            if (value == null)
+            if (Enum.IsDefined(validationContext.ObjectType, value))
                 return ValidationResult.Success;
 
-            if (value != null && value.ToString().IsNumber())
-                return ValidationResult.Success;
-
-            return new ValidationResult($"{validationContext.MemberName} Is Not Number");
+            return new ValidationResult($"{validationContext.MemberName} Is Invalid");
         }
     }
 }
