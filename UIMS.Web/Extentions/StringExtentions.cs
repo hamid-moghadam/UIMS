@@ -13,5 +13,10 @@ namespace UIMS.Web.Extentions
             return Regex.IsMatch(number, @"^[0-9]+$");
         }
 
+        public static bool IsSemester(this string input)
+        {
+            return Regex.IsMatch(input, "[0-9]{4}-[1-3]{1}");
+        }
+
     }
 }

@@ -24,7 +24,7 @@ namespace UIMS.Web.Data.Extentions
                         break;
 
                     case EntityState.Added:
-                        if (entry.Entity is IEnable baseEnable)
+                        if (entry.Entity is IEnable baseEnable && entry.Entity.GetType() != typeof(Semester))
                             baseEnable.Enable = true;
                         baseAudit.Created = now;
                         break;

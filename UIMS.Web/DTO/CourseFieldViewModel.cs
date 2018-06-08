@@ -11,5 +11,7 @@ namespace UIMS.Web.DTO
         public CourseViewModel Course { get; set; }
 
         public FieldViewModel Field { get; set; }
+
+        public bool Enable { get; set; }
     }
 }

@@ -165,9 +165,9 @@ namespace UIMS.Web.Controllers
                 var user = _mapper.Map<AppUser>(manager);
                 user.UserName = user.MelliCode;
                 var result = _userService.CreateUserAsync(user, user.MelliCode, "buildingManager").Result;
-
+                _userService.SaveChanges();
             }
-            return Ok(_userService.SaveChanges());
+            return Ok();
         }
 
 

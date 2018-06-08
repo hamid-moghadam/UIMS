@@ -6,8 +6,7 @@ using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class CourseFieldUpdateViewModel:BaseModel
+    public class StudentPresentationUpdateViewModel:BaseModel
     {
-        public bool? Enable { get; set; }
     }
 }

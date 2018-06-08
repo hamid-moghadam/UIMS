@@ -6,12 +6,14 @@ using AutoMapper;
 using UIMS.Web.Data;
 using UIMS.Web.DTO;
 using UIMS.Web.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace UIMS.Web.Services
 {
     public class CourseFieldService : BaseService<CourseField, CourseFieldInsertViewModel, CourseFieldUpdateViewModel, CourseFieldViewModel>
     {
 
+        private readonly DbSet<Presentation> _presentation;
 
         //public CourseFieldService(this)[int indes]
 
@@ -27,6 +29,7 @@ namespace UIMS.Web.Services
 
         public CourseFieldService(DataContext context, IMapper mapper) : base(context, mapper)
         {
+            _presentation = context.Set<Presentation>();
             
             int[] a = new int[2];
 
@@ -35,6 +38,23 @@ namespace UIMS.Web.Services
                 { "GetAll", Entity.Where(x => x.CourseId == 1) }
             };
             //Entity.AsQueryable
+        }
+
+
+        public override void Remove(CourseField model)
+        {
+            model.Enable = false;
+        }
+
+        public override CourseField Update(CourseField model)
+        {
+            if (model.Enable)
+                _presentation.Where(x => x.CourseFieldId == model.Id).ToList().ForEach(x => x.Enable = true);
+            else
+                _presentation.Where(x => x.CourseFieldId == model.Id).ToList().ForEach(x => x.Enable = false);
+
+            SaveChanges();            
+            return base.Update(model);
         }
     }
 }

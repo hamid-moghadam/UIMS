@@ -143,9 +143,9 @@ namespace UIMS.Web.Controllers
                 var user = _mapper.Map<AppUser>(employeeInsertVM);
                 user.UserName = user.MelliCode;
                 var result = _userService.CreateUserAsync(user, user.MelliCode, "employee").Result;
-
+                _userService.SaveChanges();
             }
-            return Ok(_userService.SaveChanges());
+            return Ok();
         }
     }
 }

@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class CourseFieldUpdateViewModel:BaseModel
+    public class StudentPresentationPartialViewModel
     {
-        public bool? Enable { get; set; }
+        public StudentViewModel Student { get; set; }
     }
 }

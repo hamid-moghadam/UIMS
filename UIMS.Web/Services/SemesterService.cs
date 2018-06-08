@@ -16,9 +16,16 @@ namespace UIMS.Web.Services
         {
         }
 
-        public async Task<Semester> GetCurrent()
+        public async Task<Semester> GetCurrentAsycn()
         {
             return await Entity.SingleOrDefaultAsync(x => x.Enable);
+        }
+
+        public async Task<Semester> SetCurrentAsycn(Semester semester)
+        {
+            await Entity.Where(x => x.Id != semester.Id).ForEachAsync(x => x.Enable = false);
+            semester.Enable = true;
+            return semester;
         }
     }
 }

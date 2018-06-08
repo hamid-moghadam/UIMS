@@ -151,6 +151,11 @@ namespace UIMS.Web.Services
                 return await Entity.AnyAsync(x => (x.UserName == entity.UserName || x.PhoneNumber == entity.PhoneNumber || x.MelliCode == entity.MelliCode) && x.Id != entity.Id);
 
         }
+        public async Task<bool> IsEnable(int userId)
+        {
+            return await Entity.AnyAsync(x => x.Id == userId && x.Enable);
+        }
+
 
         public async Task<bool> IsInRoleAsync(AppUser user, string role)
         {

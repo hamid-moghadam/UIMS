@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class PresentationViewModel:BaseModel
+    public class PresentationPartialViewModel
     {
         public string Code { get; set; }
 
@@ -28,8 +27,7 @@ namespace UIMS.Web.DTO
 
         public BuildingClassViewModel BuildingClass { get; set; }
 
-        public List<StudentPresentationPartialViewModel> Students { get; set; }
-
         public bool Enable { get; set; }
+
     }
 }

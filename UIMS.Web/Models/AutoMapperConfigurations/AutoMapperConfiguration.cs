@@ -110,8 +110,14 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
 
             CreateMap<Presentation, PresentationViewModel>()
                 .ForMember(x => x.Day, source => source.MapFrom(x => x.Day.GetDayName()));
+            CreateMap<Presentation, PresentationPartialViewModel>().ReverseMap();
             CreateMap<Presentation, PresentationInsertViewModel>().ReverseMap();
             CreateMap<PresentationUpdateViewModel, Presentation>().ReverseMap();
+
+            CreateMap<StudentPresentation, StudentPresentationViewModel>();
+            CreateMap<StudentPresentation, StudentPresentationPartialViewModel>();
+            CreateMap<StudentPresentation, StudentPresentationInsertViewModel>().ReverseMap();
+            CreateMap<StudentPresentationUpdateViewModel, StudentPresentation>().ReverseMap();
         }
 
     }

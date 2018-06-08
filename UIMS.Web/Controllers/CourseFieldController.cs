@@ -93,9 +93,23 @@ namespace UIMS.Web.Controllers
             return Ok();
         }
 
-        //public Task<IActionResult> Update([FromBody] BaseUpdateViewModel employeeUpdateVM)
-        //{
-        //    throw new NotImplementedException();
-        //}
+
+
+        [HttpPost]
+        public async Task<IActionResult> Update([FromBody] CourseFieldUpdateViewModel courseFieldUpdateVM)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var courseField = await _courseFieldService.GetAsync(x => x.Id == courseFieldUpdateVM.Id);
+
+            if (courseField == null)
+                return NotFound();
+
+            courseField = _mapper.Map(courseFieldUpdateVM, courseField);
+            _courseFieldService.Update(courseField);
+            await _courseService.SaveChangesAsync();
+            return Ok();
+        }
     }
 }

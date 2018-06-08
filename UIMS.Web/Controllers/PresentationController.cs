@@ -71,7 +71,7 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var currentSemester = await _semesterService.GetCurrent();
+            var currentSemester = await _semesterService.GetCurrentAsycn();
             var presentation = _mapper.Map<Presentation>(presentationInsertVM);
             presentation.SemesterId = currentSemester.Id;
             await _presentationService.AddAsync(presentation);

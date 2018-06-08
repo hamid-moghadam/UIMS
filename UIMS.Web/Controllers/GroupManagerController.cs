@@ -176,9 +176,9 @@ namespace UIMS.Web.Controllers
                 user.UserName = user.MelliCode;
                 user.GroupManager = new GroupManager() { };
                 var result = _userService.CreateUserAsync(user, user.MelliCode, "groupManager").Result;
-
+                _userService.SaveChanges();
             }
-            return Ok(_userService.SaveChanges());
+            return Ok();
         }
 
     }

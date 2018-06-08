@@ -8,6 +8,7 @@ using UIMS.Web.DTO;
 using UIMS.Web.Services;
 using AutoMapper;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using UIMS.Web.Extentions;
 
 namespace UIMS.Web.Controllers
 {
@@ -48,6 +49,11 @@ namespace UIMS.Web.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            if (!semesterInsertVM.Name.IsSemester())
+            {
+                ModelState.AddModelError("Semester", "نیمسال تحصیلی وارد شده صحیح نیست.");
+                return BadRequest(ModelState);
+            }
 
             if (await _semesterService.IsExistsAsync(x=>x.Name == semesterInsertVM.Name))
             {
@@ -55,18 +61,26 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _semesterService.AddAsync(semesterInsertVM);
+            var result  = await _semesterService.AddAsync(semesterInsertVM);
+            result.Enable = false;
             await _semesterService.SaveChangesAsync();
 
             return Ok();
         }
 
-        //[HttpPost]
-        //public Task<IActionResult> Remove(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
-        
+        [HttpPost]
+        public async Task<IActionResult> SetCurrent(int id)
+        {
+            var semester = await _semesterService.GetAsync(x=>x.Id == id);
+            if (semester == null)
+                return NotFound();
+
+            await _semesterService.SetCurrentAsycn(semester);
+            await _semesterService.SaveChangesAsync();
+
+            return Ok();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Update([FromBody] SemesterUpdateViewModel semesterUpdateVM)
         {

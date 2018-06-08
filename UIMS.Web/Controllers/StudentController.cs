@@ -170,9 +170,9 @@ namespace UIMS.Web.Controllers
                 var user = _mapper.Map<AppUser>(studentInsertVM);
                 user.UserName = user.Student.Code;
                 var result = _userService.CreateUserAsync(user, user.MelliCode, "student").Result;
-
+                _userService.SaveChanges();
             }
-            return Ok(_userService.SaveChanges());
+            return Ok();
         }
 
         

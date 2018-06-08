@@ -146,9 +146,9 @@ namespace UIMS.Web.Controllers
                 user.UserName = user.MelliCode;
                 user.Professor = new Professor() { };
                 var result = _userService.CreateUserAsync(user, user.MelliCode, "professor").Result;
-
+                _userService.SaveChanges();
             }
-            return Ok(_userService.SaveChanges());
+            return Ok();
         }
 
     }

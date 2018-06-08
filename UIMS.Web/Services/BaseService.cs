@@ -29,6 +29,7 @@ namespace UIMS.Web.Services
         public virtual async Task<TViewModel> GetAsync(int id) => await Entity.ProjectTo<TViewModel>().SingleOrDefaultAsync(x => x.Id == id);
 
         public virtual async Task<TModel> GetAsync(Expression<Func<TModel, bool>> expression) => await Entity.SingleOrDefaultAsync(expression);
+        public virtual TModel Get(Expression<Func<TModel, bool>> expression) => Entity.SingleOrDefault(expression);
 
         //public async Task<TModel> GetAsync(int id) => await Entity.SingleOrDefaultAsync(x => x.Id == id);
 

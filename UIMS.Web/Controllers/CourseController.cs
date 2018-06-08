@@ -97,5 +97,33 @@ namespace UIMS.Web.Controllers
 
             return Ok();
         }
+
+
+        [HttpPost]
+        public IActionResult Upload(IFormFileCollection formFile)
+        {
+
+            if (formFile == null || !formFile.Any())
+            {
+                ModelState.AddModelError("File Not Found", "فایلی آپلود نشده است");
+                return BadRequest(ModelState);
+            }
+
+            IFormFile file = formFile[0];
+            var courses = _courseService.GetAllByExcel(file);
+
+            foreach (var courseInsert in courses)
+            {
+                var isCourseExists = _courseService.IsExistsAsync(x => x.Name == courseInsert.Name || x.Code == courseInsert.Code).Result;
+                if (isCourseExists)
+                    continue;
+
+                var courseResult = _courseService.AddAsync(courseInsert).Result;
+                _courseService.SaveChanges();
+            }
+            return Ok();
+        }
+
+
     }
 }
