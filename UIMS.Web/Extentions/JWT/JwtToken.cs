@@ -15,12 +15,11 @@ namespace UIMS.Web.Extentions.JWT
     {
         public static JwtSecurityToken GetSecurityToken(AppUser user, List<string> roles)
         {
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub,user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("roles",string.Join(',',roles))
-            };
+            List<Claim> claims = new List<Claim>();
+            roles.ForEach(x => claims.Add(new Claim("role", x)));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+
             var tokenInfo = new TokenConfiguration().GetTokenAuthenticationInfo();
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenInfo.SecretKey));
@@ -30,7 +29,7 @@ namespace UIMS.Web.Extentions.JWT
             var token = new JwtSecurityToken(
                     tokenInfo.Issuer,
                     tokenInfo.Audience,
-                    claims,
+                    claims.ToArray(),
                     expires: DateTime.Now.AddYears(1),
                     signingCredentials: creds);
 

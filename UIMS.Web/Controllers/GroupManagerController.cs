@@ -11,6 +11,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using UIMS.Web.Models;
 using UIMS.Web.Extentions;
 using NPOI.SS.UserModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UIMS.Web.Controllers
 {
@@ -21,14 +22,16 @@ namespace UIMS.Web.Controllers
         private readonly IMapper _mapper;
 
         private readonly GroupManagerService _groupManagerService;
+        private readonly CourseFieldService _courseFieldService;
         private readonly FieldService _fieldService;
         private readonly UserService _userService;
 
-        public GroupManagerController(GroupManagerService groupManagerService, IMapper mapper, UserService userService, FieldService fieldService)
+        public GroupManagerController(GroupManagerService groupManagerService, IMapper mapper, UserService userService, FieldService fieldService, CourseFieldService courseFieldService)
         {
             _groupManagerService = groupManagerService;
             _fieldService = fieldService;
             _userService = userService;
+            _courseFieldService = courseFieldService;
             _mapper = mapper;
         }
 
@@ -50,6 +53,20 @@ namespace UIMS.Web.Controllers
             if (manager == null)
                 return NotFound();
             return Ok(manager);
+        }
+
+
+
+        [HttpGet]
+        [Authorize(Roles ="groupManager")]
+        [SwaggerResponse(200, typeof(List<CourseFieldViewModel>))]
+        public async Task<IActionResult> GetCourseFields()
+        {
+            var manager = await _groupManagerService.GetAsync(x=>x.UserId == UserId);
+
+            var courseFields = await _courseFieldService.GetAllByGroupManagerId(manager.Id);
+
+            return Ok(courseFields);
         }
 
 

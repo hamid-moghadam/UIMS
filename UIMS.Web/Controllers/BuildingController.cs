@@ -39,12 +39,12 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (baseInsertVM.BuildingManagerId.HasValue)
-            {
-                var isManagerHasBuilding = await _buildingManagerService.IsExistsAsync(x => x.Id == baseInsertVM.BuildingManagerId.Value && x.BuildingId != 0);
-                ModelState.AddModelError("BuildingManager", "مدیر ساختمان مورد نظر برای ساختمانی دیگر ثبت شده است.");
-                return BadRequest(ModelState);
-            }
+            //if (baseInsertVM.BuildingManagerId.HasValue)
+            //{
+            //    var isManagerHasBuilding = await _buildingManagerService.IsExistsAsync(x => x.Id == baseInsertVM.BuildingManagerId.Value && x.BuildingId != 0);
+            //    ModelState.AddModelError("BuildingManager", "مدیر ساختمان مورد نظر برای ساختمانی دیگر ثبت شده است.");
+            //    return BadRequest(ModelState);
+            //}
 
             await _buildingService.AddAsync(baseInsertVM);
             await _buildingService.SaveChangesAsync();
@@ -97,6 +97,11 @@ namespace UIMS.Web.Controllers
             //        return BadRequest(ModelState);
             //    }
             //}
+            if (await _buildingService.IsExistsAsync(x=>x.Name == buildingUpdateVM.Name))
+            {
+                ModelState.AddModelError("Building", "این ساختمان با نام مورد نظر قبلا در سیستم ثبت شده است");
+                return BadRequest(ModelState);
+            }
 
             var building = await _buildingService.GetAsync(x => x.Id == buildingUpdateVM.Id);
             if (building == null)

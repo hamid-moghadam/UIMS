@@ -12,6 +12,6 @@ namespace UIMS.Web.DTO
         public string Name { get; set; }
 
 
-        public int? BuildingManagerId { get; set; }
+        //public int? BuildingManagerId { get; set; }
     }
 }

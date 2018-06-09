@@ -11,6 +11,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using UIMS.Web.Models;
 using UIMS.Web.Extentions;
 using NPOI.SS.UserModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UIMS.Web.Controllers
 {
@@ -21,13 +22,17 @@ namespace UIMS.Web.Controllers
         private readonly IMapper _mapper;
 
         private readonly ProfessorService _professorService;
+        private readonly PresentationService _presentationService;
+        private readonly SemesterService _semesterService;
         //private readonly BuildingService _buildingService;
 
         private readonly UserService _userService;
 
-        public ProfessorController(ProfessorService professorService, IMapper mapper, UserService userService)
+        public ProfessorController(ProfessorService professorService, IMapper mapper, UserService userService, PresentationService presentationService, SemesterService semesterService)
         {
             _professorService = professorService;
+            _presentationService = presentationService;
+            _semesterService = semesterService;
             _userService = userService;
             _mapper = mapper;
         }
@@ -122,6 +127,27 @@ namespace UIMS.Web.Controllers
 
             return Ok();
         }
+
+        [HttpGet]
+        [Authorize(Roles ="professor")]
+        public async Task<IActionResult> GetPresentations(string semester)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            string currentSemester = "";
+            var user = await _userService.GetAsync(x => x.Id == UserId);
+
+            if (semester != null && semester.IsSemester())
+                currentSemester = semester;
+            else
+                currentSemester = (await _semesterService.GetCurrentAsycn()).Name;
+
+            var presentations = await _presentationService.GetAllByProfessorId(user.Professor.Id,currentSemester);
+
+            return Ok(presentations);
+        }
+
 
         [HttpPost]
         public ActionResult Upload(IFormFileCollection formFile)

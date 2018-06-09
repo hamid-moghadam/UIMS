@@ -24,6 +24,9 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
             CreateMap<AppUser, UserViewModel>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
+            CreateMap<AppUser, UserLoginViewModel>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
 
             //CreateMap<AppUser, UserUpdateViewModel>()
             //    .ReverseMap()
@@ -110,7 +113,13 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
 
             CreateMap<Presentation, PresentationViewModel>()
                 .ForMember(x => x.Day, source => source.MapFrom(x => x.Day.GetDayName()));
-            CreateMap<Presentation, PresentationPartialViewModel>().ReverseMap();
+
+            CreateMap<Presentation, PresentationPartialViewModel>()
+                .ForMember(x => x.Day, source => source.MapFrom(x => x.Day.GetDayName()));
+            CreateMap<Presentation, PresentationBuildingManagerViewModel>()
+                .ForMember(x => x.Day, source => source.MapFrom(x => x.Day.GetDayName()));
+            CreateMap<Presentation, PresentationProfessorViewModel>()
+                .ForMember(x => x.Day, source => source.MapFrom(x => x.Day.GetDayName()));
             CreateMap<Presentation, PresentationInsertViewModel>().ReverseMap();
             CreateMap<PresentationUpdateViewModel, Presentation>().ReverseMap();
 

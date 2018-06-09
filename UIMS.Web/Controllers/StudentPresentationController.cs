@@ -10,6 +10,7 @@ using UIMS.Web.Models;
 using UIMS.Web.Extentions;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using AutoMapper;
 
 namespace UIMS.Web.Controllers
 {
@@ -22,46 +23,57 @@ namespace UIMS.Web.Controllers
         private readonly PresentationService _presentationService;
         private readonly UserService _userService;
         private readonly SemesterService _semesterService;
+        private readonly IMapper _mapper;
 
 
-        public StudentPresentationController(StudentPresentationService studentPresentationService, StudentService studentService, PresentationService presentationService, UserService userService, SemesterService semesterService)
+        public StudentPresentationController(StudentPresentationService studentPresentationService, StudentService studentService, PresentationService presentationService, UserService userService, SemesterService semesterService, IMapper mapper)
         {
             _userService = userService;
             _semesterService = semesterService;
             _studentPresentationService = studentPresentationService;
+            _mapper = mapper;
             _presentationService = presentationService;
             _studentService = studentService;
         }
 
         [HttpGet]
-        [SwaggerResponse(200,typeof(StudentPresentationViewModel))]
         [Authorize(Roles ="student")]
-        public async Task<IActionResult> GetAll(string semester="")
+        [SwaggerResponse(200,typeof(StudentPresentationViewModel))]
+        public async Task<IActionResult> GetAll(string semester)
         {
-            var user = await _userService.GetAsync(x => x.Id == UserId);
-            if (!user.Enable)
-            {
-                ModelState.AddModelError("User", "دانشجو غیر فعال است");
-                return BadRequest(ModelState);
-            }
-            if (semester != "")
-            {
-                if (!semester.IsSemester())
-                {
-                    ModelState.AddModelError("Semester", "نیمسال وارد شده صحیح نیست");
-                    return BadRequest(ModelState);
-                }
-            }
-            else
-            {
-                semester = (await _semesterService.GetCurrentAsycn()).Name;
-            }
+            //var user = await _userService.GetAsync(x => x.Id == UserId);
+            //if (!user.Enable)
+            //{
+            //    ModelState.AddModelError("User", "دانشجو غیر فعال است");
+            //    return BadRequest(ModelState);
+            //}
+            var student = await _studentService.GetAsync(x => x.UserId == UserId);
+            string currentSemester = await _studentPresentationService.ParseSemester(semester);
             
-            var presentations = await _studentPresentationService.GetAll(user.Student.Id, semester);
+            var presentations = await _studentPresentationService.GetAll(student.Id, currentSemester);
 
             return Ok(presentations);
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "student")]
+        public async Task<IActionResult> Update([FromBody] StudentPresentationUpdateViewModel studentPresentationUpdateVM)
+        {
+            var studentPresentation = await _studentPresentationService.GetAsync(x => x.Id == studentPresentationUpdateVM.Id);
+
+            if (studentPresentation == null)
+                return NotFound();
+
+            studentPresentation = _mapper.Map(studentPresentationUpdateVM, studentPresentation);
+
+            _studentPresentationService.Update(studentPresentation);
+            await _studentPresentationService.SaveChangesAsync();
+
+            return Ok();
 
         }
+
 
         [HttpPost]
         public IActionResult Upload(IFormFileCollection formFile)

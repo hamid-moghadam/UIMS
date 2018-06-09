@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UIMS.Web.Data;
+using UIMS.Web.Extentions;
 using UIMS.Web.Models;
 
 namespace UIMS.Web.Services
@@ -33,6 +34,14 @@ namespace UIMS.Web.Services
             //TModel baseModel = _mapper.Map<TModel>(model);
             return (await Entity.AddAsync(model)).Entity;
 
+        }
+
+        public async Task<string> ParseSemester(string semester)
+        {
+            if (semester != null && semester.IsSemester())
+                return semester;
+            else
+                return (await _context.Set<Semester>().SingleOrDefaultAsync(x => x.Enable)).Name;
         }
 
         public async Task<int> SaveChangesAsync()

@@ -22,12 +22,15 @@ namespace UIMS.Web.Controllers
 
         private readonly BuildingManagerService _buildingManagerService;
         private readonly BuildingService _buildingService;
-
+        private readonly BuildingClassService _buildingClassService;
+        private readonly PresentationService _presentationService;
         private readonly UserService _userService;
 
-        public BuildingManagerController(BuildingManagerService buildingManagerService, IMapper mapper, UserService userService, BuildingService buildingService)
+        public BuildingManagerController(BuildingManagerService buildingManagerService, IMapper mapper, UserService userService, BuildingService buildingService, BuildingClassService buildingClassService, PresentationService presentationService)
         {
             _buildingManagerService = buildingManagerService;
+            _presentationService = presentationService;
+            _buildingClassService = buildingClassService;
             _buildingService = buildingService;
             _userService = userService;
             _mapper = mapper;
@@ -52,6 +55,42 @@ namespace UIMS.Web.Controllers
                 return NotFound();
             return Ok(manager);
         }
+
+        [SwaggerResponse(200, typeof(List<BuildingClassViewModel>))]
+        [HttpGet]
+        public async Task<IActionResult> GetBuildingClasses()
+        {
+            var manager = await _buildingManagerService.GetAsync(x => x.UserId == UserId);
+            if (!manager.BuildingId.HasValue)
+            {
+                ModelState.AddModelError("BuildingManager", "ساختمانی برای مدیر ساختمان مورد نظر ثبت نشده است");
+                return BadRequest(ModelState);
+            }
+
+            var buildingClasses = await _buildingClassService.GetAllbyBuildingId(manager.BuildingId.Value);
+
+            return Ok(buildingClasses);
+        }
+
+        [HttpGet]
+        [SwaggerResponse(200, typeof(List<PresentationBuildingManagerViewModel>))]
+        public async Task<IActionResult> GetPresentations(string semester)
+        {
+            string currentSemester = await _buildingClassService.ParseSemester(semester);
+            
+
+            var manager = await _buildingManagerService.GetAsync(x => x.UserId == UserId);
+            if (!manager.BuildingId.HasValue)
+            {
+                ModelState.AddModelError("BuildingManager", "ساختمانی برای مدیر ساختمان مورد نظر ثبت نشده است");
+                return BadRequest(ModelState);
+            }
+
+            var presentations = await _presentationService.GetAllByBuildingId(manager.BuildingId.Value,currentSemester);
+
+            return Ok(presentations);
+        }
+
 
 
         [HttpPost]

@@ -13,6 +13,7 @@ using UIMS.Web.Models;
 using UIMS.Web.Extentions.JWT;
 using System.IdentityModel.Tokens.Jwt;
 using UIMS.Web.Extentions;
+using Microsoft.AspNetCore.Identity;
 
 namespace UIMS.Web.Controllers
 {
@@ -21,13 +22,17 @@ namespace UIMS.Web.Controllers
     public class UserController : ApiController
     {
         private readonly UserService _userService;
+        private readonly SemesterService _semesterService;
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly IMapper _mapper;
 
 
-        public UserController(UserService userService, IMapper mapper)
+        public UserController(UserService userService, IMapper mapper, SemesterService semesterService, SignInManager<AppUser> signInManager)
         {
             _userService = userService;
             _mapper = mapper;
+            _signInManager = signInManager;
+            _semesterService = semesterService;
         }
 
         [HttpGet]
@@ -63,6 +68,8 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
             var user = await _userService.IsUserValidAsync(login.Username, login.Password);
+            //await _signInManager.SignInAsync(user, false);
+            //userTest.
             if (user == null)
             {
                 ModelState.AddModelError("Wrong User or Password", "نام کاربری یا کلمه عبور اشتباه است");
@@ -75,8 +82,9 @@ namespace UIMS.Web.Controllers
             }
 
             var token = GetJWTToken(user, await _userService.GetRolesAsync(user));
-            var userVM = _mapper.Map<UserViewModel>(user);
-            return Ok(new LoginInfoViewModel{ Token = token, UserViewModel = userVM });
+            var semester = await _semesterService.GetCurrentAsycn();
+            var userVM = _mapper.Map<UserLoginViewModel>(user);
+            return Ok(new LoginInfoViewModel{ Token = token,Semester = semester.Name, UserLoginViewModel = userVM });
 
         }
 

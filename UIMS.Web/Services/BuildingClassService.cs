@@ -17,6 +17,12 @@ namespace UIMS.Web.Services
         {
         }
 
+
+        public async Task<List<BuildingClassViewModel>> GetAllbyBuildingId(int id)
+        {
+            return await Entity.Where(x => x.BuildingId == id).ProjectTo<BuildingClassViewModel>().ToListAsync();
+        }
+
         //public override Task<BuildingClassViewModel> GetAsync(int id)
         //{
         //    return Entity.Include(x=>x.Building).ProjectTo<BuildingClassViewModel>().SingleOrDefaultAsync(x => x.Id == id);

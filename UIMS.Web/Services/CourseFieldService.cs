@@ -7,6 +7,7 @@ using UIMS.Web.Data;
 using UIMS.Web.DTO;
 using UIMS.Web.Models;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper.QueryableExtensions;
 
 namespace UIMS.Web.Services
 {
@@ -40,6 +41,11 @@ namespace UIMS.Web.Services
             //Entity.AsQueryable
         }
 
+
+        public async Task<List<CourseFieldViewModel>> GetAllByGroupManagerId(int id)
+        {
+            return await Entity.Where(x => x.Field.GroupManagerId == id).ProjectTo<CourseFieldViewModel>().ToListAsync();
+        }
 
         public override void Remove(CourseField model)
         {

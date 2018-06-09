@@ -71,7 +71,13 @@ namespace UIMS.Web.Services
 
         public async Task<AppUser> GetUserByUsername(string username)
         {
-            return await Entity.SingleOrDefaultAsync(x => x.UserName == username);
+            return await Entity
+                .Include(x => x.Professor)
+                .Include(x => x.GroupManager)
+                .Include(x => x.Employee)
+                .Include(x => x.Student)
+                .Include(x => x.BuildingManager)
+                .SingleOrDefaultAsync(x => x.UserName == username);
         }
 
         public async Task<string> GenerateToken(AppUser user)
@@ -156,6 +162,10 @@ namespace UIMS.Web.Services
             return await Entity.AnyAsync(x => x.Id == userId && x.Enable);
         }
 
+        //public async Task AddLoginInfo()
+        //{
+        //    UserLoginInfo
+        //}
 
         public async Task<bool> IsInRoleAsync(AppUser user, string role)
         {

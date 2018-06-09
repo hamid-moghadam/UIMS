@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UIMS.Web.Models.Attributes;
 
 namespace UIMS.Web.DTO
 {
-    public class LoginInfoViewModel
+    public class SemesterInputViewModel
     {
-        public string Token { get; set; }
-
+        [Semester]
         public string Semester { get; set; }
-
-        public UserLoginViewModel UserLoginViewModel { get; set; }
     }
 }
