@@ -16,7 +16,7 @@ namespace UIMS.Web
     {
         public static void Main(string[] args)
         {
-            var host = BuildWebHost(args);
+            var host = BuildWebHost(args).Build();
             using (var scope = host.Services.CreateScope())
             {
 
@@ -34,9 +34,8 @@ namespace UIMS.Web
             host.Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        public static IWebHostBuilder BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+                .UseStartup<Startup>();
     }
 }

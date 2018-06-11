@@ -10,6 +10,6 @@ namespace UIMS.Web.DTO
     {
         public string Name { get; set; }
 
-        public BuildingManagerViewModel BuildingManager { get; set; }
+        //public BuildingManagerViewModel BuildingManager { get; set; }
     }
 }

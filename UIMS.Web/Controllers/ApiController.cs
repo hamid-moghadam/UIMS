@@ -12,8 +12,9 @@ using UIMS.Web.DTO;
 namespace UIMS.Web.Controllers
 {
     [Produces("application/json")]
+    [ApiController]
     [Route("api/[controller]/[action]")]
-    public abstract class ApiController : Controller
+    public abstract class ApiController : ControllerBase
     {
         protected int UserId => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 

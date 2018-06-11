@@ -12,6 +12,8 @@ using UIMS.Web.Extentions;
 using UIMS.Web.Data;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using UIMS.Web.Hubs;
 
 namespace UIMS.Web
 {
@@ -43,11 +45,21 @@ namespace UIMS.Web
 
             services.AddAutoMapper();
 
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                //options.SuppressConsumesConstraintForFormFileParameters = true;
+                //options.SuppressInferBindingSourcesForParameters = true;
+                options.SuppressModelStateInvalidFilter = false;
+            });
+
             services.AddMvc().AddJsonOptions(option =>
             {
                 option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 option.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.None;
-            });
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +69,8 @@ namespace UIMS.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+                app.UseHsts();
 
             dataContext.Database.Migrate();
 
@@ -71,7 +85,10 @@ namespace UIMS.Web
 
             app.ConfigureSwagger();
 
-
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NotificationHub>("/notificationhub");
+            });
             app.UseMvc();
         }
     }

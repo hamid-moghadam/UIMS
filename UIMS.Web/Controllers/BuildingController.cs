@@ -53,13 +53,13 @@ namespace UIMS.Web.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(BuildingViewModel), 200)]
-        public async Task<IActionResult> Get(int id)
+        //[ProducesResponseType(typeof(BuildingViewModel), 200)]
+        public async Task<ActionResult<BuildingViewModel>> Get(int id)
         {
             var building = await _buildingService.GetAsync(id);
             if (building == null)
                 return NotFound();
-            return Ok(building);
+            return building;
         }
 
         [HttpGet]
