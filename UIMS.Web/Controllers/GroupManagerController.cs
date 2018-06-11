@@ -152,9 +152,12 @@ namespace UIMS.Web.Controllers
             //        return BadRequest(ModelState);
             //    }
             //}
+            var manager = await _groupManagerService.GetAsync(x => x.Id == groupManagerUpdateVM.Id);
 
+            if (manager == null)
+                return NotFound();
 
-            var user = await _userService.GetAsync(x => x.Id == UserId);
+            var user = await _userService.GetAsync(x => x.Id == manager.UserId);
             user = _mapper.Map(groupManagerUpdateVM, user);
 
             if (await _userService.IsExistsAsync(user))

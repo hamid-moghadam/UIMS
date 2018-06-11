@@ -10,9 +10,9 @@ namespace UIMS.Web.DTO
 {
     public class BaseUpdateViewModel:BaseModel
     {
-        [Number]
-        [StringLength(11,MinimumLength =11)]
-        public string PhoneNumber { get; set; }
+        //[Number]
+        //[StringLength(11,MinimumLength =11)]
+        //public string PhoneNumber { get; set; }
 
         //[Number]
         //[StringLength(10, MinimumLength = 10)]

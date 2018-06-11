@@ -11,6 +11,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using UIMS.Web.Models;
 using UIMS.Web.Extentions;
 using NPOI.SS.UserModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UIMS.Web.Controllers
 {
@@ -145,6 +146,7 @@ namespace UIMS.Web.Controllers
             return Ok();
         }
 
+        //[Authorize(Roles="admin")]
         [HttpPost]
         public async Task<IActionResult> Update([FromBody] BuildingManagerUpdateViewModel buildingManagerUpdateVM)
         {
@@ -153,22 +155,34 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            //var buildingId = buildingManagerUpdateVM.BuildingManagerBuildingId.HasValue ? buildingManagerUpdateVM.BuildingManagerBuildingId.Value : user.BuildingManager.BuildingId;
-            if (buildingManagerUpdateVM.BuildingManagerBuildingId.HasValue)
+            var buildingManager = await _buildingManagerService.GetAsync(x => x.Id == buildingManagerUpdateVM.Id);
+
+            if (buildingManager == null)
+                return NotFound();
+
+            if (buildingManagerUpdateVM.BuildingId.HasValue && buildingManagerUpdateVM.BuildingId.Value != 0)
             {
-                var isBuildingExists = await _buildingService.IsExistsAsync(x => x.Id == buildingManagerUpdateVM.BuildingManagerBuildingId.Value);
+                var isBuildingExists = await _buildingService.IsExistsAsync(x => x.Id == buildingManagerUpdateVM.BuildingId.Value);
                 if (!isBuildingExists)
                 {
                     ModelState.AddModelError("Building", "این ساختمان در سیستم ثبت نشده است.");
                     return BadRequest(ModelState);
                 }
+
+                if (await _buildingManagerService.IsExistsAsync(x => x.BuildingId != null && x.BuildingId.Value == buildingManagerUpdateVM.BuildingId.Value && x.Id != buildingManagerUpdateVM.Id))
+                {
+                    ModelState.AddModelError("Building", "این ساختمان توسط مدیر ساختمان دیگری مدیریت می شود");
+                    return BadRequest(ModelState);
+                }
+
             }
-            //converting when BuildingId is null not working and change BuildingID to 0
-            //user.BuildingManager.BuildingId = buildingId;
-
-
-            var user = await _userService.GetAsync(x => x.Id == UserId);
+            
+            var user = await _userService.GetAsync(x => x.Id == buildingManager.UserId);
             user = _mapper.Map(buildingManagerUpdateVM, user);
+
+            if (buildingManagerUpdateVM.BuildingId.HasValue && buildingManagerUpdateVM.BuildingId.Value == 0)
+                buildingManager.BuildingId = null;
+
             if (await _userService.IsExistsAsync(user))
             {
                 ModelState.AddModelError("User", "این کاربر قبلا در سیستم ثبت شده است.");

@@ -130,9 +130,12 @@ namespace UIMS.Web.Controllers
                     return BadRequest(ModelState);
                 }
             }
+            var student = await _studentService.GetAsync(x => x.Id == studentUpdateVM.Id);
 
+            if (student == null)
+                return NotFound();
 
-            var user = await _userService.GetAsync(x => x.Id == UserId);
+            var user = await _userService.GetAsync(x => x.Id == student.UserId);
             user = _mapper.Map(studentUpdateVM, user);
 
             if (await _userService.IsExistsAsync(user))

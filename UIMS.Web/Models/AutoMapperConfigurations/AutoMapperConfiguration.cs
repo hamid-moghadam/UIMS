@@ -12,7 +12,7 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
         public AutoMapperConfiguration()
         {
             ForAllMaps((x, y) => y.ForAllMembers(member => member.UseDestinationValue()));
-            ForAllMaps((x, y) => y.ForAllMembers(member => member.Condition(src => src != null)));
+            //ForAllMaps((x, y) => y.ForAllMembers(member => member.Condition(src => src != null)));
 
             CreateMap<AppUser, UserInsertViewModel>().ReverseMap();
             CreateMap<AppUser, EmployeeInsertViewModel>().ReverseMap();
@@ -45,6 +45,7 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
 
             CreateMap<BuildingManagerUpdateViewModel,AppUser>()
                 .ForMember(x => x.Id, source => source.Ignore())
+                .AfterMap((bu,ap) => ap.BuildingManager.BuildingId = bu.BuildingId.HasValue && bu.BuildingId.Value != 0?bu.BuildingId:ap.BuildingManager.BuildingId)
                 .ReverseMap();
             //CreateMap<AppUser, BuildingManagerUpdateViewModel>()
             //    .ReverseMap()
@@ -74,6 +75,8 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
 
             CreateMap<Employee, EmployeeViewModel>();
 
+            CreateMap<BuildingManagerUpdateViewModel, BuildingManager>()
+                .ForMember(x => x.BuildingId, src => src.MapFrom(x => x.BuildingId));
             CreateMap<BuildingManager, BuildingManagerViewModel>();
 
             CreateMap<GroupManager, GroupManagerViewModel>();
