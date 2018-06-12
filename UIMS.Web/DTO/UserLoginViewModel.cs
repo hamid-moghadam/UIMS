@@ -9,6 +9,7 @@ namespace UIMS.Web.DTO
     {
         public string FullName { get; set; }
 
+        public DateTime LastLogin { get; set; }
 
         public BuildingManagerViewModel BuildingManager { get; set; }
 

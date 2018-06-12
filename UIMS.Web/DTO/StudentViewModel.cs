@@ -6,12 +6,8 @@ using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class StudentViewModel:BaseModel
+    public class StudentViewModel:BaseViewModel
     {
-        public string UserMelliCode { get; set; }
-
-        public string UserFullName { get; set; }
-
         public string Code { get; set; }
 
     }

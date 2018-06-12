@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UIMS.Web.Data;
@@ -9,9 +10,10 @@ using UIMS.Web.Data;
 namespace UIMS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("13970322121214_MakeLastLoginNullable")]
+    partial class MakeLastLoginNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,61 +267,6 @@ namespace UIMS.Web.Migrations
                         .IsUnique();
 
                     b.ToTable("BuildingManager");
-                });
-
-            modelBuilder.Entity("UIMS.Web.Models.Conversation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("Created");
-
-                    b.Property<bool>("Enable");
-
-                    b.Property<int>("FirstUserId");
-
-                    b.Property<DateTime>("Modified");
-
-                    b.Property<int>("SecondUserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FirstUserId");
-
-                    b.HasIndex("SecondUserId");
-
-                    b.ToTable("Conversation");
-                });
-
-            modelBuilder.Entity("UIMS.Web.Models.ConversationReply", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("ConversationId");
-
-                    b.Property<DateTime>("Created");
-
-                    b.Property<bool>("HasSeen");
-
-                    b.Property<DateTime>("Modified");
-
-                    b.Property<int>("ReplierId");
-
-                    b.Property<string>("Reply")
-                        .HasMaxLength(1000);
-
-                    b.Property<int>("SemesterId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConversationId");
-
-                    b.HasIndex("ReplierId");
-
-                    b.HasIndex("SemesterId");
-
-                    b.ToTable("ConversationReply");
                 });
 
             modelBuilder.Entity("UIMS.Web.Models.Course", b =>
@@ -722,37 +669,6 @@ namespace UIMS.Web.Migrations
                     b.HasOne("UIMS.Web.Models.AppUser", "User")
                         .WithOne("BuildingManager")
                         .HasForeignKey("UIMS.Web.Models.BuildingManager", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("UIMS.Web.Models.Conversation", b =>
-                {
-                    b.HasOne("UIMS.Web.Models.AppUser", "FirstUser")
-                        .WithMany()
-                        .HasForeignKey("FirstUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("UIMS.Web.Models.AppUser", "SecondUser")
-                        .WithMany()
-                        .HasForeignKey("SecondUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("UIMS.Web.Models.ConversationReply", b =>
-                {
-                    b.HasOne("UIMS.Web.Models.Conversation", "Conversation")
-                        .WithMany("ConversationReplies")
-                        .HasForeignKey("ConversationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("UIMS.Web.Models.AppUser", "Replier")
-                        .WithMany("ConversationReplies")
-                        .HasForeignKey("ReplierId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("UIMS.Web.Models.Semester", "Semester")
-                        .WithMany("ConversationReplies")
-                        .HasForeignKey("SemesterId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

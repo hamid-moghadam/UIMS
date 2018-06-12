@@ -14,9 +14,9 @@ namespace UIMS.Web.DTO
         //[StringLength(11,MinimumLength =11)]
         //public string PhoneNumber { get; set; }
 
-        //[Number]
-        //[StringLength(10, MinimumLength = 10)]
-        //public string MelliCode { get; set; }
+        [Number]
+        [StringLength(10, MinimumLength = 10)]
+        public string MelliCode { get; set; }
 
         [MaxLength(50)]
         public string Name { get; set; }

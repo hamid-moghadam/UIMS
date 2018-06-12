@@ -121,19 +121,19 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (studentUpdateVM.Code != null)
+            var student = await _studentService.GetAsync(x => x.Id == studentUpdateVM.Id);
+
+            if (student == null)
+                return NotFound();
+            if (studentUpdateVM.StudentCode != null)
             {
-                var isStudentExists = await _studentService.IsExistsAsync(x => x.Code == studentUpdateVM.Code && x.Id != UserId);
+                var isStudentExists = await _studentService.IsExistsAsync(x => x.Code == studentUpdateVM.StudentCode && x.Id != student.Id);
                 if (isStudentExists)
                 {
                     ModelState.AddModelError("Student", "این دانش آموز قبلا در سیستم ثبت شده است.");
                     return BadRequest(ModelState);
                 }
             }
-            var student = await _studentService.GetAsync(x => x.Id == studentUpdateVM.Id);
-
-            if (student == null)
-                return NotFound();
 
             var user = await _userService.GetAsync(x => x.Id == student.UserId);
             user = _mapper.Map(studentUpdateVM, user);

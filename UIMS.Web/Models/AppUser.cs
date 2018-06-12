@@ -14,6 +14,8 @@ namespace UIMS.Web.Models
 
         public DateTime Modified { get; set; }
 
+        public DateTime? LastLogin { get; set; }
+
         [MaxLength(10)]
         public string MelliCode { get; set; }
 
@@ -30,6 +32,10 @@ namespace UIMS.Web.Models
         public virtual ICollection<Message> SentMessages { get; set; }
 
         public virtual ICollection<MessageReceiver> ReceivedMessages { get; set; }
+
+        public virtual ICollection<ConversationReply> ConversationReplies { get; set; }
+
+        //public virtual ICollection<Conversation> Conversations { get; set; }
 
 
         public int BuildingManagerId { get; set; }

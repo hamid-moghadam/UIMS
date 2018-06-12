@@ -26,49 +26,49 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
 
             CreateMap<AppUser, UserLoginViewModel>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-
+            CreateMap<AppUser, UserPartialViewModel>();
 
             //CreateMap<AppUser, UserUpdateViewModel>()
             //    .ReverseMap()
             //    .ForMember(x => x.Id, source => source.Ignore());
-            //CreateMap<AppUser, EmployeeUpdateViewModel>()
+
+            //CreateMap<EmployeeUpdateViewModel, AppUser>()
+            //    .ForMember(x => x.Id, source => source.Ignore())
+            //    //.AfterMap((em, ap) => ap.Employee.Post = em.EmployeePost)
+            //    .ReverseMap();
+
+            //CreateMap<AppUser, BuildingManagerUpdateViewModel>()
             //    .ReverseMap()
             //    .ForMember(x => x.Id, source => source.Ignore());
-
-            CreateMap<UserUpdateViewModel, AppUser>()
-                .ForMember(x => x.Id, source => source.Ignore())
-                .ReverseMap();
-            CreateMap<EmployeeUpdateViewModel, AppUser>()
-                .ForMember(x => x.Id, source => source.Ignore())
-                .ReverseMap();
-
-
+            CreateMap<AppUser, EmployeeUpdateViewModel>()
+                .ReverseMap()
+                .ForMember(x => x.Id, source => source.Ignore());
+            CreateMap<AppUser,UserUpdateViewModel> ()
+                .ReverseMap()
+                .ForMember(x => x.Id, source => source.Ignore());
             CreateMap<BuildingManagerUpdateViewModel,AppUser>()
                 .ForMember(x => x.Id, source => source.Ignore())
                 .AfterMap((bu,ap) => ap.BuildingManager.BuildingId = bu.BuildingId.HasValue && bu.BuildingId.Value != 0?bu.BuildingId:ap.BuildingManager.BuildingId)
                 .ReverseMap();
-            //CreateMap<AppUser, BuildingManagerUpdateViewModel>()
-            //    .ReverseMap()
-            //    .ForMember(x => x.Id, source => source.Ignore());
-            //CreateMap<AppUser, GroupManagerUpdateViewModel>()
-            //    .ReverseMap()
-            //    .ForMember(x => x.Id, source => source.Ignore());
-            //CreateMap<AppUser, ProfessorUpdateViewModel>()
-            //    .ReverseMap()
-            //    .ForMember(x => x.Id, source => source.Ignore());
-            //CreateMap<AppUser, StudentUpdateViewModel>()
-            //    .ReverseMap()
-            //    .ForMember(x => x.Id, source => source.Ignore());
+            CreateMap<AppUser, GroupManagerUpdateViewModel>()
+                .ReverseMap()
+                .ForMember(x => x.Id, source => source.Ignore());
+            CreateMap<AppUser, ProfessorUpdateViewModel>()
+                .ReverseMap()
+                .ForMember(x => x.Id, source => source.Ignore());
+            CreateMap<AppUser, StudentUpdateViewModel>()
+                .ReverseMap()
+                .ForMember(x => x.Id, source => source.Ignore());
 
-            CreateMap<GroupManagerUpdateViewModel, AppUser>()
-                .ForMember(x => x.Id, source => source.Ignore())
-                .ReverseMap();
-            CreateMap<ProfessorUpdateViewModel, AppUser>()
-                .ForMember(x => x.Id, source => source.Ignore())
-                .ReverseMap();
-            CreateMap<StudentUpdateViewModel, AppUser>()
-                .ForMember(x => x.Id, source => source.Ignore())
-                .ReverseMap();
+            //CreateMap<GroupManagerUpdateViewModel, AppUser>()
+            //    .ForMember(x => x.Id, source => source.Ignore())
+            //    .ReverseMap();
+            //CreateMap<ProfessorUpdateViewModel, AppUser>()
+            //    .ForMember(x => x.Id, source => source.Ignore())
+            //    .ReverseMap();
+            //CreateMap<StudentUpdateViewModel, AppUser>()
+            //    .ForMember(x => x.Id, source => source.Ignore())
+            //    .ReverseMap();
 
 
 

@@ -80,10 +80,14 @@ namespace UIMS.Web.Controllers
                 ModelState.AddModelError("User Is Disabled", "کاربر غیر فعال شده است.");
                 return BadRequest(ModelState);
             }
+            if (user.LastLogin == null)
+                user.LastLogin = DateTime.Now;
 
             var token = GetJWTToken(user, await _userService.GetRolesAsync(user));
             var semester = await _semesterService.GetCurrentAsycn();
             var userVM = _mapper.Map<UserLoginViewModel>(user);
+            user.LastLogin = DateTime.Now;
+            await _userService.SaveChangesAsync();
             return Ok(new LoginInfoViewModel{ Token = token,Semester = semester.Name, UserLoginViewModel = userVM });
 
         }

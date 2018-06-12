@@ -3,15 +3,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UIMS.Web.Services;
 
 namespace UIMS.Web.Hubs
 {
     public class NotificationHub:Hub
     {
+        SemesterService _SemesterService;
+        public NotificationHub(SemesterService semesterService)
+        {
+            _SemesterService = semesterService;
+        }
         public async Task SendMessage(string user, string message)
         {
             //Clients.All.
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            var current = (await _SemesterService.GetCurrentAsycn()).Name;
+            var t = await _SemesterService.GetAll(1,100);
+            var w = t.Items.Select(x => x.Id.ToString()).ToList().AsReadOnly();
+            
+            //Clients.Users(w).(;
+            await Clients.All.SendAsync("ReceiveMessage", user, $"{message} - {current}");
         }
 
         public override async Task OnConnectedAsync()

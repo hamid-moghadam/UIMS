@@ -6,12 +6,8 @@ using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class BuildingManagerViewModel:BaseModel
+    public class BuildingManagerViewModel:BaseViewModel
     {
-        public string UserMelliCode { get; set; }
-
-        public string UserFullName { get; set; }
-
         public BuildingViewModel Building  { get; set; }
     }
 }

@@ -6,10 +6,7 @@ using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class GroupManagerViewModel:BaseModel
+    public class GroupManagerViewModel:BaseViewModel
     {
-        public string UserMelliCode { get; set; }
-
-        public string UserFullName { get; set; }
     }
 }
