@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UIMS.Web.Hubs
 {
-    public class ChatHub:Hub
+    public class ConversationHub:Hub
     {
         public async Task SendMessage(string user, string message)
         {

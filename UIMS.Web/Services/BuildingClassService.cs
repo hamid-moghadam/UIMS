@@ -8,6 +8,7 @@ using UIMS.Web.DTO;
 using UIMS.Web.Models;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using UIMS.Web.Extentions;
 
 namespace UIMS.Web.Services
 {
@@ -27,5 +28,10 @@ namespace UIMS.Web.Services
         //{
         //    return Entity.Include(x=>x.Building).ProjectTo<BuildingClassViewModel>().SingleOrDefaultAsync(x => x.Id == id);
         //}
+
+        public async Task<PaginationViewModel<BuildingClassViewModel>> SearchAsync(string text, int page, int pageSize)
+        {
+            return await Entity.Where(x => x.Name.Contains(text) || x.Building.Name.Contains(text)).ProjectTo<BuildingClassViewModel>().ToPageAsync(pageSize, page);
+        }
     }
 }

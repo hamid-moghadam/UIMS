@@ -35,7 +35,7 @@ namespace UIMS.Web.Services
 
         public IEnumerable<TViewModel> GetAll() => Entity.ProjectTo<TViewModel>().AsEnumerable();
 
-        public async virtual Task<PaginationViewModel<TViewModel>> GetAll(int page, int pageSize)
+        public async virtual Task<PaginationViewModel<TViewModel>> GetAllAsync(int page, int pageSize)
         {
             return await Entity.ProjectTo<TViewModel>().ToPageAsync(pageSize, page);
         }
@@ -52,7 +52,7 @@ namespace UIMS.Web.Services
         }
        
 
-        public async Task<TModel> AddAsync(TInsertModel model)
+        public virtual async Task<TModel> AddAsync(TInsertModel model)
         {
             TModel baseModel = _mapper.Map<TModel>(model);
             return (await Entity.AddAsync(baseModel)).Entity;

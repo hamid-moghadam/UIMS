@@ -40,7 +40,7 @@ namespace UIMS.Web.Controllers
         [ProducesResponseType(typeof(PaginationViewModel<GroupManagerViewModel>), 200)]
         public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            var managers = await _groupManagerService.GetAll(page, pageSize);
+            var managers = await _groupManagerService.GetAllAsync(page, pageSize);
 
             return Ok(managers);
         }
@@ -67,6 +67,14 @@ namespace UIMS.Web.Controllers
             var courseFields = await _courseFieldService.GetAllByGroupManagerId(manager.Id);
 
             return Ok(courseFields);
+        }
+
+        [HttpPost]
+        [SwaggerResponse(200, typeof(PaginationViewModel<GroupManagerViewModel>))]
+        public async Task<IActionResult> Search([FromBody]SearchViewModel searchVM)
+        {
+            var results = await _groupManagerService.SearchAsync(searchVM.Text, searchVM.Page, searchVM.PageSize);
+            return Ok(results);
         }
 
 
@@ -117,6 +125,79 @@ namespace UIMS.Web.Controllers
             }
 
             await _userService.SaveChangesAsync();
+            return Ok();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddField([FromBody] GroupManagerAddFieldViewModel groupManagerAddFieldVM)
+        {
+            var field = await _fieldService.GetAsync(x => x.Id == groupManagerAddFieldVM.FieldId.Value);
+            var manager = await _groupManagerService.GetAsync(x => x.Id == groupManagerAddFieldVM.GroupManagerId.Value);
+
+            if (field == null || manager == null)
+                return NotFound();
+
+
+            if (!manager.User.Enable)
+            {
+                ModelState.AddModelError("GroupManager", "مدیر گروه غیر فعال است");
+                return BadRequest(ModelState);
+            }
+
+            if (field.GroupManagerId.HasValue)
+            {
+                if (field.GroupManagerId.Value != manager.Id)
+                {
+                    ModelState.AddModelError("GroupManager", "این رشته توسط مدیر گروه دیگری مدیریت می شود");
+                    return BadRequest(ModelState);
+                }
+                else
+                {
+                    ModelState.AddModelError("GroupManager", "این رشته قبلا برای مدیر گروه مورد نظر ثبت شده است");
+                    return BadRequest(ModelState);
+                }
+            }
+
+            field.GroupManagerId = manager.Id;
+            await _groupManagerService.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveField([FromBody] GroupManagerAddFieldViewModel groupManagerAddFieldVM)
+        {
+            var field = await _fieldService.GetAsync(x => x.Id == groupManagerAddFieldVM.FieldId.Value);
+            var manager = await _groupManagerService.GetAsync(x => x.Id == groupManagerAddFieldVM.GroupManagerId.Value);
+
+            if (field == null || manager == null)
+                return NotFound();
+
+
+            if (!manager.User.Enable)
+            {
+                ModelState.AddModelError("GroupManager", "مدیر گروه غیر فعال است");
+                return BadRequest(ModelState);
+            }
+
+            if (!field.GroupManagerId.HasValue)
+            {
+                ModelState.AddModelError("GroupManager", "مدیر گروهی برای این رشته ثبت نشده است");
+                return BadRequest(ModelState);
+            }
+
+            if (field.GroupManagerId.HasValue)
+            {
+                if (field.GroupManagerId.Value != manager.Id)
+                {
+                    ModelState.AddModelError("GroupManager", "این رشته توسط مدیر گروه دیگری مدیریت می شود");
+                    return BadRequest(ModelState);
+                }
+            }
+
+            manager.Fields.Remove(field);
+            field.GroupManagerId = null;
+            await _groupManagerService.SaveChangesAsync();
             return Ok();
         }
 

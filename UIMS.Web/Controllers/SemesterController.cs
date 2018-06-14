@@ -30,7 +30,7 @@ namespace UIMS.Web.Controllers
         [SwaggerResponse(200,typeof(PaginationViewModel<SemesterViewModel>))]
         public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            return Ok(await _semesterService.GetAll(page, pageSize));
+            return Ok(await _semesterService.GetAllAsync(page, pageSize));
         }
 
         [HttpGet("{id}")]

@@ -9,6 +9,7 @@ using UIMS.Web.Models;
 using Microsoft.AspNetCore.Http;
 using UIMS.Web.Extentions;
 using NPOI.SS.UserModel;
+using AutoMapper.QueryableExtensions;
 
 namespace UIMS.Web.Services
 {
@@ -43,6 +44,11 @@ namespace UIMS.Web.Services
                 });
             }
             return courses;
+        }
+
+        public async Task<PaginationViewModel<CourseViewModel>> SearchAsync(string text, int page, int pageSize)
+        {
+            return await Entity.Where(x => x.Name.Contains(text) || x.Code.Contains(text)).ProjectTo<CourseViewModel>().ToPageAsync(pageSize, page);
         }
     }
 

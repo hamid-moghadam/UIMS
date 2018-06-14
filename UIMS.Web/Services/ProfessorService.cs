@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using UIMS.Web.Extentions;
 using NPOI.SS.UserModel;
+using AutoMapper.QueryableExtensions;
 
 namespace UIMS.Web.Services
 {
@@ -71,5 +72,12 @@ namespace UIMS.Web.Services
 
             return professors;
         }
+
+        public async Task<PaginationViewModel<ProfessorViewModel>> SearchAsync(string text, int page, int pageSize)
+        {
+            return await Entity.Where(x => x.User.FullName.Contains(text)).ProjectTo<ProfessorViewModel>().ToPageAsync(pageSize, page);
+        }
+
     }
+
 }

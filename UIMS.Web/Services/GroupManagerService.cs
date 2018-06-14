@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using UIMS.Web.Extentions;
 using NPOI.SS.UserModel;
+using AutoMapper.QueryableExtensions;
 
 namespace UIMS.Web.Services
 {
@@ -69,6 +70,11 @@ namespace UIMS.Web.Services
                 });
             }
             return managers;
+        }
+
+        public async Task<PaginationViewModel<GroupManagerViewModel>> SearchAsync(string text, int page, int pageSize)
+        {
+            return await Entity.Where(x => x.User.FullName.Contains(text) || x.User.MelliCode.Contains(text)).ProjectTo<GroupManagerViewModel>().ToPageAsync(pageSize, page);
         }
     }
 }

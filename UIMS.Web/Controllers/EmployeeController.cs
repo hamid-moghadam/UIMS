@@ -35,7 +35,7 @@ namespace UIMS.Web.Controllers
         [ProducesResponseType(typeof(PaginationViewModel<EmployeeViewModel>), 200)]
         public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            var employees = await _employeeService.GetAll(page, pageSize);
+            var employees = await _employeeService.GetAllAsync(page, pageSize);
 
             return Ok(employees);
         }
@@ -50,6 +50,14 @@ namespace UIMS.Web.Controllers
             return Ok(employee);
         }
 
+
+        [HttpPost]
+        [SwaggerResponse(200, typeof(PaginationViewModel<EmployeeViewModel>))]
+        public async Task<IActionResult> Search([FromBody]SearchViewModel searchVM)
+        {
+            var results = await _employeeService.SearchAsync(searchVM.Text, searchVM.Page, searchVM.PageSize);
+            return Ok(results);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] EmployeeInsertViewModel employeeInsertVM)

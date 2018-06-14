@@ -25,6 +25,9 @@ namespace UIMS.Web.Models
 
         public virtual Semester Semester { get; set; }
 
+        public int MessageTypeId { get; set; }
+        public virtual MessageType MessageType { get; set; }
+
 
         public virtual ICollection<MessageReceiver> Receivers { get; set; }
 

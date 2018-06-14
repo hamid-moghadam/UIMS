@@ -6,13 +6,8 @@ using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class FieldViewModel:BaseModel
+    public class MessageTypeViewModel:BaseModel
     {
         public string Name { get; set; }
-
-        public DegreeViewModel Degree { get; set; }
-
-        public GroupManagerViewModel GroupManager { get; set; }
-
     }
 }

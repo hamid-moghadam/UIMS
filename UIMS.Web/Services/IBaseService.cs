@@ -15,7 +15,7 @@ namespace UIMS.Web.Services
     {
         Task<TModel> AddAsync(TInsertModel model);
         IEnumerable<TViewModel> GetAll();
-        Task<PaginationViewModel<TViewModel>> GetAll(int page, int pageSize);
+        Task<PaginationViewModel<TViewModel>> GetAllAsync(int page, int pageSize);
         Task<PaginationViewModel<TCustomViewModel>> GetAll<TCustomViewModel>(int page, int pageSize);
         Task<TViewModel> GetAsync(int id);
         Task<TModel> GetAsync(Expression<Func<TModel, bool>> expression);

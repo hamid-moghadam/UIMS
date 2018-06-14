@@ -78,7 +78,7 @@ namespace UIMS.Web.Controllers
         [SwaggerResponse(200, typeof(PaginationViewModel<CourseFieldViewModel>))]
         public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            return Ok(await _courseFieldService.GetAll(page, pageSize));
+            return Ok(await _courseFieldService.GetAllAsync(page, pageSize));
         }
 
         [HttpPost("{id}")]

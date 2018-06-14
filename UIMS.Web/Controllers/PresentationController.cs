@@ -96,8 +96,25 @@ namespace UIMS.Web.Controllers
         [SwaggerResponse(200, typeof(PaginationViewModel<PresentationViewModel>))]
         public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            return Ok(await _presentationService.GetAll(page, pageSize));
+            return Ok(await _presentationService.GetAllAsync(page, pageSize));
         }
+
+        [HttpPost("{id}")]
+        [SwaggerResponse(200, typeof(PaginationViewModel<StudentViewModel>))]
+        public async Task<IActionResult> GetStudents(int id,[FromBody] Pagination pagination)
+        {
+            return Ok(await _presentationService.GetStudents(id,pagination.Page, pagination.PageSize));
+        }
+
+
+        [HttpPost]
+        [SwaggerResponse(200, typeof(PaginationViewModel<PresentationViewModel>))]
+        public async Task<IActionResult> Search([FromBody]SearchViewModel searchVM)
+        {
+            var results = await _presentationService.SearchAsync(searchVM.Text, searchVM.Page, searchVM.PageSize);
+            return Ok(results);
+        }
+
 
         [HttpPost("{id}")]
         public async Task<IActionResult> Remove(int id)

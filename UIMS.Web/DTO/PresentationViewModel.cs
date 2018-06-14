@@ -28,7 +28,7 @@ namespace UIMS.Web.DTO
 
         public BuildingClassViewModel BuildingClass { get; set; }
 
-        public List<StudentPresentationPartialViewModel> Students { get; set; }
+        //public List<StudentPresentationPartialViewModel> Students { get; set; }
 
         public bool Enable { get; set; }
     }

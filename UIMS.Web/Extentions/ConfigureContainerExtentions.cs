@@ -135,6 +135,8 @@ namespace UIMS.Web.Extentions
             serviceCollection.AddScoped<CourseFieldService>();
             serviceCollection.AddScoped<PresentationService>();
             serviceCollection.AddScoped<StudentPresentationService>();
+            serviceCollection.AddScoped<MessageTypeService>();
+            serviceCollection.AddScoped<MessageService>();
 
         }
 

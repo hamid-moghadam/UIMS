@@ -85,7 +85,15 @@ namespace UIMS.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            return Ok(await _buildingClassService.GetAll(page, pageSize));
+            return Ok(await _buildingClassService.GetAllAsync(page, pageSize));
+        }
+
+        [HttpPost]
+        [SwaggerResponse(200, typeof(PaginationViewModel<BuildingClassViewModel>))]
+        public async Task<IActionResult> Search([FromBody]SearchViewModel searchVM)
+        {
+            var results = await _buildingClassService.SearchAsync(searchVM.Text, searchVM.Page, searchVM.PageSize);
+            return Ok(results);
         }
 
         [HttpPost("{id}")]

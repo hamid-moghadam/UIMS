@@ -130,6 +130,16 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
             CreateMap<StudentPresentation, StudentPresentationPartialViewModel>();
             CreateMap<StudentPresentation, StudentPresentationInsertViewModel>().ReverseMap();
             CreateMap<StudentPresentationUpdateViewModel, StudentPresentation>().ReverseMap();
+
+            CreateMap<MessageType, MessageTypeViewModel>();
+            CreateMap<MessageType, MessageTypeInsertViewModel>().ReverseMap();
+            CreateMap<MessageTypeUpdateViewModel, MessageType>().ReverseMap();
+
+
+            CreateMap<Message, MessageInsertViewModel>().ReverseMap();
+            CreateMap<Message, MessageViewModel>();
+            //CreateMap<Message, MessageInsertViewModel>();
+
         }
 
     }

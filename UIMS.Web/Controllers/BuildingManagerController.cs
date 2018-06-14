@@ -42,7 +42,7 @@ namespace UIMS.Web.Controllers
         [ProducesResponseType(typeof(PaginationViewModel<BuildingManagerViewModel>), 200)]
         public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            var managers = await _buildingManagerService.GetAll(page, pageSize);
+            var managers = await _buildingManagerService.GetAllAsync(page, pageSize);
 
             return Ok(managers);
         }
@@ -73,6 +73,16 @@ namespace UIMS.Web.Controllers
             return Ok(buildingClasses);
         }
 
+
+
+        [HttpPost]
+        [SwaggerResponse(200, typeof(PaginationViewModel<BuildingManagerViewModel>))]
+        public async Task<IActionResult> Search([FromBody]SearchViewModel searchVM)
+        {
+            var results = await _buildingManagerService.SearchAsync(searchVM.Text, searchVM.Page, searchVM.PageSize);
+            return Ok(results);
+        }
+
         [HttpGet]
         [SwaggerResponse(200, typeof(List<PresentationBuildingManagerViewModel>))]
         public async Task<IActionResult> GetPresentations(string semester)
@@ -91,8 +101,6 @@ namespace UIMS.Web.Controllers
 
             return Ok(presentations);
         }
-
-
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] BuildingManagerInsertViewModel buildingManagerInsertVM)

@@ -62,7 +62,7 @@ namespace UIMS.Web.Controllers
         [ProducesResponseType(typeof(PaginationViewModel<DegreeViewModel>), 200)]
         public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            return Ok(await _degreeService.GetAll(page, pageSize));
+            return Ok(await _degreeService.GetAllAsync(page, pageSize));
         }
 
         //public async Task<IActionResult> Remove(int id)

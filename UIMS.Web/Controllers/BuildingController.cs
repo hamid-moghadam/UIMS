@@ -66,7 +66,7 @@ namespace UIMS.Web.Controllers
         [ProducesResponseType(typeof(PaginationViewModel<BuildingViewModel>), 200)]
         public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            return Ok(await _buildingService.GetAll(page, pageSize));
+            return Ok(await _buildingService.GetAllAsync(page, pageSize));
         }
 
         //[HttpPost("{id}")]

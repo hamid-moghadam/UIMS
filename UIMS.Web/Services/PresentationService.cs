@@ -8,13 +8,17 @@ using UIMS.Web.DTO;
 using UIMS.Web.Models;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using UIMS.Web.Extentions;
 
 namespace UIMS.Web.Services
 {
     public class PresentationService : BaseService<Presentation, PresentationInsertViewModel, PresentationUpdateViewModel, PresentationViewModel>
     {
+        private readonly DbSet<StudentPresentation> _studentPresentation;
+
         public PresentationService(DataContext context, IMapper mapper) : base(context, mapper)
         {
+            _studentPresentation = context.Set<StudentPresentation>();
         }
 
         public override void Remove(Presentation model)
@@ -32,5 +36,14 @@ namespace UIMS.Web.Services
             return await Entity.Where(x => x.BuildingClass.BuildingId == id && x.Semester.Name == semester).ProjectTo<PresentationBuildingManagerViewModel>().ToListAsync();
         }
 
+        public async Task<PaginationViewModel<PresentationViewModel>> SearchAsync(string text, int page, int pageSize)
+        {
+            return await Entity.Where(x => x.BuildingClass.Name.Contains(text) || x.Professor.User.FullName.Contains(text) || x.CourseField.Course.Name.Contains(text) || x.CourseField.Field.Name.Contains(text)).ProjectTo<PresentationViewModel>().ToPageAsync(pageSize, page);
+        }
+
+        public async Task<PaginationViewModel<StudentViewModel>> GetStudents(int id,int page,int pageSize)
+        {
+            return await _studentPresentation.Where(x => x.PresentationId == id).Select(x => x.Student).ProjectTo<StudentViewModel>().ToPageAsync(pageSize,page);
+        }
     }
 }

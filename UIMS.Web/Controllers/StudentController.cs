@@ -45,7 +45,7 @@ namespace UIMS.Web.Controllers
         [ProducesResponseType(typeof(PaginationViewModel<StudentViewModel>), 200)]
         public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            var students = await _studentService.GetAll(page, pageSize);
+            var students = await _studentService.GetAllAsync(page, pageSize);
 
             return Ok(students);
         }
@@ -58,6 +58,14 @@ namespace UIMS.Web.Controllers
             if (student == null)
                 return NotFound();
             return Ok(student);
+        }
+
+        [HttpPost]
+        [SwaggerResponse(200, typeof(PaginationViewModel<StudentViewModel>))]
+        public async Task<IActionResult> Search([FromBody]SearchViewModel searchVM)
+        {
+            var results = await _studentService.SearchAsync(searchVM.Text, searchVM.Page, searchVM.PageSize);
+            return Ok(results);
         }
 
 

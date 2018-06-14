@@ -61,8 +61,17 @@ namespace UIMS.Web.Controllers
         [SwaggerResponse(200, typeof(PaginationViewModel<FieldViewModel>))]
         public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            return Ok(await _fieldService.GetAll(page, pageSize));
+            return Ok(await _fieldService.GetAllAsync(page, pageSize));
         }
+
+        [HttpPost]
+        [SwaggerResponse(200, typeof(PaginationViewModel<FieldViewModel>))]
+        public async Task<IActionResult> Search([FromBody]SearchViewModel searchVM)
+        {
+            var results = await _fieldService.SearchAsync(searchVM.Text, searchVM.Page, searchVM.PageSize);
+            return Ok(results);
+        }
+
 
         [HttpPost("{id}")]
         public async Task<IActionResult> Remove(int id)

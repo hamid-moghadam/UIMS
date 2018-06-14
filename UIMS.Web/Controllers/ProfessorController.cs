@@ -42,7 +42,7 @@ namespace UIMS.Web.Controllers
         [ProducesResponseType(typeof(PaginationViewModel<ProfessorViewModel>), 200)]
         public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
         {
-            var professors = await _professorService.GetAll(page, pageSize);
+            var professors = await _professorService.GetAllAsync(page, pageSize);
 
             return Ok(professors);
         }
@@ -55,6 +55,34 @@ namespace UIMS.Web.Controllers
             if (professor == null)
                 return NotFound();
             return Ok(professor);
+        }
+
+        [HttpGet]
+        [Authorize(Roles ="professor")]
+        public async Task<IActionResult> GetPresentations(string semester)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            string currentSemester = "";
+            var user = await _userService.GetAsync(x => x.Id == UserId);
+
+            if (semester != null && semester.IsSemester())
+                currentSemester = semester;
+            else
+                currentSemester = (await _semesterService.GetCurrentAsycn()).Name;
+
+            var presentations = await _presentationService.GetAllByProfessorId(user.Professor.Id,currentSemester);
+
+            return Ok(presentations);
+        }
+
+        [HttpPost]
+        [SwaggerResponse(200, typeof(PaginationViewModel<ProfessorViewModel>))]
+        public async Task<IActionResult> Search([FromBody]SearchViewModel searchVM)
+        {
+            var results = await _professorService.SearchAsync(searchVM.Text, searchVM.Page, searchVM.PageSize);
+            return Ok(results);
         }
 
 
@@ -133,25 +161,6 @@ namespace UIMS.Web.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        [Authorize(Roles ="professor")]
-        public async Task<IActionResult> GetPresentations(string semester)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            string currentSemester = "";
-            var user = await _userService.GetAsync(x => x.Id == UserId);
-
-            if (semester != null && semester.IsSemester())
-                currentSemester = semester;
-            else
-                currentSemester = (await _semesterService.GetCurrentAsycn()).Name;
-
-            var presentations = await _presentationService.GetAllByProfessorId(user.Professor.Id,currentSemester);
-
-            return Ok(presentations);
-        }
 
 
         [HttpPost]
