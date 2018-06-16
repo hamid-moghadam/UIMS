@@ -29,11 +29,11 @@ namespace UIMS.Web.Models
 
         public string FullName => $"{Name} {Family}";
 
-        public virtual ICollection<Message> SentMessages { get; set; }
+        public virtual ICollection<Notification> SentMessages { get; set; }
 
-        public virtual ICollection<MessageReceiver> ReceivedMessages { get; set; }
+        public virtual ICollection<NotificationReceiver> ReceivedMessages { get; set; }
 
-        public virtual ICollection<ConversationReply> ConversationReplies { get; set; }
+        public virtual ICollection<ChatReply> ConversationReplies { get; set; }
 
         //public virtual ICollection<Conversation> Conversations { get; set; }
 

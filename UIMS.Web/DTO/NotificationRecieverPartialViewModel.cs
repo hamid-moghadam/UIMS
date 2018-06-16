@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace UIMS.Web.DTO
 {
-    public class MessageReceiverViewModel
+    public class NotificationReceiverPartialViewModel
     {
         public bool HasSeen { get; set; }
 
@@ -14,9 +14,5 @@ namespace UIMS.Web.DTO
 
         public int UserId { get; set; }
 
-
-        public MessageViewModel Message { get; set; }
-
-        public int MessageId { get; set; }
     }
 }

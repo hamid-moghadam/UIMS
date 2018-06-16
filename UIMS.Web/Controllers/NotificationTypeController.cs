@@ -12,12 +12,12 @@ namespace UIMS.Web.Controllers
 {
     [Produces("application/json")]
     [ApiController]
-    public class MessageTypeController : ApiController
+    public class NotificationTypeController : ApiController
     {
 
-        private readonly MessageTypeService _messageTypeService;
+        private readonly NotificationTypeService _messageTypeService;
 
-        public MessageTypeController(MessageTypeService messageTypeService)
+        public NotificationTypeController(NotificationTypeService messageTypeService)
         {
             _messageTypeService = messageTypeService;
         }
@@ -25,7 +25,7 @@ namespace UIMS.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(string name)
         {
-            await _messageTypeService.AddAsync(new DTO.MessageTypeInsertViewModel() { Name = name });
+            await _messageTypeService.AddAsync(new DTO.NotificationTypeInsertViewModel() { Name = name });
 
             await _messageTypeService.SaveChangesAsync();
             return Ok();

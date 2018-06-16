@@ -55,6 +55,33 @@ namespace UIMS.Web.Controllers
             return Ok(presentations);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Add([FromBody] StudentPresentationInsertViewModel studentPresentationInsertVM)
+        {
+            var student = await _studentService.GetAsync(x => x.Code == studentPresentationInsertVM.StudentCode);
+            if (student == null)
+                return NotFound();
+
+            var presentaion = await _presentationService.GetAsync(x => x.Code == studentPresentationInsertVM.PresentationCode);
+            if (presentaion == null)
+                return NotFound();
+            if (!presentaion.Enable)
+            {
+                ModelState.AddModelError("StudentPresentation","کلاس مورد نظر غیر فعال شده است");
+                return BadRequest(ModelState);
+            }
+
+            if (await _studentPresentationService.IsExistsAsync(x=>x.StudentId == student.Id && x.PresentationId == presentaion.Id))
+            {
+                ModelState.AddModelError("StudentPresentation", "این کلاس قبلا توسط دانشجو گرفته شده است");
+                return BadRequest(ModelState);
+            }
+            await _studentPresentationService.AddAsync(studentPresentationInsertVM);
+            await _studentPresentationService.SaveChangesAsync();
+            return Ok();
+
+        }
+
 
         [HttpPost]
         [Authorize(Roles = "student")]

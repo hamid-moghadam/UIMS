@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace UIMS.Web.DTO
 {
-    public class ConversationReplyViewModel
+    public class ChatReplyViewModel
     {
         public string Reply { get; set; }
 

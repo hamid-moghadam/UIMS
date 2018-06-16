@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace UIMS.Web.DTO
 {
-    public class StudentPresentationInsertViewModel
+    public class ChatInsertViewModel
     {
         [Required]
-        public string StudentCode { get; set; }
+        public int? FirstId { get; set; }
 
         [Required]
-        public string PresentationCode { get; set; }
+        public int? SecondId { get; set; }
 
     }
 }

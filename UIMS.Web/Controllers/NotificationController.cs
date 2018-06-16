@@ -14,19 +14,19 @@ namespace UIMS.Web.Controllers
 {
     [Produces("application/json")]
     [ApiController]
-    public class MessageController : ApiController
+    public class NotificationController : ApiController
     {
-        private readonly MessageService _messageService;
+        private readonly NotificationService _messageService;
 
-        public MessageController(MessageService messageService)
+        public NotificationController(NotificationService messageService)
         {
             _messageService = messageService;
         }
 
         // GET: api/values
-        [SwaggerResponse(200, typeof(PaginationViewModel<MessageViewModel>))]
+        [SwaggerResponse(200, typeof(PaginationViewModel<NotificationViewModel>))]
         [HttpPost]
-        public async Task<IActionResult> GetAll(MessageGetAllViewModel messageGetAllVM)
+        public async Task<IActionResult> GetAll(NotificationGetAllViewModel messageGetAllVM)
         {
             return Ok(await _messageService.GetAll(messageGetAllVM.Semester,messageGetAllVM.Page,messageGetAllVM.PageSize,UserId));
         }
@@ -37,24 +37,6 @@ namespace UIMS.Web.Controllers
         {
             return Ok(await _messageService.GetMessagesCount(semester, UserId));
         }
-
-
-        [HttpGet]
-        public async Task<IActionResult> Test()
-        {
-            await _messageService.AddAsync(new Message()
-            {
-                Content = "sadsa",
-                MessageTypeId = 1,
-                Title = "sdsdf",
-                SemesterId = 1,
-                SenderId = 1,
-                Receivers = new List<MessageReceiver>() { new MessageReceiver() {UserId =1 }, new MessageReceiver() { UserId = 3 }, new MessageReceiver() { UserId = 2 } }
-            });
-            await _messageService.SaveChangesAsync();
-            return Ok();
-        }
-
 
 
     }

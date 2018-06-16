@@ -4,7 +4,7 @@ using System.Text;
 
 namespace UIMS.Web.Models
 {
-    public class MessageReceiver:BaseModelTracker
+    public class NotificationReceiver:BaseModelTracker
     {
         public bool HasSeen { get; set; }
 
@@ -14,8 +14,8 @@ namespace UIMS.Web.Models
         public int UserId { get; set; }
 
 
-        public virtual Message Message { get; set; }
+        public virtual Notification Notification { get; set; }
 
-        public int MessageId { get; set; }
+        public int NotificationId { get; set; }
     }
 }

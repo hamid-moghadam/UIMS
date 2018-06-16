@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class MessageTypeViewModel:BaseModel
+    public class NotificationGetAllViewModel:Pagination
     {
-        public string Name { get; set; }
+        public string Semester { get; set; }
     }
 }

@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace UIMS.Web.DTO
 {
-    public class ConversationInsertViewModel
+    public class ChatGetRepliesViewModel:Pagination
     {
         [Required]
-        public int? FirstId { get; set; }
-
-        [Required]
-        public int? SecondId { get; set; }
+        public int? ChatId { get; set; }
 
     }
 }

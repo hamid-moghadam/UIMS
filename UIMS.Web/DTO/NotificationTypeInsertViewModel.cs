@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UIMS.Web.DTO
 {
-    public class MessageTypeInsertViewModel
+    public class NotificationTypeInsertViewModel
     {
         [Required]
         public string Name { get; set; }

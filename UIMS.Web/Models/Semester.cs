@@ -11,9 +11,9 @@ namespace UIMS.Web.Models
         [MaxLength(6)]
         public string Name { get; set; }
 
-        public virtual ICollection<Message> Messages { get; set; }
+        public virtual ICollection<Notification> Messages { get; set; }
         public virtual ICollection<Presentation> Presentations { get; set; }
-        public virtual ICollection<ConversationReply> ConversationReplies { get; set; }
+        public virtual ICollection<ChatReply> ConversationReplies { get; set; }
         public bool Enable { get ; set ; }
     }
 }

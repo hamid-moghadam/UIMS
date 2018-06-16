@@ -45,5 +45,10 @@ namespace UIMS.Web.Services
         {
             return await _studentPresentation.Where(x => x.PresentationId == id).Select(x => x.Student).ProjectTo<StudentViewModel>().ToPageAsync(pageSize,page);
         }
+
+        public async Task<List<int>> GetStudentsAsync(int id)
+        {
+            return await _studentPresentation.Where(x => x.PresentationId == id && x.Enable).Select(x => x.Student.UserId).ToListAsync();
+        }
     }
 }

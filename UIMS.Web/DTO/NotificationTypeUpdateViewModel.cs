@@ -6,7 +6,7 @@ using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class MessageUpdateViewModel:BaseModel
+    public class NotificationTypeUpdateViewModel : BaseModel
     {
     }
 }

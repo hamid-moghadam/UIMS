@@ -59,14 +59,14 @@ namespace UIMS.Web
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
-            {
-                builder
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .WithOrigins("http://localhost:4200")
-                .AllowCredentials();
-            }));
+            //services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+            //{
+            //    builder
+            //    .AllowAnyMethod()
+            //    .AllowAnyHeader()
+            //    .WithOrigins("http://localhost:4200")
+            //    .AllowCredentials();
+            //}));
             //services.AddCors(options => options.AddPolicy("CorsPolicy",
             //builder =>
             //{
@@ -92,7 +92,6 @@ namespace UIMS.Web
 
             app.HandleApiRequests();
 
-            //app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseStaticFiles();
 
@@ -100,10 +99,11 @@ namespace UIMS.Web
             app.UseAuthentication();
 
             app.ConfigureSwagger();
-            app.UseCors("CorsPolicy");
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials());
+            //app.UseCors("CorsPolicy");
             app.UseSignalR(routes =>
             {
-                routes.MapHub<MessageHub>("/notificationhub");
+                routes.MapHub<NotificationHub>("/notificationhub");
             });
             app.UseMvc();
         }

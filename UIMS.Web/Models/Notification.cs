@@ -6,7 +6,7 @@ using UIMS.Web.Models.Interfaces;
 
 namespace UIMS.Web.Models
 {
-    public class Message:BaseModelTracker,IEnable
+    public class Notification:BaseModelTracker,IEnable
     {
         public virtual AppUser Sender { get; set; }
 
@@ -25,11 +25,11 @@ namespace UIMS.Web.Models
 
         public virtual Semester Semester { get; set; }
 
-        public int MessageTypeId { get; set; }
-        public virtual MessageType MessageType { get; set; }
+        public int NotificationTypeId { get; set; }
+        public virtual NotificationType NotificationType { get; set; }
 
 
-        public virtual ICollection<MessageReceiver> Receivers { get; set; }
+        public virtual ICollection<NotificationReceiver> Receivers { get; set; }
 
 
 

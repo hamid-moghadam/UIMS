@@ -6,7 +6,7 @@ using UIMS.Web.Models.Interfaces;
 
 namespace UIMS.Web.Models
 {
-    public class Conversation:BaseModelTracker, IEnable
+    public class Chat:BaseModelTracker, IEnable
     {
 
         public virtual AppUser FirstUser { get; set; }
@@ -15,7 +15,7 @@ namespace UIMS.Web.Models
         public virtual AppUser SecondUser { get; set; }
         public int SecondUserId { get; set; }
 
-        public ICollection<ConversationReply> ConversationReplies { get; set; }
+        public ICollection<ChatReply> Replies { get; set; }
 
         public bool Enable { get; set; }
     }
