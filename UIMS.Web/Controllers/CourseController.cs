@@ -34,7 +34,7 @@ namespace UIMS.Web.Controllers
 
             if (await _courseService.IsExistsAsync(x=>x.Code == courseInsertVM.Code || x.Name == courseInsertVM.Name))
             {
-                ModelState.AddModelError("Course", "این درس قبلا در سیستم ثبت شده است");
+                ModelState.AddModelError("Errors", "این درس قبلا در سیستم ثبت شده است");
                 return BadRequest(ModelState);
             }
 
@@ -92,7 +92,7 @@ namespace UIMS.Web.Controllers
 
             if (await _courseService.IsExistsAsync(x=>(x.Name == courseUpdateVM.Name || x.Code == courseUpdateVM.Code) && x.Id != courseUpdateVM.Id))
             {
-                ModelState.AddModelError("Course", "این درس قبلا در سیستم ثبت شده است");
+                ModelState.AddModelError("Errors", "این درس قبلا در سیستم ثبت شده است");
                 return BadRequest(ModelState);
             }
 
@@ -114,7 +114,7 @@ namespace UIMS.Web.Controllers
 
             if (formFile == null || !formFile.Any())
             {
-                ModelState.AddModelError("File Not Found", "فایلی آپلود نشده است");
+                ModelState.AddModelError("Errors", "فایلی آپلود نشده است");
                 return BadRequest(ModelState);
             }
 

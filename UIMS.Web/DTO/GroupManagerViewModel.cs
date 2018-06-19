@@ -8,5 +8,6 @@ namespace UIMS.Web.DTO
 {
     public class GroupManagerViewModel:BaseViewModel
     {
+        public List<FieldPartialViewModel> Fields { get; set; }
     }
 }

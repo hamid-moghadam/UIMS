@@ -12,6 +12,8 @@ namespace UIMS.Web.DTO
         [MaxLength(100)]
         public string Name { get; set; }
 
+        public bool? Enable { get; set; }
+
         //public int? BuildingId { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace UIMS.Web.Services
     {
         public FieldService(DataContext context, IMapper mapper) : base(context, mapper)
         {
+            Filters.Add("HasNoGroupManager", x => x.GroupManagerId == null);
         }
 
         public async override Task<Field> GetAsync(Expression<Func<Field, bool>> expression)

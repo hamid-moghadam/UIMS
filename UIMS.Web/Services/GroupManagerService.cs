@@ -18,9 +18,11 @@ namespace UIMS.Web.Services
     public class GroupManagerService : BaseService<GroupManager, GroupManagerInsertViewModel, GroupManagerUpdateViewModel, GroupManagerViewModel>
     {
         private readonly UserService _userService;
+        private readonly DbSet<Field> _fields;
         public GroupManagerService(DataContext context, IMapper mapper, UserService userService) : base(context, mapper)
         {
             _userService = userService;
+            _fields = context.Set<Field>();
         }
 
 
@@ -76,5 +78,13 @@ namespace UIMS.Web.Services
         {
             return await Entity.Where(x => x.User.FullName.Contains(text) || x.User.MelliCode.Contains(text)).ProjectTo<GroupManagerViewModel>().ToPageAsync(pageSize, page);
         }
+
+        public async Task ResetFieldsAsync(GroupManager manager,List<Field> fields)
+        {
+            await _fields.Where(x => x.GroupManagerId == manager.Id).ForEachAsync(x => x.GroupManagerId = null);
+            await SaveChangesAsync();
+            manager.Fields = fields;
+        }
+
     }
 }

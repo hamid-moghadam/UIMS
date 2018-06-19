@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace UIMS.Web.DTO
 {
-    public class GroupManagerUpdateViewModel:BaseUpdateViewModel
+    public class FilterInputViewModel:Pagination
     {
-        public List<int> FieldsId { get; set; }
+        public string[] Filters { get; set; }
     }
 }

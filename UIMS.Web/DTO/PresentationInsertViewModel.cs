@@ -10,6 +10,7 @@ namespace UIMS.Web.DTO
     public class PresentationInsertViewModel
     {
         [MaxLength(10)]
+        [MinLength(3)]
         public string Code { get; set; }
 
         [MaxLength(5)]

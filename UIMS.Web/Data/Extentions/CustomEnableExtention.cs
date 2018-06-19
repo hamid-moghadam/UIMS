@@ -12,6 +12,11 @@ namespace UIMS.Web.Data.Extentions
         {
             typeof(Semester),
             typeof(Notification),
+            typeof(CourseField),
+            typeof(BuildingClass),
+            typeof(StudentPresentation),
+            typeof(Presentation),
+            typeof(AppUser),
             typeof(Chat),
         };
 

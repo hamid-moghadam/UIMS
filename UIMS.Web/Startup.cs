@@ -104,6 +104,7 @@ namespace UIMS.Web
             app.UseSignalR(routes =>
             {
                 routes.MapHub<NotificationHub>("/notificationhub");
+                routes.MapHub<ChatHub>("/chathub");
             });
             app.UseMvc();
         }

@@ -13,7 +13,7 @@ namespace UIMS.Web.DTO
 
         public string End { get; set; }
 
-        public string Day { get; set; }
+        public int Day { get; set; }
 
 
         public CourseFieldViewModel CourseField { get; set; }

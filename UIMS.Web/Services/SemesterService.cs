@@ -19,7 +19,7 @@ namespace UIMS.Web.Services
         }
         public override async Task<PaginationViewModel<SemesterViewModel>> GetAllAsync(int page, int pageSize)
         {
-            return await Entity.OrderBy(x=>x.Enable).ProjectTo<SemesterViewModel>().ToPageAsync(pageSize, page);
+            return await Entity.OrderBy(x=>!x.Enable).ProjectTo<SemesterViewModel>().ToPageAsync(pageSize, page);
         }
 
         public async Task<Semester> GetCurrentAsycn()

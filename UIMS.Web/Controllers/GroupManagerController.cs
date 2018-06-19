@@ -45,7 +45,7 @@ namespace UIMS.Web.Controllers
             return Ok(managers);
         }
 
-        [SwaggerResponse(200, typeof(BuildingManagerViewModel))]
+        [SwaggerResponse(200, typeof(GroupManagerViewModel))]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -91,7 +91,7 @@ namespace UIMS.Web.Controllers
                 var field = await _fieldService.GetAsync(x => x.Id == fieldId);
                 if (field == null)
                 {
-                    ModelState.AddModelError("Field", "این رشته در سیستم ثبت نشده است.");
+                    ModelState.AddModelError("Errors", "این رشته در سیستم ثبت نشده است.");
                     return BadRequest(ModelState);
                 }
                 fields.Add(field);
@@ -141,7 +141,7 @@ namespace UIMS.Web.Controllers
 
             if (!manager.User.Enable)
             {
-                ModelState.AddModelError("GroupManager", "مدیر گروه غیر فعال است");
+                ModelState.AddModelError("Errors", "مدیر گروه غیر فعال است");
                 return BadRequest(ModelState);
             }
 
@@ -149,12 +149,12 @@ namespace UIMS.Web.Controllers
             {
                 if (field.GroupManagerId.Value != manager.Id)
                 {
-                    ModelState.AddModelError("GroupManager", "این رشته توسط مدیر گروه دیگری مدیریت می شود");
+                    ModelState.AddModelError("Errors", "این رشته توسط مدیر گروه دیگری مدیریت می شود");
                     return BadRequest(ModelState);
                 }
                 else
                 {
-                    ModelState.AddModelError("GroupManager", "این رشته قبلا برای مدیر گروه مورد نظر ثبت شده است");
+                    ModelState.AddModelError("Errors", "این رشته قبلا برای مدیر گروه مورد نظر ثبت شده است");
                     return BadRequest(ModelState);
                 }
             }
@@ -176,13 +176,13 @@ namespace UIMS.Web.Controllers
 
             if (!manager.User.Enable)
             {
-                ModelState.AddModelError("GroupManager", "مدیر گروه غیر فعال است");
+                ModelState.AddModelError("Errors", "مدیر گروه غیر فعال است");
                 return BadRequest(ModelState);
             }
 
             if (!field.GroupManagerId.HasValue)
             {
-                ModelState.AddModelError("GroupManager", "مدیر گروهی برای این رشته ثبت نشده است");
+                ModelState.AddModelError("Errors", "مدیر گروهی برای این رشته ثبت نشده است");
                 return BadRequest(ModelState);
             }
 
@@ -190,7 +190,7 @@ namespace UIMS.Web.Controllers
             {
                 if (field.GroupManagerId.Value != manager.Id)
                 {
-                    ModelState.AddModelError("GroupManager", "این رشته توسط مدیر گروه دیگری مدیریت می شود");
+                    ModelState.AddModelError("Errors", "این رشته توسط مدیر گروه دیگری مدیریت می شود");
                     return BadRequest(ModelState);
                 }
             }
@@ -224,26 +224,33 @@ namespace UIMS.Web.Controllers
             {
                 return BadRequest(ModelState);
             }
-            //if (groupManagerUpdateVM.GroupManagerFieldId.HasValue)
-            //{
-            //    var isFieldExists = await _fieldService.IsExistsAsync(x => x.Id == groupManagerUpdateVM.GroupManagerFieldId.Value);
-            //    if (!isFieldExists)
-            //    {
-            //        ModelState.AddModelError("Field", "این رشته در سیستم ثبت نشده است.");
-            //        return BadRequest(ModelState);
-            //    }
-            //}
             var manager = await _groupManagerService.GetAsync(x => x.Id == groupManagerUpdateVM.Id);
 
             if (manager == null)
                 return NotFound();
+
+            if (groupManagerUpdateVM.FieldsId != null && groupManagerUpdateVM.FieldsId.Count > 0)
+            {
+                List<Field> fields = new List<Field>(2);
+                foreach (var fieldId in groupManagerUpdateVM.FieldsId)
+                {
+                    var field = await _fieldService.GetAsync(x => x.Id == fieldId);
+                    if (field != null && (field.GroupManagerId == null || field.GroupManagerId == manager.Id))
+                        fields.Add(field);
+                }
+                if (fields.Count > 0)
+                {
+                    await _groupManagerService.ResetFieldsAsync(manager, fields);
+                }
+            }
+
 
             var user = await _userService.GetAsync(x => x.Id == manager.UserId);
             user = _mapper.Map(groupManagerUpdateVM, user);
 
             if (await _userService.IsExistsAsync(user))
             {
-                ModelState.AddModelError("User", "این کاربر قبلا در سیستم ثبت شده است.");
+                ModelState.AddModelError("Errors", "این کاربر قبلا در سیستم ثبت شده است.");
                 return BadRequest(ModelState);
             }
 
@@ -258,7 +265,7 @@ namespace UIMS.Web.Controllers
         {
             if (formFile == null || !formFile.Any())
             {
-                ModelState.AddModelError("File Not Found", "فایلی آپلود نشده است");
+                ModelState.AddModelError("Errors", "فایلی آپلود نشده است");
                 return BadRequest();
             }
 

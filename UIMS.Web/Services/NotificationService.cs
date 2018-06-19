@@ -22,14 +22,21 @@ namespace UIMS.Web.Services
             _messageReceiver = context.Set<NotificationReceiver>();
         }
 
-        public async Task<PaginationViewModel<NotificationViewModel>> GetAll(string semester,int page, int pageSize,int userId)
+        public async Task<PaginationViewModel<NotificationViewModel>> GetAll(int typeId,string semester,int page, int pageSize,int userId)
         {
-            return await _messageReceiver.Where(x=>x.Notification.Semester.Name == semester && x.UserId == userId).OrderByDescending(x=>x.Created).ThenBy(x=>!x.HasSeen).Select(x=>x.Notification).ProjectTo<NotificationViewModel>().ToPageAsync(pageSize, page);
+            return await _messageReceiver
+                .Where(x=>x.Notification.NotificationTypeId == typeId &&  x.Notification.Semester.Name == semester && x.UserId == userId)
+                .OrderByDescending(x=>x.Created)
+                .ThenBy(x=>!x.HasSeen)
+                .Select(x=>x.Notification).ProjectTo<NotificationViewModel>()
+                .ToPageAsync(pageSize, page);
         }
 
         public async Task<int> GetMessagesCount(string semester,int userId)
         {
-            return await _messageReceiver.Where(x => x.UserId == userId && x.Notification.Semester.Name == semester && !x.HasSeen).CountAsync();
+            return await _messageReceiver
+                .Where(x => x.UserId == userId && x.Notification.Semester.Name == semester && !x.HasSeen)
+                .CountAsync();
         }
 
 

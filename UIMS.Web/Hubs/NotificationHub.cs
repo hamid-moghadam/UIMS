@@ -123,6 +123,29 @@ namespace UIMS.Web.Hubs
             await Clients.All.SendAsync("ReceiveMessage", $"شما یک پیام از {user.FullName} دارید.");
         }
 
+        [Authorize]
+        public async Task SendOne(string id, string title, string content)
+        {
+            var currentSemester = await _SemesterService.GetCurrentAsycn();
+            var user = await _userService.GetAsync(x => x.Id == int.Parse(Context.User.FindFirst(ClaimTypes.NameIdentifier).Value));
+            //var userReceivers = _userService.GetAll().Select(x => x.Id).Except(new List<int>() { user.Id }).Select(x => new MessageReceiver() { UserId = x });
+            var userReceivers = new List<NotificationReceiver>() { new NotificationReceiver() { UserId = int.Parse(id) } };
+            if (user == null)
+                return;
+            await _messageService.AddAsync(new DTO.NotificationInsertViewModel()
+            {
+                Content = content,
+                MessageTypeId = 1,
+                Title = title,
+                SemesterId = currentSemester.Id,
+                SenderId = user.Id,
+                Receivers = userReceivers.ToList()
+            });
+            await _messageService.SaveChangesAsync();
+            await Clients.Users(user.Id.ToString()).SendAsync("ReceiveMessage", $"شما یک پیام از {user.FullName} دارید.");
+        }
+
+
         public override async Task OnConnectedAsync()
         {
             //await Groups.AddToGroupAsync(Context.ConnectionId, "SignalR Users");

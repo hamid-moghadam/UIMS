@@ -28,7 +28,7 @@ namespace UIMS.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAll(NotificationGetAllViewModel messageGetAllVM)
         {
-            return Ok(await _messageService.GetAll(messageGetAllVM.Semester,messageGetAllVM.Page,messageGetAllVM.PageSize,UserId));
+            return Ok(await _messageService.GetAll(messageGetAllVM.NotificationTypeId.Value,messageGetAllVM.Semester,messageGetAllVM.Page,messageGetAllVM.PageSize,UserId));
         }
 
         // GET api/values/5
@@ -37,7 +37,5 @@ namespace UIMS.Web.Controllers
         {
             return Ok(await _messageService.GetMessagesCount(semester, UserId));
         }
-
-
     }
 }

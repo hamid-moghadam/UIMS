@@ -10,7 +10,7 @@ namespace UIMS.Web.DTO
     public class StudentInsertViewModel:BaseInsertViewModel
     {
         [Number]
-        [StringLength(14,MinimumLength =5)]
+        [StringLength(14,MinimumLength =14)]
         public string StudentCode { get; set; }
 
     }

@@ -67,13 +67,13 @@ namespace UIMS.Web.Controllers
                 return NotFound();
             if (!presentaion.Enable)
             {
-                ModelState.AddModelError("StudentPresentation","کلاس مورد نظر غیر فعال شده است");
+                ModelState.AddModelError("Errors", "کلاس مورد نظر غیر فعال شده است");
                 return BadRequest(ModelState);
             }
 
             if (await _studentPresentationService.IsExistsAsync(x=>x.StudentId == student.Id && x.PresentationId == presentaion.Id))
             {
-                ModelState.AddModelError("StudentPresentation", "این کلاس قبلا توسط دانشجو گرفته شده است");
+                ModelState.AddModelError("Errors", "این کلاس قبلا توسط دانشجو گرفته شده است");
                 return BadRequest(ModelState);
             }
             await _studentPresentationService.AddAsync(studentPresentationInsertVM);
@@ -108,7 +108,7 @@ namespace UIMS.Web.Controllers
 
             if (formFile == null || !formFile.Any())
             {
-                ModelState.AddModelError("File Not Found", "فایلی آپلود نشده است");
+                ModelState.AddModelError("Errors", "فایلی آپلود نشده است");
                 return BadRequest(ModelState);
             }
 

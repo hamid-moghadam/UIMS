@@ -80,7 +80,7 @@ namespace UIMS.Web.Controllers
             var isCodeExists = await _studentService.IsExistsAsync(x => x.Code == studentInsertVM.StudentCode);
             if (isCodeExists)
             {
-                ModelState.AddModelError("Student", "شماره دانشجویی قبلا در سیستم ثبت شده است.");
+                ModelState.AddModelError("Errors", "شماره دانشجویی قبلا در سیستم ثبت شده است.");
                 return BadRequest(ModelState);
             }
 
@@ -138,7 +138,7 @@ namespace UIMS.Web.Controllers
                 var isStudentExists = await _studentService.IsExistsAsync(x => x.Code == studentUpdateVM.StudentCode && x.Id != student.Id);
                 if (isStudentExists)
                 {
-                    ModelState.AddModelError("Student", "این دانش آموز قبلا در سیستم ثبت شده است.");
+                    ModelState.AddModelError("Errors", "این دانش آموز قبلا در سیستم ثبت شده است.");
                     return BadRequest(ModelState);
                 }
             }
@@ -148,7 +148,7 @@ namespace UIMS.Web.Controllers
 
             if (await _userService.IsExistsAsync(user))
             {
-                ModelState.AddModelError("User", "این کاربر قبلا در سیستم ثبت شده است.");
+                ModelState.AddModelError("Errors", "این کاربر قبلا در سیستم ثبت شده است.");
                 return BadRequest(ModelState);
             }
 
@@ -163,7 +163,7 @@ namespace UIMS.Web.Controllers
         {
             if (formFile == null || !formFile.Any())
             {
-                ModelState.AddModelError("File Not Found", "فایلی آپلود نشده است");
+                ModelState.AddModelError("Errors", "فایلی آپلود نشده است");
                 return BadRequest();
             }
 

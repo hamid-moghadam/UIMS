@@ -54,10 +54,10 @@ namespace UIMS.Web.Services
 
         public override CourseField Update(CourseField model)
         {
-            if (model.Enable)
-                _presentation.Where(x => x.CourseFieldId == model.Id).ToList().ForEach(x => x.Enable = true);
-            else
+            if (!model.Enable)
                 _presentation.Where(x => x.CourseFieldId == model.Id).ToList().ForEach(x => x.Enable = false);
+            //else
+            //    _presentation.Where(x => x.CourseFieldId == model.Id).ToList().ForEach(x => x.Enable = false);
 
             SaveChanges();            
             return base.Update(model);

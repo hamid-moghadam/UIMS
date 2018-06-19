@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using UIMS.Web.Extentions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using UIMS.Web.Data;
-using UIMS.Web.Extentions;
 using UIMS.Web.Models;
 
 namespace UIMS.Web.Services
@@ -16,6 +17,15 @@ namespace UIMS.Web.Services
         protected readonly IMapper _mapper;
         protected DbSet<TModel> Entity { get; set; }
         protected IQueryable<TModel> BaseQuery { get; set; }
+        protected Dictionary<string, Expression<Func<TModel, bool>>> Filters { get; set; }
+        protected Expression<Func<TModel, bool>> this[string index]
+        {
+            get
+            {
+                return GetFilters(index);
+            }
+        }
+
 
 
         public BaseServiceProvider(DataContext context, IMapper mapper)
@@ -24,6 +34,7 @@ namespace UIMS.Web.Services
             _mapper = mapper;
             Entity = context.Set<TModel>();
             BaseQuery = Entity.AsQueryable();
+            Filters = new Dictionary<string, Expression<Func<TModel, bool>>>();
         }
 
         public virtual void Remove(TModel model) => Entity.Remove(model);
@@ -53,5 +64,46 @@ namespace UIMS.Web.Services
         {
             return _context.SaveChanges();
         }
+
+        //public Expression<Func<TModel, bool>> GetFilters(string[] filters)
+        //{
+        //    Expression<Func<TModel, bool>> finalExpression = null;
+
+
+        //    foreach (var filter in filters)
+        //    {
+        //        var ex = Filters[filter];
+        //        if (finalExpression == null)
+        //            finalExpression = ex;
+        //        else
+        //            finalExpression.AndAlso(ex);
+        //    }
+        //    if (finalExpression == null)
+        //        return (e) => true;
+        //    return finalExpression;
+        //}
+
+        public Expression<Func<TModel, bool>> GetFilters(params string[] filters)
+        {
+            Expression<Func<TModel, bool>> finalExpression = null;
+            if (filters == null || filters.Count() == 0)
+                return (e) => true;
+
+            foreach (var filter in filters)
+            {
+                var result = Filters.TryGetValue(filter,out Expression<Func<TModel, bool>> ex);
+                if (!result)
+                    continue;
+                if (finalExpression == null)
+                    finalExpression = ex;
+                else
+                    finalExpression.AndAlso(ex);
+            }
+            if (finalExpression == null)
+                return (e) => true;
+            return finalExpression;
+        }
+
+
     }
 }

@@ -15,8 +15,8 @@ using System.Linq.Expressions;
 
 namespace UIMS.Web.Services
 {
-    public abstract class BaseService<TModel, TInsertModel, TUpdateModel, TViewModel> : BaseServiceProvider<TModel>, IBaseService<TModel, TInsertModel,TUpdateModel, TViewModel> 
-        where TModel : class, IKey<int>
+    public abstract class BaseService<TModel, TInsertModel, TUpdateModel, TViewModel> : BaseServiceProvider<TModel>, IBaseService<TModel, TInsertModel, TUpdateModel, TViewModel>
+        where TModel : class, IKey<int>,ITracker
         where TViewModel : BaseModel
         where TUpdateModel : BaseModel
     {
@@ -28,21 +28,32 @@ namespace UIMS.Web.Services
 
         public virtual async Task<TViewModel> GetAsync(int id) => await Entity.ProjectTo<TViewModel>().SingleOrDefaultAsync(x => x.Id == id);
 
+        public virtual async Task<TCustomViewModel> GetAsync<TCustomViewModel>(int id) where TCustomViewModel:IKey<int> => await Entity.ProjectTo<TCustomViewModel>().SingleOrDefaultAsync(x => x.Id == id);
+
         public virtual async Task<TModel> GetAsync(Expression<Func<TModel, bool>> expression) => await Entity.SingleOrDefaultAsync(expression);
         public virtual TModel Get(Expression<Func<TModel, bool>> expression) => Entity.SingleOrDefault(expression);
 
         //public async Task<TModel> GetAsync(int id) => await Entity.SingleOrDefaultAsync(x => x.Id == id);
 
-        public IEnumerable<TViewModel> GetAll() => Entity.ProjectTo<TViewModel>().AsEnumerable();
+        public IEnumerable<TViewModel> GetAll()
+        {
+            return Entity.OrderByDescending(x => x.Created).ProjectTo<TViewModel>().AsEnumerable();
+        }
 
         public async virtual Task<PaginationViewModel<TViewModel>> GetAllAsync(int page, int pageSize)
         {
-            return await Entity.ProjectTo<TViewModel>().ToPageAsync(pageSize, page);
+            return await Entity.OrderByDescending(x=>x.Created).ProjectTo<TViewModel>().ToPageAsync(pageSize, page);
         }
+
+        public async virtual Task<PaginationViewModel<TViewModel>> GetAllAsync(string[] filters ,int page, int pageSize)
+        {
+            return await Entity.Where(GetFilters(filters)).OrderByDescending(x => x.Created).ProjectTo<TViewModel>().ToPageAsync(pageSize, page);
+        }
+
 
         public async virtual Task<PaginationViewModel<TCustomViewModel>> GetAll<TCustomViewModel>(int page, int pageSize)
         {
-            return await Entity.ProjectTo<TCustomViewModel>().ToPageAsync(pageSize, page);
+            return await Entity.OrderByDescending(x => x.Created).ProjectTo<TCustomViewModel>().ToPageAsync(pageSize, page);
         }
 
         public async Task<bool> IsExistsAsync(Expression<Func<TModel, bool>> expression)

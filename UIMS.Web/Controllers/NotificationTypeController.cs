@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UIMS.Web.Services;
 using Microsoft.AspNetCore.Authorization;
+using UIMS.Web.DTO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,6 +22,15 @@ namespace UIMS.Web.Controllers
         {
             _messageTypeService = messageTypeService;
         }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<NotificationTypeViewModel>> GetAll()
+        {
+            return Ok(_messageTypeService.GetAll());
+        }
+
+
+
         // GET: api/values
         [HttpPost]
         public async Task<IActionResult> Add(string name)
@@ -32,5 +42,7 @@ namespace UIMS.Web.Controllers
 
 
         }
+
+
     }
 }

@@ -13,5 +13,7 @@ namespace UIMS.Web.DTO
         public FieldViewModel Field { get; set; }
 
         public bool Enable { get; set; }
+
+        public string FullName => $"{Course.Name} | {Field.Name}";
     }
 }

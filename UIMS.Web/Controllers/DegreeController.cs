@@ -36,7 +36,7 @@ namespace UIMS.Web.Controllers
 
             if (await _degreeService.IsExistsAsync(x=>x.Name == degreeInsertVM.Name))
             {
-                ModelState.AddModelError("Degree Exists", "این مقطع قبلا در سیستم ثبت شده است.");
+                ModelState.AddModelError("Errors", "این مقطع قبلا در سیستم ثبت شده است.");
                 return BadRequest(ModelState);
             }
 
@@ -90,7 +90,7 @@ namespace UIMS.Web.Controllers
 
             if (await _degreeService.IsExistsAsync(x => x.Name == degreeUpdateVM.Name && x.Id != degreeUpdateVM.Id))
             {
-                ModelState.AddModelError("Degree Exists", "این مقطع قبلا در سیستم ثبت شده است.");
+                ModelState.AddModelError("Errors", "این مقطع قبلا در سیستم ثبت شده است.");
                 return BadRequest(ModelState);
             }
 

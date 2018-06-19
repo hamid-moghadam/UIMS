@@ -9,6 +9,7 @@ namespace UIMS.Web.Services
     {
         public BuildingService(DataContext context, IMapper mapper, UserService userService) : base(context, mapper)
         {
+            Filters.Add("HasNoBuildingManager", x => x.BuildingManager == null);
         }
 
         

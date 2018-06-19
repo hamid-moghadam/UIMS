@@ -35,7 +35,7 @@ namespace UIMS.Web.Controllers
 
             if (await _buildingService.IsExistsAsync(x=>x.Name == baseInsertVM.Name))
             {
-                ModelState.AddModelError("Building Exists", "ساختمان مورد نظر در سیستم وجود دارد");
+                ModelState.AddModelError("Errors", "ساختمان مورد نظر در سیستم وجود دارد");
                 return BadRequest(ModelState);
             }
 
@@ -62,11 +62,11 @@ namespace UIMS.Web.Controllers
             return building;
         }
 
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(typeof(PaginationViewModel<BuildingViewModel>), 200)]
-        public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
+        public async Task<IActionResult> GetAll([FromBody] FilterInputViewModel filterInputVM)
         {
-            return Ok(await _buildingService.GetAllAsync(page, pageSize));
+            return Ok(await _buildingService.GetAllAsync(filterInputVM.Filters,filterInputVM.Page,filterInputVM.PageSize));
         }
 
         //[HttpPost("{id}")]
@@ -97,9 +97,9 @@ namespace UIMS.Web.Controllers
             //        return BadRequest(ModelState);
             //    }
             //}
-            if (await _buildingService.IsExistsAsync(x=>x.Name == buildingUpdateVM.Name))
+            if (await _buildingService.IsExistsAsync(x=>x.Name == buildingUpdateVM.Name && x.Id != buildingUpdateVM.Id))
             {
-                ModelState.AddModelError("Building", "این ساختمان با نام مورد نظر قبلا در سیستم ثبت شده است");
+                ModelState.AddModelError("Errors", "این ساختمان با نام مورد نظر قبلا در سیستم ثبت شده است");
                 return BadRequest(ModelState);
             }
 

@@ -43,7 +43,7 @@ namespace UIMS.Web.Controllers
                 buildingId = buildingClassVM.BuildingId.Value;
                 if (!await _buildingService.IsExistsAsync(x=>x.Id == buildingId))
                 {
-                    ModelState.AddModelError("Building", "ساختمان مورد نظر یافت نشد");
+                    ModelState.AddModelError("Errors", "ساختمان مورد نظر یافت نشد");
                     return BadRequest(ModelState);
                 }
             }
@@ -52,14 +52,14 @@ namespace UIMS.Web.Controllers
                 var user = await _userService.GetAsync(x => x.Id == UserId);
                 if (!user.BuildingManager.BuildingId.HasValue)
                 {
-                    ModelState.AddModelError("BuildingManager", "مدیر ساختمان مورد نظر هیچ ساختمانی را مدیریت نمی کند");
+                    ModelState.AddModelError("Errors", "مدیر ساختمان مورد نظر هیچ ساختمانی را مدیریت نمی کند");
                     return BadRequest(ModelState);
                 }
                 buildingId = user.BuildingManager.BuildingId.Value;
             }
             if (await _buildingClassService.IsExistsAsync(x => x.Name == buildingClassVM.Name && x.BuildingId == buildingId))
             {
-                ModelState.AddModelError("BuildingClass", "این کلاس قبلا در این ساختمان ثبت شده است");
+                ModelState.AddModelError("Errors", "این کلاس قبلا در این ساختمان ثبت شده است");
                 return BadRequest(ModelState);
             }
 
@@ -82,10 +82,10 @@ namespace UIMS.Web.Controllers
         }
 
         [SwaggerResponse(200, typeof(PaginationViewModel<BuildingClassViewModel>))]
-        [HttpGet]
-        public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
+        [HttpPost]
+        public async Task<IActionResult> GetAll([FromBody] FilterInputViewModel filterInputVM)
         {
-            return Ok(await _buildingClassService.GetAllAsync(page, pageSize));
+            return Ok(await _buildingClassService.GetAllAsync(filterInputVM.Filters,filterInputVM.Page,filterInputVM.PageSize));
         }
 
         [HttpPost]
@@ -120,7 +120,7 @@ namespace UIMS.Web.Controllers
                 return NotFound();
             if (await _buildingClassService.IsExistsAsync(x => (x.BuildingId == buildingClass.BuildingId && x.Name == buildingClassUpdateVM.Name && x.Id != buildingClass.Id)))
             {
-                ModelState.AddModelError("Course", "این کلاس قبلا در سیستم ثبت شده است");
+                ModelState.AddModelError("Errors", "این کلاس قبلا در سیستم ثبت شده است");
                 return BadRequest(ModelState);
             }
 

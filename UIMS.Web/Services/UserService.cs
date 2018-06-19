@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Linq.Expressions;
+using AutoMapper.QueryableExtensions;
+using UIMS.Web.Extentions;
 
 namespace UIMS.Web.Services
 {
@@ -17,11 +19,9 @@ namespace UIMS.Web.Services
     {
         private readonly UserManager<AppUser> _userManager;
 
-
         public UserService(DataContext context, IMapper mapper, UserManager<AppUser> userManager) : base(context, mapper)
         {
             _userManager = userManager;
-
             BaseQuery = BaseQuery.Where(x => x.Enable);
 
         }
@@ -41,6 +41,15 @@ namespace UIMS.Web.Services
         //{
         //    return base.GetAll<TModel>(page, pageSize);
         //}
+        public async Task<PaginationViewModel<UserViewModel>> GetAll(string role,int page, int pageSize)
+        {
+            if (role == "")
+                return await GetAllAsync(page, pageSize);
+
+            var users = await _userManager.GetUsersInRoleAsync(role);
+            var usersVM = _mapper.Map<List<UserViewModel>>(users);
+            return usersVM.ToPage(pageSize, page);
+        }
 
         public async Task<IdentityResult> AddPasswordToUserAsync(AppUser user)
         {
@@ -161,11 +170,6 @@ namespace UIMS.Web.Services
         {
             return await Entity.AnyAsync(x => x.Id == userId && x.Enable);
         }
-
-        //public async Task AddLoginInfo()
-        //{
-        //    UserLoginInfo
-        //}
 
         public async Task<bool> IsInRoleAsync(AppUser user, string role)
         {

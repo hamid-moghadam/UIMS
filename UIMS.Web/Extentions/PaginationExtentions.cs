@@ -21,5 +21,20 @@ namespace UIMS.Web.Extentions
             };
 
         }
+
+        public static PaginationViewModel<TSource> ToPage<TSource>(this IEnumerable<TSource> source, int pageSize, int page)
+        {
+            var data = source.Skip((page - 1) * pageSize).Take(pageSize);
+            var sourceCount = source.Count();
+            return new PaginationViewModel<TSource>()
+            {
+                Items = data,
+                TotalCount = sourceCount,
+                TotalPage = (int)Math.Ceiling((double)sourceCount / pageSize)
+            };
+
+        }
+
+
     }
 }

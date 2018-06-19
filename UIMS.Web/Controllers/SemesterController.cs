@@ -51,13 +51,13 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             if (!semesterInsertVM.Name.IsSemester())
             {
-                ModelState.AddModelError("Semester", "نیمسال تحصیلی وارد شده صحیح نیست.");
+                ModelState.AddModelError("Errors", "نیمسال تحصیلی وارد شده صحیح نیست.");
                 return BadRequest(ModelState);
             }
 
             if (await _semesterService.IsExistsAsync(x=>x.Name == semesterInsertVM.Name))
             {
-                ModelState.AddModelError("Semester", "نیمسال تحصیلی قبلا در سیستم ثبت شده است.");
+                ModelState.AddModelError("Errors", "نیمسال تحصیلی قبلا در سیستم ثبت شده است.");
                 return BadRequest(ModelState);
             }
 
@@ -95,7 +95,7 @@ namespace UIMS.Web.Controllers
             var isSemesterExists = await _semesterService.IsExistsAsync(x => x.Name == semesterUpdateVM.Name && x.Id != semesterUpdateVM.Id);
             if(isSemesterExists)
             {
-                ModelState.AddModelError("Semester", "این نیمسال قبلا در سیستم ثبت شده است.");
+                ModelState.AddModelError("Errors", "این نیمسال قبلا در سیستم ثبت شده است.");
                 return BadRequest(ModelState);
             }
 

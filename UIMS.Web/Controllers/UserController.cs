@@ -35,11 +35,11 @@ namespace UIMS.Web.Controllers
             _semesterService = semesterService;
         }
 
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(typeof(PaginationViewModel<UserViewModel>), 200)]
-        public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
+        public async Task<IActionResult> GetAll([FromBody] UserGetAllInputViewModel userGetAllInputVM)
         {
-            var users = await _userService.GetAll<UserViewModel>(page, pageSize);
+            var users = await _userService.GetAll(userGetAllInputVM.Role,userGetAllInputVM.Page,userGetAllInputVM.PageSize);
 
             return Ok(users);
         }
@@ -56,6 +56,18 @@ namespace UIMS.Web.Controllers
             return Ok(user);
         }
 
+        [HttpGet]
+        [ProducesResponseType(typeof(UserPartialViewModel), 200)]
+        public async Task<IActionResult> GetInfo()
+        {
+            var user = await _userService.GetAsync<UserPartialViewModel>(UserId);
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
+        }
+
+
         [HttpPost]
         [AllowAnonymous]
         [SwaggerResponse(200, typeof(LoginInfoViewModel), "موفق")]
@@ -64,7 +76,7 @@ namespace UIMS.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("User-Pass", "نام کاربری یا پسورد وارد نشده است");
+                ModelState.AddModelError("Errors", "نام کاربری یا پسورد وارد نشده است");
                 return BadRequest(ModelState);
             }
             var user = await _userService.IsUserValidAsync(login.Username, login.Password);
@@ -72,12 +84,12 @@ namespace UIMS.Web.Controllers
             //userTest.
             if (user == null)
             {
-                ModelState.AddModelError("Wrong User or Password", "نام کاربری یا کلمه عبور اشتباه است");
+                ModelState.AddModelError("Errors", "نام کاربری یا کلمه عبور اشتباه است");
                 return BadRequest(ModelState);
             }
             if (!user.Enable)
             {
-                ModelState.AddModelError("User Is Disabled", "کاربر غیر فعال شده است.");
+                ModelState.AddModelError("Errors", "کاربر غیر فعال شده است.");
                 return BadRequest(ModelState);
             }
             if (user.LastLogin == null)
@@ -122,7 +134,7 @@ namespace UIMS.Web.Controllers
 
             if (await _userService.IsExistsAsync(user))
             {
-                ModelState.AddModelError("Error", "مشخصات کاربری قبلا در سیستم ثبت شده است.");
+                ModelState.AddModelError("Errors", "مشخصات کاربری قبلا در سیستم ثبت شده است.");
                 return BadRequest(ModelState);
             }
 
@@ -144,8 +156,8 @@ namespace UIMS.Web.Controllers
             var result = await _userService.ChangePasswordAsync(user, passwordVM.OldPassword, passwordVM.NewPassword);
             if (!result.Succeeded)
             {
-                ModelState.AddModelError("OldPasswordError", "پسورد وارد شده صحیح نیست");
-                ModelState.AddModelError("NewPasswordError", "پسورد جدید باید بیش از 5 رقم باشد");
+                ModelState.AddModelError("Errors", "پسورد وارد شده صحیح نیست");
+                ModelState.AddModelError("Errors", "پسورد جدید باید بیش از 5 رقم باشد");
                 return BadRequest(ModelState);
             }
             await _userService.SaveChangesAsync();
@@ -163,7 +175,7 @@ namespace UIMS.Web.Controllers
             var user = await _userService.GetUserByUsername(adminChangePasswordVM.Username);
             if (user == null)
             {
-                ModelState.AddModelError("User", "کاربر پیدا نشد");
+                ModelState.AddModelError("Errors", "کاربر پیدا نشد");
                 return BadRequest(ModelState);
             }
             await _userService.ChangePasswordAsync(user, adminChangePasswordVM.Password);
@@ -183,7 +195,7 @@ namespace UIMS.Web.Controllers
             string userType = addUserVM.Type.ToLower();
             if (userType != "admin" && userType != "supervisor")
             {
-                ModelState.AddModelError("Type Error", "The Type Must Be Either admin or supervisor");
+                ModelState.AddModelError("Errors", "کاربر باید یا ادمین باشد و یا ناظر سامانه");
                 return BadRequest(ModelState);
             }
             //if (!addUserVM.MelliCode.IsNumber())
@@ -196,7 +208,7 @@ namespace UIMS.Web.Controllers
 
             if (await _userService.IsExistsAsync(user))
             {
-                ModelState.AddModelError("Error", "مشخصات کاربری قبلا در سیستم ثبت شده است.");
+                ModelState.AddModelError("Errors", "مشخصات کاربری قبلا در سیستم ثبت شده است.");
                 return BadRequest(ModelState);
             }
 
@@ -217,7 +229,7 @@ namespace UIMS.Web.Controllers
             var user = await _userService.IsUserValidAsync(loginVM.Username, loginVM.Password);
             if (user == null)
             {
-                ModelState.AddModelError("Bad Username Or Password", "پسورد یا نام کاربری اشتباه است.");
+                ModelState.AddModelError("Errors", "پسورد یا نام کاربری اشتباه است.");
                 return BadRequest(ModelState);
             }
 

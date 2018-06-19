@@ -64,7 +64,7 @@ namespace UIMS.Web.Controllers
             var manager = await _buildingManagerService.GetAsync(x => x.UserId == UserId);
             if (!manager.BuildingId.HasValue)
             {
-                ModelState.AddModelError("BuildingManager", "ساختمانی برای مدیر ساختمان مورد نظر ثبت نشده است");
+                ModelState.AddModelError("Errors", "ساختمانی برای مدیر ساختمان مورد نظر ثبت نشده است");
                 return BadRequest(ModelState);
             }
 
@@ -93,7 +93,7 @@ namespace UIMS.Web.Controllers
             var manager = await _buildingManagerService.GetAsync(x => x.UserId == UserId);
             if (!manager.BuildingId.HasValue)
             {
-                ModelState.AddModelError("BuildingManager", "ساختمانی برای مدیر ساختمان مورد نظر ثبت نشده است");
+                ModelState.AddModelError("Errors", "ساختمانی برای مدیر ساختمان مورد نظر ثبت نشده است");
                 return BadRequest(ModelState);
             }
 
@@ -113,7 +113,7 @@ namespace UIMS.Web.Controllers
             var isBuildingExists = await _buildingService.IsExistsAsync(x => x.Id == buildingManagerInsertVM.BuildingManagerBuildingId.Value);
             if (!isBuildingExists)
             {
-                ModelState.AddModelError("Building", "این ساختمان در سیستم ثبت نشده است.");
+                ModelState.AddModelError("Errors", "این ساختمان در سیستم ثبت نشده است.");
                 return BadRequest(ModelState);
             }
 
@@ -173,13 +173,13 @@ namespace UIMS.Web.Controllers
                 var isBuildingExists = await _buildingService.IsExistsAsync(x => x.Id == buildingManagerUpdateVM.BuildingId.Value);
                 if (!isBuildingExists)
                 {
-                    ModelState.AddModelError("Building", "این ساختمان در سیستم ثبت نشده است.");
+                    ModelState.AddModelError("Errors", "این ساختمان در سیستم ثبت نشده است.");
                     return BadRequest(ModelState);
                 }
 
                 if (await _buildingManagerService.IsExistsAsync(x => x.BuildingId != null && x.BuildingId.Value == buildingManagerUpdateVM.BuildingId.Value && x.Id != buildingManagerUpdateVM.Id))
                 {
-                    ModelState.AddModelError("Building", "این ساختمان توسط مدیر ساختمان دیگری مدیریت می شود");
+                    ModelState.AddModelError("Errors", "این ساختمان توسط مدیر ساختمان دیگری مدیریت می شود");
                     return BadRequest(ModelState);
                 }
 
@@ -193,7 +193,7 @@ namespace UIMS.Web.Controllers
 
             if (await _userService.IsExistsAsync(user))
             {
-                ModelState.AddModelError("User", "این کاربر قبلا در سیستم ثبت شده است.");
+                ModelState.AddModelError("Errors", "این کاربر قبلا در سیستم ثبت شده است.");
                 return BadRequest(ModelState);
             }
 
@@ -208,7 +208,7 @@ namespace UIMS.Web.Controllers
         {
             if (formFile == null || !formFile.Any())
             {
-                ModelState.AddModelError("File Not Found", "فایلی آپلود نشده است");
+                ModelState.AddModelError("Errors", "فایلی آپلود نشده است");
                 return BadRequest();
             }
 

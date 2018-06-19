@@ -40,20 +40,20 @@ namespace UIMS.Web.Controllers
             var field = await _fieldService.GetAsync(x => x.Id == courseFieldInsertVM.FieldId.Value);
             if (field == null)
             {
-                ModelState.AddModelError("Field", "رشته مورد نظر یافت نشد");
+                ModelState.AddModelError("Errors", "رشته مورد نظر یافت نشد");
                 return BadRequest(ModelState);
             }
             var course = await _courseService.GetAsync(x => x.Id == courseFieldInsertVM.CourseId.Value);
             if (course == null)
             {
-                ModelState.AddModelError("Course", "درس مورد نظر یافت نشد");
+                ModelState.AddModelError("Errors", "درس مورد نظر یافت نشد");
                 return BadRequest(ModelState);
             }
 
             var isAlreadyExists = await _courseFieldService.IsExistsAsync(x => x.FieldId == field.Id && x.CourseId == course.Id);
             if (isAlreadyExists)
             {
-                ModelState.AddModelError("CourseField", "این درس با رشته مورد نظر قبلا در سیستم ثبت شده است");
+                ModelState.AddModelError("Errors", "این درس با رشته مورد نظر قبلا در سیستم ثبت شده است");
                 return BadRequest(ModelState);
             }
 

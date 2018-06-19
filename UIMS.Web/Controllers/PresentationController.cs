@@ -43,31 +43,31 @@ namespace UIMS.Web.Controllers
 
             if (await _presentationService.IsExistsAsync(x=>x.Code == presentationInsertVM.Code))
             {
-                ModelState.AddModelError("Presentation", "این کلاس طبق کد وارد شده قبلا در سیستم ثبت شده است");
+                ModelState.AddModelError("Errors", "این کلاس طبق کد وارد شده قبلا در سیستم ثبت شده است");
                 return BadRequest(ModelState);
             }
 
             var professor = await _professorService.GetAsync(x => x.Id == presentationInsertVM.ProfessorId.Value);
             if (professor== null)
             {
-                ModelState.AddModelError("Professor", "استاد مورد نظر یافت نشد");
+                ModelState.AddModelError("Errors", "استاد مورد نظر یافت نشد");
                 return BadRequest(ModelState);
             }
             if (!professor.User.Enable)
             {
-                ModelState.AddModelError("Professor", "امکان اختصاص کلاس به استاد مورد نظر وجود ندارد");
+                ModelState.AddModelError("Errors", "امکان اختصاص کلاس به استاد مورد نظر وجود ندارد");
                 return BadRequest(ModelState);
             }
 
             if (!await _courseFieldService.IsExistsAsync(x=>x.Id == presentationInsertVM.CourseFieldId.Value))
             {
-                ModelState.AddModelError("CourseField", "درس مورد نظر یافت نشد");
+                ModelState.AddModelError("Errors", "درس مورد نظر یافت نشد");
                 return BadRequest(ModelState);
             }
             
             if (!await _buildingClassService.IsExistsAsync(x => x.Id == presentationInsertVM.BuildingClassId.Value))
             {
-                ModelState.AddModelError("BuildingClass", "کلاس مورد نظر در سیستم یافت نشد");
+                ModelState.AddModelError("Errors", "کلاس مورد نظر در سیستم یافت نشد");
                 return BadRequest(ModelState);
             }
 
@@ -140,13 +140,13 @@ namespace UIMS.Web.Controllers
             
             if (await _presentationService.IsExistsAsync(x => x.Code == presentationUpdateVM.Code && x.Id != presentationUpdateVM.Id))
             {
-                ModelState.AddModelError("Presentation", "این کلاس طبق کد وارد شده قبلا در سیستم ثبت شده است");
+                ModelState.AddModelError("Errors", "این کلاس طبق کد وارد شده قبلا در سیستم ثبت شده است");
                 return BadRequest(ModelState);
             }
 
             if (!await _buildingClassService.IsExistsAsync(x => x.Id == presentationUpdateVM.BuildingClassId.Value))
             {
-                ModelState.AddModelError("BuildingClass", "کلاس مورد نظر در سیستم یافت نشد");
+                ModelState.AddModelError("Errors", "کلاس مورد نظر در سیستم یافت نشد");
                 return BadRequest(ModelState);
             }
 

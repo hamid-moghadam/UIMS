@@ -36,7 +36,7 @@ namespace UIMS.Web.Controllers
 
             if (await _fieldService.IsExistsAsync(x=>x.Name == fieldInsertVM.Name && x.DegreeId == fieldInsertVM.DegreeId.Value))
             {
-                ModelState.AddModelError("Field", "این رشته قبلا در سیستم ثبت شده است.");
+                ModelState.AddModelError("Errors", "این رشته قبلا در سیستم ثبت شده است.");
                 return BadRequest(ModelState);
             }
 
@@ -57,11 +57,11 @@ namespace UIMS.Web.Controllers
             return Ok(field);
         }
 
-        [HttpGet]
+        [HttpPost]
         [SwaggerResponse(200, typeof(PaginationViewModel<FieldViewModel>))]
-        public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
+        public async Task<IActionResult> GetAll([FromBody] FilterInputViewModel filterInputVM)
         {
-            return Ok(await _fieldService.GetAllAsync(page, pageSize));
+            return Ok(await _fieldService.GetAllAsync(filterInputVM.Filters,filterInputVM.Page,filterInputVM.PageSize));
         }
 
         [HttpPost]
@@ -96,7 +96,7 @@ namespace UIMS.Web.Controllers
                 var isDegreeExists = await _degreeService.IsExistsAsync(x => x.Id == fieldUpdateVM.DegreeId.Value);
                 if (!isDegreeExists)
                 {
-                    ModelState.AddModelError("Degree", "مقطع مورد نظر در سیستم ثبت نشده است.");
+                    ModelState.AddModelError("Errors", "مقطع مورد نظر در سیستم ثبت نشده است.");
                     return BadRequest(ModelState);
                 }
             }

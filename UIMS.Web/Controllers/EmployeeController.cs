@@ -122,7 +122,7 @@ namespace UIMS.Web.Controllers
 
             if (await _userService.IsExistsAsync(user))
             {
-                ModelState.AddModelError("User", "User Exists");
+                ModelState.AddModelError("Errors", "User Exists");
                 return BadRequest(ModelState);
             }
 
@@ -137,7 +137,7 @@ namespace UIMS.Web.Controllers
         {
             if (formFile == null || !formFile.Any())
             {
-                ModelState.AddModelError("File Not Found", "فایلی آپلود نشده است");
+                ModelState.AddModelError("Errors", "فایلی آپلود نشده است");
                 return BadRequest();
             }
 

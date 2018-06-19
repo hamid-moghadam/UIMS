@@ -12,6 +12,7 @@ namespace UIMS.Web.DTO
         [Number]
         [Required]
         [MaxLength(10)]
+        [MinLength(3)]
         public string Code { get; set; }
 
         [Required]

@@ -21,13 +21,13 @@ namespace UIMS.Web.DTO
         [Required]
         public DayOfWeek? Day { get; set; }
 
+        public bool? Enable { get; set; }
+
 
         //public int? CourseFieldId { get; set; }
 
         //public int? ProfessorId { get; set; }
 
         public int? BuildingClassId { get; set; }
-
-
     }
 }
