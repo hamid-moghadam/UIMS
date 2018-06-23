@@ -14,9 +14,15 @@ namespace UIMS.Web.DTO
 
         public string FullName { get; set; }
 
+        public string Name { get; set; }
+
+        public string Family { get; set; }
+
         public string PhoneNumber { get; set; }
 
-        //public bool Enable { get; set; }
+        public bool Enable { get; set; }
+
+        public string Username { get; set; }
 
         //public ICollection<Message> SentMessages { get; set; }
 

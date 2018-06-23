@@ -9,6 +9,23 @@ namespace UIMS.Web.Extentions
 {
     public static class ConfigureApplicationBuilderExtentions
     {
+
+        private static readonly string Auth_Query_String_Key = "Access_Token";
+
+
+        public static void HandleSignalRWithJWT(this IApplicationBuilder app)
+        {
+            app.Use(async (Mcontext, next) => {
+                if (Mcontext.Request.Query.TryGetValue(Auth_Query_String_Key, out var token))
+                {
+                    Mcontext.Request.Headers.Add("Authorization", $"Bearer {token}");
+                }
+                await next();
+
+            });
+        }
+
+
         public static void HandleApiRequests(this IApplicationBuilder app)
         {
             app.Use(async (Mcontext, next) => {
@@ -30,6 +47,9 @@ namespace UIMS.Web.Extentions
                     await next();
                 }
             });
+
+
+
         }
 
         public static void ConfigureSwagger(this IApplicationBuilder app)

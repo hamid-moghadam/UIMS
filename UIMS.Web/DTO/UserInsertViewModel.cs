@@ -8,7 +8,7 @@ using UIMS.Web.Models.Attributes;
 
 namespace UIMS.Web.DTO
 {
-    public class UserInsertViewModel:BaseModel
+    public class UserInsertViewModel
     {
         [Number]
         [Required]

@@ -114,10 +114,14 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
             CreateMap<CourseField, CourseFieldInsertViewModel>().ReverseMap();
             CreateMap<CourseFieldUpdateViewModel, CourseField>().ReverseMap();
 
-            CreateMap<Presentation, PresentationViewModel>();
-            CreateMap<Presentation, PresentationPartialViewModel>();
-            CreateMap<Presentation, PresentationBuildingManagerViewModel>();
-            CreateMap<Presentation, PresentationProfessorViewModel>();
+            CreateMap<Presentation, PresentationViewModel>()
+                .ForMember(x => x.Day, source => source.MapFrom(x => (int)x.Day));
+            CreateMap<Presentation, PresentationPartialViewModel>()
+                .ForMember(x => x.Day, source => source.MapFrom(x => (int)x.Day));
+            CreateMap<Presentation, PresentationBuildingManagerViewModel>()
+                .ForMember(x => x.Day, source => source.MapFrom(x => (int)x.Day));
+            CreateMap<Presentation, PresentationProfessorViewModel>()
+                .ForMember(x => x.Day, source => source.MapFrom(x => (int)x.Day));
             CreateMap<Presentation, PresentationInsertViewModel>().ReverseMap();
             CreateMap<PresentationUpdateViewModel, Presentation>().ReverseMap();
 

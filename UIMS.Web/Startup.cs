@@ -91,6 +91,7 @@ namespace UIMS.Web
             dataContext.Database.Migrate();
 
             app.HandleApiRequests();
+            app.HandleSignalRWithJWT();
 
 
             app.UseStaticFiles();

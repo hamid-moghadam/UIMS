@@ -106,16 +106,12 @@ namespace UIMS.Web.Controllers
 
 
         [HttpPost]
-        [Authorize]
         [SwaggerResponse(200, typeof(UserViewModel), "موفق")]
         [SwaggerResponse(400, typeof(UserViewModel), "شماره همراه یا تلفن یا ای دی صحیح نیست")]
         public async Task<IActionResult> Update([FromBody]UserUpdateViewModel userVM)
         {
-            int id = UserId;
-            if (userVM.AdminEditPermitted && Roles.Contains("admin"))
-                id = userVM.Id;
 
-            if (!ModelState.IsValid || id == 0)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             //if (userVM.PhoneNumber != null && !userVM.PhoneNumber.IsNumber())
@@ -128,7 +124,10 @@ namespace UIMS.Web.Controllers
             //    ModelState.AddModelError("MelliCodeError", "کد ملی باید عدد باشد");
             //    return BadRequest(ModelState);
             //}
-            var user = await _userService.GetAsync(x=>x.Id == id);
+            var user = await _userService.GetAsync(x=>x.Id == userVM.Id);
+
+            if (user == null)
+                return NotFound();
 
             user = _mapper.Map(userVM, user);
 

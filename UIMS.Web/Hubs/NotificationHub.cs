@@ -110,10 +110,10 @@ namespace UIMS.Web.Hubs
             var userReceivers = _userService.GetAll().Select(x => x.Id).Select(x => new NotificationReceiver() { UserId = x });
             if (user == null)
                 return;
-            await _messageService.AddAsync(new DTO.NotificationInsertViewModel()
+            await _messageService.AddAsync(new Notification()
             {
                 Content = content,
-                MessageTypeId = 1,
+                NotificationTypeId = 1,
                 Title = title,
                 SemesterId = currentSemester.Id,
                 SenderId = user.Id,
@@ -132,10 +132,10 @@ namespace UIMS.Web.Hubs
             var userReceivers = new List<NotificationReceiver>() { new NotificationReceiver() { UserId = int.Parse(id) } };
             if (user == null)
                 return;
-            await _messageService.AddAsync(new DTO.NotificationInsertViewModel()
+            await _messageService.AddAsync(new Notification()
             {
                 Content = content,
-                MessageTypeId = 1,
+                NotificationTypeId = 1,
                 Title = title,
                 SemesterId = currentSemester.Id,
                 SenderId = user.Id,

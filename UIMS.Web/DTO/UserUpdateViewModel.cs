@@ -24,7 +24,9 @@ namespace UIMS.Web.DTO
         [MaxLength(80)]
         public string Family { get; set; }
 
-        public bool AdminEditPermitted { get; set; }
+        public bool? Enable { get; set; }
+
+        //public bool AdminEditPermitted { get; set; }
         //[MinLength(6)]
         //public string Password { get; set; }
 

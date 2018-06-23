@@ -70,6 +70,7 @@ namespace UIMS.Web.Services
         public async Task<IdentityResult> UpdateUserAsync(AppUser user)
         {
             //await ChangePasswordAsync(user, user.MelliCode);
+            user.UserName = user.MelliCode;
             return await _userManager.UpdateAsync(user);
         }
 

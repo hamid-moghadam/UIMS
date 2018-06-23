@@ -57,6 +57,16 @@ namespace UIMS.Web.Extentions
             })
             .AddJwtBearer(cfg =>
             {
+                cfg.Events = new JwtBearerEvents()
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (context.Request.Path.ToString().EndsWith("hub"))
+                            context.Token = context.Request.Query["access_token"];
+                        return Task.CompletedTask;
+                    },
+                };
+
                 cfg.RequireHttpsMetadata = false;
                 cfg.SaveToken = true;
                 cfg.TokenValidationParameters = new TokenValidationParameters()

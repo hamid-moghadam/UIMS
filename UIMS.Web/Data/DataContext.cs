@@ -45,6 +45,21 @@ namespace UIMS.Web.Data
 
             return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
+        public override int SaveChanges()
+        {
+            ChangeTracker.ApplyTrackingInformation();
+            return base.SaveChanges();
+        }
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            ChangeTracker.ApplyTrackingInformation();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            ChangeTracker.ApplyTrackingInformation();
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

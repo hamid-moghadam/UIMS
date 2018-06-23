@@ -9,6 +9,7 @@ using UIMS.Web.Services;
 using AutoMapper;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using UIMS.Web.Extentions;
+using UIMS.Web.Models;
 
 namespace UIMS.Web.Controllers
 {
@@ -18,10 +19,12 @@ namespace UIMS.Web.Controllers
     {
 
         private readonly SemesterService _semesterService;
+        private readonly NotificationService _notificationService;
         private readonly IMapper _mapper;
 
-        public SemesterController(SemesterService semesterService, IMapper mapper)
+        public SemesterController(SemesterService semesterService, IMapper mapper, NotificationService notificationService)
         {
+            _notificationService = notificationService;
             _semesterService = semesterService;
             _mapper = mapper;
         }
@@ -106,5 +109,6 @@ namespace UIMS.Web.Controllers
             return Ok();
 
         }
+
     }
 }
