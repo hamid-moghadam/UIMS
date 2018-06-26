@@ -47,8 +47,14 @@ namespace UIMS.Web.Services
                 return await GetAllAsync(page, pageSize);
 
             var users = await _userManager.GetUsersInRoleAsync(role);
-            var usersVM = _mapper.Map<List<UserViewModel>>(users);
+            var usersVM = _mapper.Map<List<UserViewModel>>(users.OrderByDescending(x=>x.Created).ToList());
             return usersVM.ToPage(pageSize, page);
+        }
+
+        public async Task<IList<AppUser>> GetAll(string role)
+        {
+            var users = await _userManager.GetUsersInRoleAsync(role);
+            return users;
         }
 
         public async Task<IdentityResult> AddPasswordToUserAsync(AppUser user)
@@ -59,7 +65,9 @@ namespace UIMS.Web.Services
 
         public async Task<IdentityResult> AddRoleToUserAsync(AppUser user, string role)
         {
-            return await _userManager.AddToRoleAsync(user, role);
+            if (!await _userManager.IsInRoleAsync(user,role))
+                return await _userManager.AddToRoleAsync(user, role);
+            return null;
         }
 
         public async Task<IdentityResult> RemoveRoleAsync(AppUser user, string role)

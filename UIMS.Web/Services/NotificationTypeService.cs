@@ -14,5 +14,17 @@ namespace UIMS.Web.Services
         public NotificationTypeService(DataContext context, IMapper mapper) : base(context, mapper)
         {
         }
+
+        public async Task<NotificationType> CreateIfNotExists(string type)
+        {
+            var notifType = await GetAsync(x => x.Type == type);
+            if (notifType == null)
+            {
+                var result = await AddAsync(new NotificationType() { Type = type });
+                await SaveChangesAsync();
+            }
+            return notifType;
+        }
+
     }
 }

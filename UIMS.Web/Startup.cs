@@ -94,7 +94,10 @@ namespace UIMS.Web
             app.HandleSignalRWithJWT();
 
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                ServeUnknownFileTypes = true
+            });
 
 
             app.UseAuthentication();
@@ -110,4 +113,4 @@ namespace UIMS.Web
             app.UseMvc();
         }
     }
-}
+}   

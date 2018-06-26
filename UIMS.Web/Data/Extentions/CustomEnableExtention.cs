@@ -10,7 +10,7 @@ namespace UIMS.Web.Data.Extentions
     {
         public static List<Type> TrueEnableTypes => new List<Type>()
         {
-            typeof(Semester),
+            //typeof(Semester),
             typeof(Notification),
             typeof(CourseField),
             typeof(BuildingClass),

@@ -18,13 +18,13 @@ namespace UIMS.Web.Services
 
         //public CourseFieldService(this)[int indes]
 
-        public IQueryable<CourseField> this[string index]
-        {
-            get
-            {
-                return dictionary[index];
-            }
-        }
+        //public IQueryable<CourseField> this[string index]
+        //{
+        //    get
+        //    {
+        //        return dictionary[index];
+        //    }
+        //}
         public Dictionary<string, IQueryable<CourseField>> dictionary;
 
 

@@ -10,51 +10,19 @@ using UIMS.Web.Services;
 
 namespace UIMS.Web.Hubs
 {
-    //[Authorize]
+    [Authorize]
     public class NotificationHub:BaseHub
     {
-        private readonly SemesterService _SemesterService;
         private readonly NotificationService _messageService;
+        private readonly NotificationTypeService _notificationTypeService;
         private readonly PresentationService _presentationService;
-        private readonly UserService _userService;
+        private static int _usersCount = 0;
 
-
-        public NotificationHub(SemesterService semesterService, NotificationService messageService,UserService userService, PresentationService presentationService)
+        public NotificationHub(SemesterService semesterService, NotificationService messageService,UserService userService, PresentationService presentationService, NotificationTypeService notificationTypeService) :base(semesterService,userService)
         {
-            _SemesterService = semesterService;
+            _notificationTypeService = notificationTypeService;
             _messageService = messageService;
             _presentationService = presentationService;
-            _userService = userService;
-        }
-
-        public async Task SendMessage(string id,string title,string content)
-        {
-            var currentSemester = await _SemesterService.GetCurrentAsycn();
-            AppUser user = null;
-            //if (int.TryParse(Context.User.FindFirst(ClaimTypes.NameIdentifier).Value,out int result))
-            if (int.TryParse(id, out int result))
-            {
-                user = await _userService.GetAsync(x => x.Id == result);
-            }
-            else
-                return;
-
-            //user = await _userService.GetAsync(x => x.Id == int.Parse(Context.UserIdentifier));
-            //var userReceivers = _userService.GetAll().Select(x => x.Id).Except(new List<int>() { user.Id }).Select(x => new MessageReceiver() { UserId = x });
-            var userReceivers = _userService.GetAll().Select(x => x.Id).Select(x => new NotificationReceiver() { UserId = x });
-            //if (user == null)
-            //    return;
-            await _messageService.AddAsync(new Notification()
-            {
-                Content = content,
-                NotificationTypeId = 1,
-                Title = title,
-                SemesterId = currentSemester.Id,
-                SenderId = user.Id,
-                Receivers = userReceivers.ToList()
-            });
-            await _messageService.SaveChangesAsync();
-            await Clients.All.SendAsync("ReceiveMessage", $"شما یک پیام از {user.FullName} دارید.");
         }
 
         public async Task SuspendPresentation(int presentationId)
@@ -101,62 +69,70 @@ namespace UIMS.Web.Hubs
         }
 
 
-        [Authorize]
-        public async Task Send(string title, string content)
+        public async Task SendSpecific(string[] ids,string title,string content)
         {
-            var currentSemester = await _SemesterService.GetCurrentAsycn();
-            var user = await _userService.GetAsync(x => x.Id == int.Parse(Context.User.FindFirst(ClaimTypes.NameIdentifier).Value));
-            //var userReceivers = _userService.GetAll().Select(x => x.Id).Except(new List<int>() { user.Id }).Select(x => new MessageReceiver() { UserId = x });
-            var userReceivers = _userService.GetAll().Select(x => x.Id).Select(x => new NotificationReceiver() { UserId = x });
-            if (user == null)
-                return;
-            await _messageService.AddAsync(new Notification()
-            {
-                Content = content,
-                NotificationTypeId = 1,
-                Title = title,
-                SemesterId = currentSemester.Id,
-                SenderId = user.Id,
-                Receivers = userReceivers.ToList()
-            });
+            var type = await _notificationTypeService.CreateIfNotExists("اختصاصی");
+            var receivers = GetReceiversByIds(ids);
+            var t = await GetNotificationAsync(content, title, type.Id, receivers);
+
+            await _messageService.AddAsync(t.Item1);
             await _messageService.SaveChangesAsync();
-            await Clients.All.SendAsync("ReceiveMessage", $"شما یک پیام از {user.FullName} دارید.");
+
+            await Clients.Users(ids).SendAsync("ReceiveMessage", $"شما یک پیام از {t.Item2.FullName} دارید.");
         }
 
-        [Authorize]
-        public async Task SendOne(string id, string title, string content)
+        public async Task SendAll(string title, string content)
         {
-            var currentSemester = await _SemesterService.GetCurrentAsycn();
-            var user = await _userService.GetAsync(x => x.Id == int.Parse(Context.User.FindFirst(ClaimTypes.NameIdentifier).Value));
-            //var userReceivers = _userService.GetAll().Select(x => x.Id).Except(new List<int>() { user.Id }).Select(x => new MessageReceiver() { UserId = x });
-            var userReceivers = new List<NotificationReceiver>() { new NotificationReceiver() { UserId = int.Parse(id) } };
-            if (user == null)
-                return;
-            await _messageService.AddAsync(new Notification()
-            {
-                Content = content,
-                NotificationTypeId = 1,
-                Title = title,
-                SemesterId = currentSemester.Id,
-                SenderId = user.Id,
-                Receivers = userReceivers.ToList()
-            });
+            var type = await _notificationTypeService.CreateIfNotExists("عمومی");
+            var ids = _userService.GetAll().Select(x => x.Id);
+            var receivers = GetReceiversByIds(ids);
+            var t = await GetNotificationAsync(content, title, type.Id, receivers);
+
+            await _messageService.AddAsync(t.Item1);
             await _messageService.SaveChangesAsync();
-            await Clients.Users(user.Id.ToString()).SendAsync("ReceiveMessage", $"شما یک پیام از {user.FullName} دارید.");
+
+            await Clients.Users(ids.Select(x=>x.ToString()).ToArray()).SendAsync("ReceiveMessage", $"شما یک پیام از {t.Item2.FullName} دارید.");
         }
+
+        public async Task SendRole(string role,string title, string content)
+        {
+            var type = await _notificationTypeService.CreateIfNotExists("گروهی");
+            var ids = (await _userService.GetAll(role)).Select(x => x.Id);
+            var receivers = GetReceiversByIds(ids);
+            var t = await GetNotificationAsync(content, title, type.Id, receivers);
+
+            await _messageService.AddAsync(t.Item1);
+            await _messageService.SaveChangesAsync();
+
+            await Clients.Users(ids.Select(x => x.ToString()).ToArray()).SendAsync("ReceiveMessage", $"شما یک پیام از {t.Item2.FullName} دارید.");
+        }
+
 
 
         public override async Task OnConnectedAsync()
         {
-            //await Groups.AddToGroupAsync(Context.ConnectionId, "SignalR Users");
             await base.OnConnectedAsync();
+            _usersCount++;
+            foreach (var role in Roles)
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, role);
+            }
+            await Clients.Groups("admin", "supervisor").SendAsync("ReceiveOnlineUsers", _usersCount);
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            //await Groups.RemoveFromGroupAsync(Context.ConnectionId, "SignalR Users");
             await base.OnDisconnectedAsync(exception);
+            _usersCount--;
+            foreach (var role in Roles)
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, role);
+            }
+            await Clients.Groups("admin", "supervisor").SendAsync("ReceiveOnlineUsers", _usersCount);
         }
+
+
+
 
     }
 }

@@ -207,10 +207,12 @@ namespace UIMS.Web.Controllers
 
             if (await _userService.IsExistsAsync(user))
             {
-                ModelState.AddModelError("Errors", "مشخصات کاربری قبلا در سیستم ثبت شده است.");
-                return BadRequest(ModelState);
+                await _userService.AddRoleToUserAsync(user, userType);
+                await _userService.SaveChangesAsync();
+                return Ok();
+                //ModelState.AddModelError("Errors", "مشخصات کاربری قبلا در سیستم ثبت شده است.");
+                //return BadRequest(ModelState);
             }
-
             await _userService.CreateUserAsync(user, addUserVM.Password, addUserVM.Type);
             await _userService.SaveChangesAsync();
 

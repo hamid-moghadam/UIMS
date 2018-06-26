@@ -12,19 +12,15 @@ namespace UIMS.Web.Hubs
     public class ChatHub:BaseHub
     {
         private readonly ChatService _chatService;
-        private readonly SemesterService _semesterService;
-        private readonly UserService _userService;
 
-        public ChatHub(ChatService conversationService, SemesterService semesterService, UserService userService)
+        public ChatHub(ChatService conversationService, SemesterService semesterService, UserService userService):base(semesterService,userService)
         {
             _chatService = conversationService;
-            _userService = userService;
-            _semesterService = semesterService;
         }
 
         public async Task SendMessage(string id, string message)
         {
-            var currentSemester = await _semesterService.GetCurrentAsycn();
+            var currentSemester = await GetCurrentSemesterId();
             var conversation = await _chatService.AddIfNotExists(UserId,int.Parse(id));
             var user = await _userService.GetAsync(x => x.Id == UserId);
             conversation.Replies.Add(new Models.ChatReply()
@@ -32,7 +28,7 @@ namespace UIMS.Web.Hubs
                 ChatId = conversation.Id,
                 ReplierId = UserId,
                 Reply = message,
-                SemesterId = currentSemester.Id
+                SemesterId = currentSemester
             });
 
             await Clients.User(id).SendAsync("ReceiveMessage", $"شما یک پیام از {user.FullName} دارید.");
