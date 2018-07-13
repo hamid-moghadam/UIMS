@@ -47,12 +47,17 @@ namespace UIMS.Web.Services
 
         }
 
-        public async Task<string> ParseSemester(string semester)
+        public async Task<string> ParseSemesterAsync(string semester)
         {
             if (semester != null && semester.IsSemester())
                 return semester;
             else
                 return (await _context.Set<Semester>().SingleOrDefaultAsync(x => x.Enable)).Name;
+        }
+
+        public async Task<string> GetCurrentSemesterAsync()
+        {
+            return (await _context.Set<Semester>().SingleOrDefaultAsync(x => x.Enable)).Name;
         }
 
         public async Task<int> SaveChangesAsync()

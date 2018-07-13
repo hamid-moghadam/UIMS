@@ -31,7 +31,15 @@ namespace UIMS.Web.Controllers
             return Ok(await _messageService.GetAll(messageGetAllVM.NotificationTypeId.Value,messageGetAllVM.Semester,messageGetAllVM.Page,messageGetAllVM.PageSize,UserId));
         }
 
-        // GET api/values/5
+
+        [HttpPost]
+        public async Task<IActionResult> MarkSeenMessages()
+        {
+            await _messageService.MarkMessagesAsSeenAsync(UserId);
+            await _messageService.SaveChangesAsync();
+            return Ok();
+        }
+
         [HttpGet("{semester}")]
         public async Task<IActionResult> GetBadge(string semester)
         {

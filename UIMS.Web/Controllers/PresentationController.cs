@@ -99,11 +99,11 @@ namespace UIMS.Web.Controllers
             return Ok(await _presentationService.GetAllAsync(page, pageSize));
         }
 
-        [HttpPost("{id}")]
+        [HttpPost]
         [SwaggerResponse(200, typeof(PaginationViewModel<StudentViewModel>))]
-        public async Task<IActionResult> GetStudents(int id,[FromBody] Pagination pagination)
+        public async Task<IActionResult> GetStudents([FromBody] PresentationGetStudentsViewModel presentationGetStudentsVM)
         {
-            return Ok(await _presentationService.GetStudents(id,pagination.Page, pagination.PageSize));
+            return Ok(await _presentationService.GetStudents(presentationGetStudentsVM.Id, presentationGetStudentsVM.Page, presentationGetStudentsVM.PageSize));
         }
 
 

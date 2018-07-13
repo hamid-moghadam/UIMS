@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UIMS.Web.Models;
+//using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class PresentationViewModel:BaseModel
+    public class PresentationViewModel: UIMS.Web.Models.BaseModel
     {
         public string Code { get; set; }
 
@@ -27,6 +27,14 @@ namespace UIMS.Web.DTO
 
 
         public BuildingClassViewModel BuildingClass { get; set; }
+
+        public string FullName
+        {
+            get
+            {
+                return $"{Code} | {CourseField.Course.Name} - {CourseField.Field.Name} | {Professor.UserFullName}";
+            }
+        }
 
         //public List<StudentPresentationPartialViewModel> Students { get; set; }
 

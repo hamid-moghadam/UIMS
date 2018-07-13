@@ -58,6 +58,7 @@ namespace UIMS.Web.Controllers
         }
 
         [HttpGet]
+        [SwaggerResponse(200, typeof(List<PresentationProfessorViewModel>))]
         [Authorize(Roles ="professor")]
         public async Task<IActionResult> GetPresentations(string semester)
         {

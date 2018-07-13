@@ -22,6 +22,12 @@ namespace UIMS.Web.Data.Helpers
         }
 
 
+        public async Task<int> SeedSemesterEntities()
+        {
+            await _dataContext.Semester.AddAsync(new Semester() { Name = "1397-1",Enable = true });
+            return await _dataContext.SaveChangesAsync();
+        }
+
         public async Task<int> SeedUserEntities()
         {
             AppUser hamid = new AppUser()

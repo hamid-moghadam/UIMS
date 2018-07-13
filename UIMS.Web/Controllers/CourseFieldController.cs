@@ -74,11 +74,11 @@ namespace UIMS.Web.Controllers
             return Ok(courseField);
             
         }
-        [HttpGet]
+        [HttpPost]
         [SwaggerResponse(200, typeof(PaginationViewModel<CourseFieldViewModel>))]
-        public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
+        public async Task<IActionResult> GetAll(FilterInputViewModel filterInputVM)
         {
-            return Ok(await _courseFieldService.GetAllAsync(page, pageSize));
+            return Ok(await _courseFieldService.GetAllAsync(filterInputVM.Filters,filterInputVM.Page,filterInputVM.PageSize));
         }
 
         [HttpPost("{id}")]

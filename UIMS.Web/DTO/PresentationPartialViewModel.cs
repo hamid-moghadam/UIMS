@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class PresentationPartialViewModel
+    public class PresentationPartialViewModel:BaseModel
     {
         public string Code { get; set; }
 

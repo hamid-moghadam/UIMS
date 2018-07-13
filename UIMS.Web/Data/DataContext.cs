@@ -26,15 +26,16 @@ namespace UIMS.Web.Data
         public DbSet<Employee> Employee { get; set; }
         public DbSet<Field> Field { get; set; }
         public DbSet<GroupManager> GroupManager { get; set; }
-        public DbSet<Notification> Message { get; set; }
-        public DbSet<NotificationReceiver> MessageReceiver { get; set; }
-        public DbSet<NotificationType> MessageType { get; set; }
+        public DbSet<Notification> Notification { get; set; }
+        public DbSet<NotificationReceiver> NotificationReceiver { get; set; }
+        public DbSet<NotificationType> NotificationType { get; set; }
         public DbSet<Presentation> Presentation { get; set; }
         public DbSet<Professor> Professor { get; set; }
         public DbSet<Semester> Semester { get; set; }
         public DbSet<Student> Student { get; set; }
         public DbSet<StudentPresentation> StudentPresentation { get; set; }
         public DbSet<AppUser> User { get; set; }
+        public DbSet<Settings> Settings { get; set; }
 
 
 

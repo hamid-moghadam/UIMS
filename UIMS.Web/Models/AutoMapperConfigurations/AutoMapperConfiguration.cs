@@ -126,6 +126,16 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
             CreateMap<PresentationUpdateViewModel, Presentation>().ReverseMap();
 
             CreateMap<StudentPresentation, StudentPresentationViewModel>();
+                //.ForMember(x => x.Enable, source => source.MapFrom(x => x.Enable))
+                //.ForMember(x => x.BuildingClass, source => source.MapFrom(x => x.Presentation.BuildingClass))
+                //.ForMember(x => x.Code, source => source.MapFrom(x => x.Presentation.Code))
+                //.ForMember(x => x.CourseField, source => source.MapFrom(x => x.Presentation.CourseField))
+                //.ForMember(x => x.Day, source => source.MapFrom(x => x.Presentation.Day))
+                //.ForMember(x => x.End, source => source.MapFrom(x => x.Presentation.End))
+                //.ForMember(x => x.Id, source => source.MapFrom(x => x.Presentation.Id))
+                //.ForMember(x => x.Professor, source => source.MapFrom(x => x.Presentation.Professor))
+                //.ForMember(x => x.Semester, source => source.MapFrom(x => x.Presentation.Semester))
+                //.ForMember(x => x.Start, source => source.MapFrom(x => x.Presentation.Start));
             CreateMap<StudentPresentation, StudentPresentationPartialViewModel>();
             CreateMap<StudentPresentation, StudentPresentationInsertViewModel>().ReverseMap();
             CreateMap<StudentPresentationUpdateViewModel, StudentPresentation>().ReverseMap();
@@ -138,6 +148,11 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
             CreateMap<Notification, NotificationInsertViewModel>().ReverseMap();
             CreateMap<Notification, NotificationViewModel>();
             //CreateMap<Message, MessageInsertViewModel>();
+
+
+            CreateMap<Settings, SettingsViewModel>();
+            CreateMap<Settings, SettingsInsertViewModel>().ReverseMap();
+            CreateMap<SettingsUpdateViewModel, Settings>().ReverseMap();
 
         }
 

@@ -7,6 +7,8 @@ namespace UIMS.Web.DTO
 {
     public class PresentationBuildingManagerViewModel
     {
+        public int Id { get; set; }
+
         public string Code { get; set; }
 
         public string Start { get; set; }

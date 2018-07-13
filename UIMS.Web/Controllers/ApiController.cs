@@ -8,10 +8,12 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using AutoMapper;
 using UIMS.Web.DTO;
+using UIMS.Web.Filters;
 
 namespace UIMS.Web.Controllers
 {
     [Produces("application/json")]
+    //[LogException]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public abstract class ApiController : ControllerBase

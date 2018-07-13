@@ -32,13 +32,14 @@ namespace UIMS.Web.Services
         {
             _presentation = context.Set<Presentation>();
             
-            int[] a = new int[2];
+            //int[] a = new int[2];
 
-            dictionary = new Dictionary<string, IQueryable<CourseField>>
-            {
-                { "GetAll", Entity.Where(x => x.CourseId == 1) }
-            };
+            //dictionary = new Dictionary<string, IQueryable<CourseField>>
+            //{
+            //    { "GetAll", Entity.Where(x => x.CourseId == 1) }
+            //};
             //Entity.AsQueryable
+            Filters.Add("Enable", x => x.Enable);
         }
 
 

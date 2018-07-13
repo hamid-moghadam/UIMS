@@ -87,7 +87,7 @@ namespace UIMS.Web.Controllers
         [SwaggerResponse(200, typeof(List<PresentationBuildingManagerViewModel>))]
         public async Task<IActionResult> GetPresentations(string semester)
         {
-            string currentSemester = await _buildingClassService.ParseSemester(semester);
+            string currentSemester = await _buildingClassService.ParseSemesterAsync(semester);
             
 
             var manager = await _buildingManagerService.GetAsync(x => x.UserId == UserId);

@@ -15,13 +15,13 @@ namespace UIMS.Web.Services
         {
         }
 
-        public async Task<NotificationType> CreateIfNotExists(string type)
+        public NotificationType CreateIfNotExists(string type)
         {
-            var notifType = await GetAsync(x => x.Type == type);
+            var notifType = GetAsync(x => x.Type == type).Result;
             if (notifType == null)
             {
-                var result = await AddAsync(new NotificationType() { Type = type });
-                await SaveChangesAsync();
+                var result = AddAsync(new NotificationType() { Type = type }).Result;
+                SaveChanges();
             }
             return notifType;
         }

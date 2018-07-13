@@ -15,6 +15,7 @@ namespace UIMS.Web.Data.Extentions
         {
             var userCount = default(int);
             var roleCount = default(int);
+            var semesterCount = default(int);
 
 
             var context = serviceProvider.GetRequiredService<DataContext>();
@@ -34,6 +35,11 @@ namespace UIMS.Web.Data.Extentions
             if (!context.User.Any())
             {
                 userCount = dbSeeder.SeedUserEntities().Result;
+            }
+
+            if (!context.Semester.Any())
+            {
+                semesterCount = dbSeeder.SeedSemesterEntities().Result;
             }
 
             return userCount + roleCount;

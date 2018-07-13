@@ -32,18 +32,9 @@ namespace UIMS.Web.Extentions
                 await next();
                 if (Mcontext.Response.StatusCode == 404 &&
                 !Path.HasExtension(Mcontext.Request.Path.Value) &&
-                Mcontext.Request.Path.Value.StartsWith("/admin") &&
                 !Mcontext.Request.Path.Value.StartsWith("/api"))
                 {
                     Mcontext.Request.Path = "/admin/index.html";
-                    await next();
-                }
-                else if (Mcontext.Response.StatusCode == 404 &&
-                !Path.HasExtension(Mcontext.Request.Path.Value) &&
-                !Mcontext.Request.Path.Value.StartsWith("/admin") &&
-                !Mcontext.Request.Path.Value.StartsWith("/api"))
-                {
-                    Mcontext.Request.Path = "/index.html";
                     await next();
                 }
             });

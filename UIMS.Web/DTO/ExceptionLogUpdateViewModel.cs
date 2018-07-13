@@ -6,8 +6,7 @@ using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class NotificationTypeViewModel:BaseModel
+    public class ExceptionLogUpdateViewModel:BaseModel
     {
-        public string Type { get; set; }
     }
 }

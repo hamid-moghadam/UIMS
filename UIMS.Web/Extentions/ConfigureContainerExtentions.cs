@@ -148,6 +148,8 @@ namespace UIMS.Web.Extentions
             serviceCollection.AddScoped<NotificationTypeService>();
             serviceCollection.AddScoped<NotificationService>();
             serviceCollection.AddScoped<ChatService>();
+            serviceCollection.AddScoped<SettingsService>();
+
 
         }
 

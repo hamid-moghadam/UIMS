@@ -38,7 +38,7 @@ namespace UIMS.Web.Controllers
 
         [HttpGet]
         [Authorize(Roles ="student")]
-        [SwaggerResponse(200,typeof(StudentPresentationViewModel))]
+        [SwaggerResponse(200,typeof(List<PresentationPartialViewModel>))]
         public async Task<IActionResult> GetAll(string semester)
         {
             //var user = await _userService.GetAsync(x => x.Id == UserId);
@@ -48,7 +48,7 @@ namespace UIMS.Web.Controllers
             //    return BadRequest(ModelState);
             //}
             var student = await _studentService.GetAsync(x => x.UserId == UserId);
-            string currentSemester = await _studentPresentationService.ParseSemester(semester);
+            string currentSemester = await _studentPresentationService.ParseSemesterAsync(semester);
             
             var presentations = await _studentPresentationService.GetAll(student.Id, currentSemester);
 
@@ -73,10 +73,12 @@ namespace UIMS.Web.Controllers
 
             if (await _studentPresentationService.IsExistsAsync(x=>x.StudentId == student.Id && x.PresentationId == presentaion.Id))
             {
-                ModelState.AddModelError("Errors", "این کلاس قبلا توسط دانشجو گرفته شده است");
+                ModelState.AddModelError("Errors", "این کلاس قبلا توسط دانشجو اخذ شده است");
                 return BadRequest(ModelState);
             }
-            await _studentPresentationService.AddAsync(studentPresentationInsertVM);
+            presentaion.Students.Add(new StudentPresentation() { PresentationId = presentaion.Id, StudentId = student.Id });
+            //await _studentPresentationService.GetAsync(x => x.StudentId == student.Id && x.PresentationId == presentaion.Id);
+            //await _studentPresentationService.AddAsync(studentPresentationInsertVM);
             await _studentPresentationService.SaveChangesAsync();
             return Ok();
 
@@ -84,7 +86,7 @@ namespace UIMS.Web.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = "student")]
+        //[Authorize(Roles = "student")]
         public async Task<IActionResult> Update([FromBody] StudentPresentationUpdateViewModel studentPresentationUpdateVM)
         {
             var studentPresentation = await _studentPresentationService.GetAsync(x => x.Id == studentPresentationUpdateVM.Id);

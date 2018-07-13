@@ -27,82 +27,78 @@ namespace UIMS.Web.Hubs
 
         public async Task SuspendPresentation(int presentationId)
         {
-            var currentSemester = await _SemesterService.GetCurrentAsycn();
-            var students = await _presentationService.GetStudentsAsync(presentationId);
-            //if (int.TryParse(id, out int result))
-            //{
-            //    user = await _userService.GetAsync(x => x.Id == result);
-            //}
-            //else
-            //    return;
-            var user = await _userService.GetAsync(x => x.Id == UserId);
-            await _messageService.AddAsync(new Notification()
+            try
             {
-                Content = "",
-                NotificationTypeId= 2,
-                Title = "",
-                SemesterId = currentSemester.Id,
-                SenderId = user.Id,
-                Receivers = students.Select(x => new NotificationReceiver() { UserId = x }).ToList()
-            });
-            await _messageService.SaveChangesAsync();
-            await Clients.Users(students.Select(x=>x.ToString()).ToList().AsReadOnly()).SendAsync("ReceiveMessage", $"شما یک پیام از {user.FullName} دارید.");
+                var presentation = await _presentationService.GetAsync(presentationId);
+                var type = _notificationTypeService.CreateIfNotExists("عدم تشکیل کلاس");
+                var students = await _presentationService.GetStudentsAsync(presentationId);
+                var receivers = GetReceiversByIds(students);
+                var t = await GetNotificationAsync($"کلاس {presentation.CourseField.Course.Name} استاد {presentation.Professor.UserFullName} این هفته برگزار نمی شود", "عدم تشکیل کلاس", type.Id, receivers);
+
+                await _messageService.AddAsync(t.Item1);
+                await _messageService.SaveChangesAsync();
+                receivers.ForEach(x => x.NotificationId = t.Item1.Id);
+                await Clients.Users(students.Select(x=>x.ToString()).ToArray()).SendAsync("ReceiveMessage", $"شما یک پیام از {t.Item2.FullName} دارید.");
+            }
+            catch(Exception e)
+            {
+                await Clients.Caller.SendAsync("ReceiveMessage", e.Message);
+            }
         }
 
         public async Task SendMessagePresentation(string id,string title,string content)
         {
-            var currentSemester = await _SemesterService.GetCurrentAsycn();
-            var students = await _presentationService.GetStudentsAsync(int.Parse(id));
-            var user = await _userService.GetAsync(x => x.Id == UserId);
+            var presentation = await _presentationService.GetAsync(int.Parse(id));
+            var type = _notificationTypeService.CreateIfNotExists("ارسال پیام به دانشجویان کلاس");
+            var students = await _presentationService.GetStudentsAsync(presentation.Id);
+            var receivers = GetReceiversByIds(students);
+            var t = await GetNotificationAsync(content, title, type.Id, receivers);
 
-            await _messageService.AddAsync(new Notification()
-            {
-                Content = content,
-                NotificationTypeId = 3,
-                Title = title,
-                SemesterId = currentSemester.Id,
-                SenderId = user.Id,
-                Receivers = students.Select(x => new NotificationReceiver() { UserId = x }).ToList()
-            });
+            await _messageService.AddAsync(t.Item1);
             await _messageService.SaveChangesAsync();
-            await Clients.Users(students.Select(x => x.ToString()).ToList().AsReadOnly()).SendAsync("ReceiveMessage", $"شما یک پیام از {user.FullName} دارید.");
+            receivers.ForEach(x => x.NotificationId = t.Item1.Id);
+
+            await Clients.Users(students.Select(x => x.ToString()).ToArray()).SendAsync("ReceiveMessage", $"شما یک پیام از {t.Item2.FullName} دارید.");
         }
 
 
         public async Task SendSpecific(string[] ids,string title,string content)
         {
-            var type = await _notificationTypeService.CreateIfNotExists("اختصاصی");
+            var type =  _notificationTypeService.CreateIfNotExists("اختصاصی");
             var receivers = GetReceiversByIds(ids);
             var t = await GetNotificationAsync(content, title, type.Id, receivers);
 
             await _messageService.AddAsync(t.Item1);
             await _messageService.SaveChangesAsync();
+            receivers.ForEach(x => x.NotificationId = t.Item1.Id);
 
             await Clients.Users(ids).SendAsync("ReceiveMessage", $"شما یک پیام از {t.Item2.FullName} دارید.");
         }
 
         public async Task SendAll(string title, string content)
         {
-            var type = await _notificationTypeService.CreateIfNotExists("عمومی");
+            var type =  _notificationTypeService.CreateIfNotExists("عمومی");
             var ids = _userService.GetAll().Select(x => x.Id);
             var receivers = GetReceiversByIds(ids);
             var t = await GetNotificationAsync(content, title, type.Id, receivers);
 
             await _messageService.AddAsync(t.Item1);
             await _messageService.SaveChangesAsync();
+            receivers.ForEach(x => x.NotificationId = t.Item1.Id);
 
             await Clients.Users(ids.Select(x=>x.ToString()).ToArray()).SendAsync("ReceiveMessage", $"شما یک پیام از {t.Item2.FullName} دارید.");
         }
 
         public async Task SendRole(string role,string title, string content)
         {
-            var type = await _notificationTypeService.CreateIfNotExists("گروهی");
+            var type =  _notificationTypeService.CreateIfNotExists("گروهی");
             var ids = (await _userService.GetAll(role)).Select(x => x.Id);
             var receivers = GetReceiversByIds(ids);
             var t = await GetNotificationAsync(content, title, type.Id, receivers);
 
             await _messageService.AddAsync(t.Item1);
             await _messageService.SaveChangesAsync();
+            receivers.ForEach(x => x.NotificationId = t.Item1.Id);
 
             await Clients.Users(ids.Select(x => x.ToString()).ToArray()).SendAsync("ReceiveMessage", $"شما یک پیام از {t.Item2.FullName} دارید.");
         }
