@@ -24,9 +24,11 @@ namespace UIMS.Web.Services
         }
 
 
-        public async Task<List<BuildingClassViewModel>> GetAllbyBuildingId(int id)
+        public async Task<PaginationViewModel<BuildingClassViewModel>> GetAllbyBuildingId(int id,int page,int pageSize)
         {
-            return await Entity.Where(x => x.BuildingId == id).ProjectTo<BuildingClassViewModel>().ToListAsync();
+            return await Entity.Where(x => x.BuildingId == id)
+                .ProjectTo<BuildingClassViewModel>()
+                .ToPageAsync(pageSize,page);
         }
 
         //public override Task<BuildingClassViewModel> GetAsync(int id)

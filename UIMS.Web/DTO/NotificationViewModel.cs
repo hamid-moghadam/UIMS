@@ -14,16 +14,19 @@ namespace UIMS.Web.DTO
 
         public string Title { get; set; }
 
+        public string Subtitle { get; set; }
+
         public string Content { get; set; }
 
         public bool Enable { get; set; }
 
+        public DateTime Created { get; set; }
 
         public int SemesterId { get; set; }
 
         public SemesterViewModel Semester { get; set; }
 
-        public ICollection<NotificationReceiverPartialViewModel> Receivers { get; set; }
+        //public ICollection<NotificationReceiverPartialViewModel> Receivers { get; set; }
 
     }
 }

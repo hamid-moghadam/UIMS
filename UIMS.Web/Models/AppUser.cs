@@ -60,9 +60,18 @@ namespace UIMS.Web.Models
 
     }
 
-        public class AppRole : IdentityRole<int> { }
+    public class AppRole : IdentityRole<int>, IKey<int>, ITracker
+    {
+        public DateTime Created { get; set ; }
+        public DateTime Modified { get ; set ; }
 
-        public class UserToken : IdentityUserToken<int> { }
+        [StringLength(30)]
+        public string PersianName { get; set; }
+
+        public virtual ICollection<NotificationAccess> NotificationTypes { get; set; }
+    }
+
+    public class UserToken : IdentityUserToken<int> { }
 
         public class UserRole : IdentityUserRole<int> { }
 

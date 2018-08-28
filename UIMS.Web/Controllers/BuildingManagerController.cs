@@ -57,9 +57,9 @@ namespace UIMS.Web.Controllers
             return Ok(manager);
         }
 
-        [SwaggerResponse(200, typeof(List<BuildingClassViewModel>))]
+        [SwaggerResponse(200, typeof(PaginationViewModel<BuildingClassViewModel>))]
         [HttpGet]
-        public async Task<IActionResult> GetBuildingClasses()
+        public async Task<IActionResult> GetBuildingClasses(int pageSize = 5, int page = 1)
         {
             var manager = await _buildingManagerService.GetAsync(x => x.UserId == UserId);
             if (!manager.BuildingId.HasValue)
@@ -68,7 +68,7 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            var buildingClasses = await _buildingClassService.GetAllbyBuildingId(manager.BuildingId.Value);
+            var buildingClasses = await _buildingClassService.GetAllbyBuildingId(manager.BuildingId.Value,page,pageSize);
 
             return Ok(buildingClasses);
         }

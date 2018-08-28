@@ -46,13 +46,13 @@ namespace UIMS.Web.Hubs
             }
         }
 
-        public async Task SendMessagePresentation(string id,string title,string content)
+        public async Task SendMessagePresentation(string id,string title,string content,string subtitle="")
         {
             var presentation = await _presentationService.GetAsync(int.Parse(id));
             var type = _notificationTypeService.CreateIfNotExists("ارسال پیام به دانشجویان کلاس");
             var students = await _presentationService.GetStudentsAsync(presentation.Id);
             var receivers = GetReceiversByIds(students);
-            var t = await GetNotificationAsync(content, title, type.Id, receivers);
+            var t = await GetNotificationAsync(content, title, type.Id, receivers,subtitle);
 
             await _messageService.AddAsync(t.Item1);
             await _messageService.SaveChangesAsync();
@@ -62,11 +62,11 @@ namespace UIMS.Web.Hubs
         }
 
 
-        public async Task SendSpecific(string[] ids,string title,string content)
+        public async Task SendSpecific(string[] ids,string title,string content, string subtitle = "")
         {
             var type =  _notificationTypeService.CreateIfNotExists("اختصاصی");
             var receivers = GetReceiversByIds(ids);
-            var t = await GetNotificationAsync(content, title, type.Id, receivers);
+            var t = await GetNotificationAsync(content, title, type.Id, receivers, subtitle);
 
             await _messageService.AddAsync(t.Item1);
             await _messageService.SaveChangesAsync();
@@ -75,12 +75,12 @@ namespace UIMS.Web.Hubs
             await Clients.Users(ids).SendAsync("ReceiveMessage", $"شما یک پیام از {t.Item2.FullName} دارید.");
         }
 
-        public async Task SendAll(string title, string content)
+        public async Task SendAll(string title, string content, string subtitle = "")
         {
             var type =  _notificationTypeService.CreateIfNotExists("عمومی");
             var ids = _userService.GetAll().Select(x => x.Id);
             var receivers = GetReceiversByIds(ids);
-            var t = await GetNotificationAsync(content, title, type.Id, receivers);
+            var t = await GetNotificationAsync(content, title, type.Id, receivers, subtitle);
 
             await _messageService.AddAsync(t.Item1);
             await _messageService.SaveChangesAsync();
@@ -89,12 +89,12 @@ namespace UIMS.Web.Hubs
             await Clients.Users(ids.Select(x=>x.ToString()).ToArray()).SendAsync("ReceiveMessage", $"شما یک پیام از {t.Item2.FullName} دارید.");
         }
 
-        public async Task SendRole(string role,string title, string content)
+        public async Task SendRole(string role,string title, string content, string subtitle = "")
         {
-            var type =  _notificationTypeService.CreateIfNotExists("گروهی");
+            var type =  _notificationTypeService.CreateIfNotExists("گروهی (نقش ها)");
             var ids = (await _userService.GetAll(role)).Select(x => x.Id);
             var receivers = GetReceiversByIds(ids);
-            var t = await GetNotificationAsync(content, title, type.Id, receivers);
+            var t = await GetNotificationAsync(content, title, type.Id, receivers, subtitle);
 
             await _messageService.AddAsync(t.Item1);
             await _messageService.SaveChangesAsync();
@@ -103,7 +103,21 @@ namespace UIMS.Web.Hubs
             await Clients.Users(ids.Select(x => x.ToString()).ToArray()).SendAsync("ReceiveMessage", $"شما یک پیام از {t.Item2.FullName} دارید.");
         }
 
+        public async Task Send(string[] ids, int notifTypeId, string title, string content, string subtitle = "")
+        {
+            var notifType = _notificationTypeService.Get(x => x.Id == notifTypeId);
+            if (notifType == null)
+                return;
 
+            var receivers = GetReceiversByIds(ids);
+            var t = await GetNotificationAsync(content, title, notifTypeId, receivers, subtitle);
+
+            await _messageService.AddAsync(t.Item1);
+            await _messageService.SaveChangesAsync();
+
+            receivers.ForEach(x => x.NotificationId = t.Item1.Id);
+            await Clients.Users(ids).SendAsync("ReceiveMessage", $"شما یک پیام از {t.Item2.FullName} دارید.");
+        }
 
         public override async Task OnConnectedAsync()
         {
@@ -126,9 +140,5 @@ namespace UIMS.Web.Hubs
             }
             await Clients.Groups("admin", "supervisor").SendAsync("ReceiveOnlineUsers", _usersCount);
         }
-
-
-
-
     }
 }

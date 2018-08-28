@@ -11,8 +11,13 @@ namespace UIMS.Web.Services
 {
     public class NotificationTypeService : BaseService<NotificationType, NotificationTypeInsertViewModel, NotificationTypeViewModel, NotificationTypeViewModel>
     {
-        public NotificationTypeService(DataContext context, IMapper mapper) : base(context, mapper)
+        private readonly UserService _userService;
+        private readonly NotificationAccessService _notificationAccessService;
+
+        public NotificationTypeService(DataContext context, IMapper mapper, UserService userService, NotificationAccessService notificationAccessService) : base(context, mapper)
         {
+            _userService = userService;
+            _notificationAccessService = notificationAccessService;
         }
 
         public NotificationType CreateIfNotExists(string type)
@@ -25,6 +30,15 @@ namespace UIMS.Web.Services
             }
             return notifType;
         }
+
+        public async Task<List<NotificationTypeViewModel>> GetAttachedNotificationTypesAsync(int userId)
+        {
+            var user = _userService.Get(x => x.Id == userId);
+            var roles = await _userService.GetRolesAsync(user);
+            var notifAccesses = await _notificationAccessService.GetAllByRolesAsync(roles);
+            return notifAccesses.Select(x => x.NotificationType).OrderBy(x=>x.Priority).ToList();
+        }
+
 
     }
 }

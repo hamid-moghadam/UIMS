@@ -10,7 +10,11 @@ namespace UIMS.Web.Models
         [MaxLength(50)]
         public string Type { get; set; }
 
+        public int Priority { get; set; }
+
         public virtual ICollection<Notification> Notifications { get; set; }
+
+        public virtual ICollection<NotificationAccess> Roles { get; set; }
 
     }
 }

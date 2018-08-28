@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace UIMS.Web.DTO
 {
-    public class NotificationGetAllViewModel:Pagination
+    public class NotificationGetAllViewModel:FilterInputViewModel
     {
         public string Semester { get; set; }
 
-        [Required]
-        public int? NotificationTypeId { get; set; }
+        //[Required]
+        public int NotificationTypeId { get; set; } = 0;
     }
 }

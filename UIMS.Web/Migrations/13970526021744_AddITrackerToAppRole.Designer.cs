@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UIMS.Web.Data;
@@ -9,9 +10,10 @@ using UIMS.Web.Data;
 namespace UIMS.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("13970526021744_AddITrackerToAppRole")]
+    partial class AddITrackerToAppRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,9 +119,6 @@ namespace UIMS.Web.Migrations
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256);
-
-                    b.Property<string>("PersianName")
-                        .HasMaxLength(30);
 
                     b.HasKey("Id");
 
@@ -481,9 +480,6 @@ namespace UIMS.Web.Migrations
 
                     b.Property<int>("SenderId");
 
-                    b.Property<string>("Subtitle")
-                        .HasMaxLength(200);
-
                     b.Property<string>("Title")
                         .HasMaxLength(100);
 
@@ -496,28 +492,6 @@ namespace UIMS.Web.Migrations
                     b.HasIndex("SenderId");
 
                     b.ToTable("Notification");
-                });
-
-            modelBuilder.Entity("UIMS.Web.Models.NotificationAccess", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AppRoleId");
-
-                    b.Property<DateTime>("Created");
-
-                    b.Property<DateTime>("Modified");
-
-                    b.Property<int>("NotificationTypeId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppRoleId");
-
-                    b.HasIndex("NotificationTypeId");
-
-                    b.ToTable("NotificationAccess");
                 });
 
             modelBuilder.Entity("UIMS.Web.Models.NotificationReceiver", b =>
@@ -552,8 +526,6 @@ namespace UIMS.Web.Migrations
                     b.Property<DateTime>("Created");
 
                     b.Property<DateTime>("Modified");
-
-                    b.Property<int>("Priority");
 
                     b.Property<string>("Type")
                         .HasMaxLength(50);
@@ -871,19 +843,6 @@ namespace UIMS.Web.Migrations
                     b.HasOne("UIMS.Web.Models.AppUser", "Sender")
                         .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("UIMS.Web.Models.NotificationAccess", b =>
-                {
-                    b.HasOne("UIMS.Web.Models.AppRole", "AppRole")
-                        .WithMany("NotificationTypes")
-                        .HasForeignKey("AppRoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("UIMS.Web.Models.NotificationType", "NotificationType")
-                        .WithMany("Roles")
-                        .HasForeignKey("NotificationTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

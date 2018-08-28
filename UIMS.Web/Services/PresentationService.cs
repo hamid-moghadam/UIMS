@@ -31,6 +31,23 @@ namespace UIMS.Web.Services
             return await Entity.Where(x => x.ProfessorId == id && x.Semester.Name == semester).ProjectTo<PresentationProfessorViewModel>().ToListAsync();
         }
 
+        public async Task<PaginationViewModel<PresentationViewModel>> GetFieldPresentations(string semester,List<int> fieldIds,int page,int pageSize)
+        {
+            return await 
+                Entity
+                .Where(x => fieldIds.Contains(x.CourseField.FieldId) && x.Semester.Name == semester)
+                .ProjectTo<PresentationViewModel>()
+                .ToPageAsync(pageSize,page);
+        }
+
+        public async Task<PaginationViewModel<PresentationViewModel>> GetAllByRoleAsync(int page, int pageSize,int professorId)
+        {
+            return await Entity
+                .Where(x => x.ProfessorId == professorId)
+                .OrderByDescending(x => x.Created)
+                .ProjectTo<PresentationViewModel>().ToPageAsync(pageSize, page);
+        }
+
         public async Task<List<PresentationBuildingManagerViewModel>> GetAllByBuildingId(int id, string semester)
         {
             return await Entity.Where(x => x.BuildingClass.BuildingId == id && x.Semester.Name == semester).ProjectTo<PresentationBuildingManagerViewModel>().ToListAsync();

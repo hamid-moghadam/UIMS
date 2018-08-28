@@ -9,6 +9,7 @@ using AutoMapper;
 using UIMS.Web.Services;
 using UIMS.Web.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UIMS.Web.Controllers
 {
@@ -98,6 +99,21 @@ namespace UIMS.Web.Controllers
         {
             return Ok(await _presentationService.GetAllAsync(page, pageSize));
         }
+
+        [Authorize]
+        [HttpGet]
+        [SwaggerResponse(200, typeof(PaginationViewModel<PresentationViewModel>))]
+        public async Task<IActionResult> GetAllByRole(int pageSize = 5, int page = 1)
+        {
+            var professor = await _professorService.GetAsync(x => x.UserId == UserId);
+
+            if (professor == null)
+                return NotFound();
+
+            return Ok(await _presentationService.GetAllByRoleAsync(page,pageSize,professor.Id));
+        }
+
+
 
         [HttpPost]
         [SwaggerResponse(200, typeof(PaginationViewModel<StudentViewModel>))]

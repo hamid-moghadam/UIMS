@@ -14,6 +14,9 @@ namespace UIMS.Web.DTO
         [MaxLength(100)]
         public string Title { get; set; }
 
+        [MaxLength(200)]
+        public string Subtitle { get; set; }
+
         [MaxLength(1000)]
         public string Content { get; set; }
 

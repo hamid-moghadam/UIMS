@@ -8,5 +8,7 @@ namespace UIMS.Web.DTO
     public class FilterInputViewModel:Pagination
     {
         public string[] Filters { get; set; }
+
+        //public string SearchText { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace UIMS.Web.Extentions.JWT
 {
     public static class JwtToken
     {
-        public static JwtSecurityToken GetSecurityToken(AppUser user, List<string> roles)
+        public static JwtSecurityToken GetSecurityToken(bool webLogin,AppUser user, List<string> roles)
         {
             List<Claim> claims = new List<Claim>();
             roles.ForEach(x => claims.Add(new Claim("role", x)));
@@ -30,7 +30,7 @@ namespace UIMS.Web.Extentions.JWT
                     tokenInfo.Issuer,
                     tokenInfo.Audience,
                     claims.ToArray(),
-                    expires: DateTime.Now.AddYears(1),
+                    expires: webLogin?DateTime.Now.AddHours(2): DateTime.Now.AddYears(1),
                     signingCredentials: creds);
 
             return token;

@@ -74,6 +74,17 @@ namespace UIMS.Web.Services
             return managers;
         }
 
+        public async Task<List<int>> GetFieldIdsAsync(int userId)
+        {
+            var groupManager = await Entity.Include(x=>x.Fields).SingleOrDefaultAsync(x => x.UserId == userId);
+            if (groupManager == null)
+                return null;
+
+            return groupManager.Fields.Select(x => x.Id).ToList();
+
+        }
+
+
         public async Task<PaginationViewModel<GroupManagerViewModel>> SearchAsync(string text, int page, int pageSize)
         {
             return await Entity.Where(x => x.User.FullName.Contains(text) || x.User.MelliCode.Contains(text)).ProjectTo<GroupManagerViewModel>().ToPageAsync(pageSize, page);

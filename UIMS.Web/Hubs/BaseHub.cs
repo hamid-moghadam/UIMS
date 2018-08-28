@@ -68,7 +68,7 @@ namespace UIMS.Web.Hubs
             return receivers;
         }
 
-        protected async Task<Tuple<Notification,AppUser>> GetNotificationAsync(string content,string title,int typeId,List<NotificationReceiver> receivers)
+        protected async Task<Tuple<Notification,AppUser>> GetNotificationAsync(string content,string title,int typeId,List<NotificationReceiver> receivers,string subtitle="")
         {
             var semesterId = await GetCurrentSemesterId();
             var user = await _userService.GetAsync(x => x.Id == UserId);
@@ -77,6 +77,7 @@ namespace UIMS.Web.Hubs
                     Content = content,
                     NotificationTypeId = typeId,
                     Title = title,
+                    Subtitle = subtitle,
                     SemesterId = semesterId,
                     SenderId = user.Id,
                     Receivers = receivers

@@ -154,7 +154,6 @@ namespace UIMS.Web.Services
             return await _userManager.AddClaimAsync(user, claim);
         }
 
-
         public async Task<List<string>> SetClaimRoles(AppUser user)
         {
             var roles = await _userManager.GetRolesAsync(user);
@@ -190,5 +189,6 @@ namespace UIMS.Web.Services
             model.Enable = false;
             //base.Remove(model);
         }
+
     }
 }

@@ -147,13 +147,23 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
 
             CreateMap<Notification, NotificationInsertViewModel>().ReverseMap();
             CreateMap<Notification, NotificationViewModel>();
-            //CreateMap<Message, MessageInsertViewModel>();
+            CreateMap<NotificationUpdateViewModel, Notification>().ReverseMap();
+
+            CreateMap<NotificationReceiver, NotificationReceiverViewModel>();
+            CreateMap<NotificationReceiver, NotificationReceiverPartialViewModel>();
 
 
             CreateMap<Settings, SettingsViewModel>();
             CreateMap<Settings, SettingsInsertViewModel>().ReverseMap();
             CreateMap<SettingsUpdateViewModel, Settings>().ReverseMap();
 
+            CreateMap<AppRole, AppRoleViewModel>();
+            CreateMap<AppRole, AppRoleInsertViewModel>().ReverseMap();
+            CreateMap<AppRoleUpdateViewModel, AppRole>().ReverseMap();
+
+            CreateMap<NotificationAccess, NotificationAccessViewModel>();
+            CreateMap<NotificationAccess, NotificationAccessInsertModel>().ReverseMap();
+            CreateMap<NotificationAccessUpdateViewModel, NotificationAccess>().ReverseMap();
         }
 
     }

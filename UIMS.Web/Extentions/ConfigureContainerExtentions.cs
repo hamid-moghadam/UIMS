@@ -149,6 +149,9 @@ namespace UIMS.Web.Extentions
             serviceCollection.AddScoped<NotificationService>();
             serviceCollection.AddScoped<ChatService>();
             serviceCollection.AddScoped<SettingsService>();
+            serviceCollection.AddScoped<RoleService>();
+            serviceCollection.AddScoped<NotificationAccessService>();
+
 
 
         }

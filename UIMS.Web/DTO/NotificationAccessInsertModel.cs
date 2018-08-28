@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace UIMS.Web.DTO
 {
-    public class NotificationTypeInsertViewModel
+    public class NotificationAccessInsertModel
     {
         [Required]
-        public string Type { get; set; }
+        public int? AppRoleId { get; set; }
+
 
         [Required]
-        public int Priority { get; set; }
+        public int? NotificationTypeId { get; set; }
     }
 }

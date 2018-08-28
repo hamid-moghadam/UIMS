@@ -95,7 +95,7 @@ namespace UIMS.Web.Controllers
             if (user.LastLogin == null)
                 user.LastLogin = DateTime.Now;
 
-            var token = GetJWTToken(user, await _userService.GetRolesAsync(user));
+            var token = GetJWTToken(login.WebLogin,user, await _userService.GetRolesAsync(user));
             var semester = await _semesterService.GetCurrentAsycn();
             var userVM = _mapper.Map<UserLoginViewModel>(user);
             user.LastLogin = DateTime.Now;
@@ -216,7 +216,7 @@ namespace UIMS.Web.Controllers
             await _userService.CreateUserAsync(user, addUserVM.Password, addUserVM.Type);
             await _userService.SaveChangesAsync();
 
-            return Ok(new { token = GetJWTToken(user, new List<string>() { addUserVM.Type }) });
+            return Ok(new { token = GetJWTToken(true,user, new List<string>() { addUserVM.Type }) });
         }
 
 
@@ -234,7 +234,7 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(new { token = GetJWTToken(user, await _userService.GetRolesAsync(user)) });
+            return Ok(new { token = GetJWTToken(false,user, await _userService.GetRolesAsync(user)) });
         }
 
         [HttpPost("{id}")]
@@ -253,9 +253,9 @@ namespace UIMS.Web.Controllers
 
 
         [NonAction]
-        public string GetJWTToken(AppUser user, List<string> role)
+        public string GetJWTToken(bool webLogin,AppUser user, List<string> role)
         {
-            var token = JwtToken.GetSecurityToken(user, role);
+            var token = JwtToken.GetSecurityToken(webLogin,user, role);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

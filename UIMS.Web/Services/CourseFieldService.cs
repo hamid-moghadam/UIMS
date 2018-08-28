@@ -8,6 +8,7 @@ using UIMS.Web.DTO;
 using UIMS.Web.Models;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
+using UIMS.Web.Extentions;
 
 namespace UIMS.Web.Services
 {
@@ -43,9 +44,12 @@ namespace UIMS.Web.Services
         }
 
 
-        public async Task<List<CourseFieldViewModel>> GetAllByGroupManagerId(int id)
+        public async Task<PaginationViewModel<CourseFieldViewModel>> GetAllByGroupManagerId(int id,int page,int pageSize)
         {
-            return await Entity.Where(x => x.Field.GroupManagerId == id).ProjectTo<CourseFieldViewModel>().ToListAsync();
+            return await Entity
+                .Where(x => x.Field.GroupManagerId == id)
+                .ProjectTo<CourseFieldViewModel>()
+                .ToPageAsync(pageSize,page);
         }
 
         public override void Remove(CourseField model)

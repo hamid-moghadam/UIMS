@@ -9,5 +9,7 @@ namespace UIMS.Web.DTO
     public class NotificationTypeViewModel:BaseModel
     {
         public string Type { get; set; }
+
+        public int Priority { get; set; }
     }
 }

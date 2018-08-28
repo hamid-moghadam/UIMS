@@ -45,6 +45,8 @@ namespace UIMS.Web.Services
             return await Entity.OrderByDescending(x=>x.Created).ProjectTo<TViewModel>().ToPageAsync(pageSize, page);
         }
 
+        
+
         public async virtual Task<PaginationViewModel<TViewModel>> GetAllAsync(string[] filters ,int page, int pageSize)
         {
             return await Entity.Where(GetFilters(filters)).OrderByDescending(x => x.Created).ProjectTo<TViewModel>().ToPageAsync(pageSize, page);

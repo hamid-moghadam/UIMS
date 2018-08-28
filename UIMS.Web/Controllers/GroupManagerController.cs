@@ -23,15 +23,17 @@ namespace UIMS.Web.Controllers
 
         private readonly GroupManagerService _groupManagerService;
         private readonly CourseFieldService _courseFieldService;
+        private readonly PresentationService _presentationService;
         private readonly FieldService _fieldService;
         private readonly UserService _userService;
 
-        public GroupManagerController(GroupManagerService groupManagerService, IMapper mapper, UserService userService, FieldService fieldService, CourseFieldService courseFieldService)
+        public GroupManagerController(GroupManagerService groupManagerService, IMapper mapper, UserService userService, FieldService fieldService, CourseFieldService courseFieldService, PresentationService presentationService)
         {
             _groupManagerService = groupManagerService;
             _fieldService = fieldService;
             _userService = userService;
             _courseFieldService = courseFieldService;
+            _presentationService = presentationService;
             _mapper = mapper;
         }
 
@@ -55,20 +57,32 @@ namespace UIMS.Web.Controllers
             return Ok(manager);
         }
 
-
-
         [HttpGet]
         [Authorize(Roles ="groupManager")]
-        [SwaggerResponse(200, typeof(List<CourseFieldViewModel>))]
-        public async Task<IActionResult> GetCourseFields()
+        [SwaggerResponse(200, typeof(PaginationViewModel<PresentationViewModel>))]
+        public async Task<IActionResult> GetCourseFields(int pageSize=5,int page =1 )
         {
             var manager = await _groupManagerService.GetAsync(x=>x.UserId == UserId);
 
-            var courseFields = await _courseFieldService.GetAllByGroupManagerId(manager.Id);
+            var courseFields = await _courseFieldService.GetAllByGroupManagerId(manager.Id, page,pageSize);
 
             return Ok(courseFields);
         }
 
+
+        [HttpGet]
+        [Authorize(Roles = "groupManager")]
+        [SwaggerResponse(200, typeof(PaginationViewModel<PresentationViewModel>))]
+        public async Task<IActionResult> GetFieldPresentations(int pageSize = 5, int page = 1)
+        {
+            var fieldIds = await _groupManagerService.GetFieldIdsAsync(UserId);
+            var semester = await _groupManagerService.GetCurrentSemesterAsync();
+
+            var presentations = await _presentationService.GetFieldPresentations(semester, fieldIds, page, pageSize);
+            return Ok(presentations);
+        }
+
+        
         [HttpPost]
         [SwaggerResponse(200, typeof(PaginationViewModel<GroupManagerViewModel>))]
         public async Task<IActionResult> Search([FromBody]SearchViewModel searchVM)

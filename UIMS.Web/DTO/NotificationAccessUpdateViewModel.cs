@@ -6,11 +6,7 @@ using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class NotificationTypeUpdateViewModel : BaseModel
+    public class NotificationAccessUpdateViewModel:BaseModel
     {
-        public string Type { get; set; }
-
-        public int? Priority { get; set; }
-
     }
 }

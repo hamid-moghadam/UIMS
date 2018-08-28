@@ -13,5 +13,7 @@ namespace UIMS.Web.DTO
 
         [Required]
         public string Password { get; set; }
+
+        public bool WebLogin { get; set; } = true;
     }
 }
