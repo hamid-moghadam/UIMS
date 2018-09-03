@@ -49,6 +49,15 @@ namespace UIMS.Web.Services
                 .CountAsync();
         }
 
+        //public async Task<int> GetTodaySuspendedPresentationCount()
+        //{
+        //    var suspendedNotifications = Entity.Where(x=>x.NotificationType.Type == "عدم تشکیل کلاس" && x.Created);
+        //    return await _messageReceiver
+        //        .Where(x => x.UserId == userId && x.Notification.Semester.Name == semester && !x.HasSeen)
+        //        .CountAsync();
+        //}
+
+
         public async Task<PaginationViewModel<NotificationViewModel>> GetSentNotifications(int typeId, string semester, int page, int pageSize, int userId)
         {
             return await Entity
@@ -69,11 +78,16 @@ namespace UIMS.Web.Services
         }
 
 
-        public async Task MarkNotifAsSeenAsync(int id)
+        public async Task MarkNotifAsSeenAsync(int id,int userId)
         {
-            var notifReceiver = await _messageReceiver.FindAsync(id);
+            var notification = await Entity.FindAsync(id);
+            if (notification == null)
+                return;
+
+            var notifReceiver = await _messageReceiver.SingleOrDefaultAsync(x => x.NotificationId == notification.Id && x.UserId == userId);
             if (notifReceiver != null)
                 notifReceiver.HasSeen = true;
+
         }
 
 

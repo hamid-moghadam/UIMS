@@ -22,6 +22,7 @@ namespace UIMS.Web.Services
         public StudentService(DataContext context, IMapper mapper, UserService userService) : base(context, mapper)
         {
             _userService = userService;
+            SearchQuery = (text) => Entity.Where(x => x.User.FullName.Contains(text) || x.Code.Contains(text));
         }
 
         public override async Task<Student> GetAsync(Expression<Func<Student, bool>> expression)

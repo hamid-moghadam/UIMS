@@ -61,7 +61,8 @@ namespace UIMS.Web.Controllers
         [SwaggerResponse(200, typeof(PaginationViewModel<FieldViewModel>))]
         public async Task<IActionResult> GetAll([FromBody] FilterInputViewModel filterInputVM)
         {
-            return Ok(await _fieldService.GetAllAsync(filterInputVM.Filters,filterInputVM.Page,filterInputVM.PageSize));
+            //return Ok(await _fieldService.GetAllAsync(filterInputVM.Filters,filterInputVM.Page,filterInputVM.PageSize));
+            return Ok(await _fieldService.GetAllAsync(filterInputVM));
         }
 
         [HttpPost]

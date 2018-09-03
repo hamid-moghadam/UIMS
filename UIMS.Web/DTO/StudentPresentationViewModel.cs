@@ -6,15 +6,10 @@ using UIMS.Web.Models;
 
 namespace UIMS.Web.DTO
 {
-    public class StudentPresentationViewModel:PresentationPartialViewModel
+    public class StudentPresentationViewModel : BaseModel
     {
+        public PresentationPartialViewModel Presentation { get; set; }
 
+        public bool Enable { get; set; }
     }
-
-    //public class StudentPresentationViewModel : BaseModel
-    //{
-    //    public PresentationPartialViewModel Presentation { get; set; }
-
-    //    public bool Enable { get; set; }
-    //}
 }

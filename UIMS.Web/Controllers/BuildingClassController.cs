@@ -85,7 +85,8 @@ namespace UIMS.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAll([FromBody] FilterInputViewModel filterInputVM)
         {
-            return Ok(await _buildingClassService.GetAllAsync(filterInputVM.Filters,filterInputVM.Page,filterInputVM.PageSize));
+            //return Ok(await _buildingClassService.GetAllAsync(filterInputVM.Filters,filterInputVM.Page,filterInputVM.PageSize));
+            return Ok(await _buildingClassService.GetAllAsync(filterInputVM));
         }
 
         [HttpPost]

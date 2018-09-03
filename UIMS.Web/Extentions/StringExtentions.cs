@@ -18,5 +18,7 @@ namespace UIMS.Web.Extentions
             return Regex.IsMatch(input, "[0-9]{4}-[1-3]{1}");
         }
 
+        public static string DefaultIfNull(this string input) => input ?? "";
+
     }
 }

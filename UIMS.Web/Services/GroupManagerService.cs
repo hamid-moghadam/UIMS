@@ -23,6 +23,7 @@ namespace UIMS.Web.Services
         {
             _userService = userService;
             _fields = context.Set<Field>();
+            SearchQuery = (text) => Entity.Where(x => x.User.FullName.Contains(text) || x.User.MelliCode.Contains(text));
         }
 
 

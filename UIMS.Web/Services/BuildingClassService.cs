@@ -21,6 +21,7 @@ namespace UIMS.Web.Services
         {
             _presentations = context.Set<Presentation>();
             Filters.Add("Enable", x => x.Enable);
+            SearchQuery = (st) => Entity.Where(x => x.Name.Contains(st) || x.Building.Name.Contains(st));
         }
 
 

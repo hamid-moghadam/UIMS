@@ -18,7 +18,7 @@ namespace UIMS.Web.DTO
         [MaxLength(5)]
         public string End { get; set; }
 
-        [Required]
+        //[Required]
         public DayOfWeek? Day { get; set; }
 
         public bool? Enable { get; set; }

@@ -15,10 +15,13 @@ namespace UIMS.Web.Services
     public class PresentationService : BaseService<Presentation, PresentationInsertViewModel, PresentationUpdateViewModel, PresentationViewModel>
     {
         private readonly DbSet<StudentPresentation> _studentPresentation;
+        private readonly NotificationService _notificationService;
 
-        public PresentationService(DataContext context, IMapper mapper) : base(context, mapper)
+        public PresentationService(DataContext context, IMapper mapper, NotificationService notificationService) : base(context, mapper)
         {
             _studentPresentation = context.Set<StudentPresentation>();
+            _notificationService = notificationService;
+            SearchQuery = (text) => Entity.Where(x => x.Code.Contains(text) || x.BuildingClass.Name.Contains(text) || x.Professor.User.FullName.Contains(text) || x.CourseField.Course.Name.Contains(text) || x.CourseField.Field.Name.Contains(text));
         }
 
         public override void Remove(Presentation model)
@@ -30,6 +33,19 @@ namespace UIMS.Web.Services
         {
             return await Entity.Where(x => x.ProfessorId == id && x.Semester.Name == semester).ProjectTo<PresentationProfessorViewModel>().ToListAsync();
         }
+
+        //public async Task<PresentationDashboardDataViewModel> GetDashboardInfo()
+        //{
+        //    var suspendedNotifications = await _notificationService.GetAsync(x => x.NotificationType.Type == "عدم تشکیل کلاس");
+
+        //    var todayPresentations = await Entity.CountAsync(x => (int)x.Day == DateTime.Now.Day && x.Enable);
+        //    var todaySuspendedPresentations = await Entity.CountAsync(x => (int)x.Day == DateTime.Now.Day);
+
+        //    return await new PresentationDashboardDataViewModel()
+        //    {
+        //        TodayPresentations = await Entity.CountAsync(x=>(int)x.Day == DateTime.Now.Day)
+        //    }
+        //}
 
         public async Task<PaginationViewModel<PresentationViewModel>> GetFieldPresentations(string semester,List<int> fieldIds,int page,int pageSize)
         {

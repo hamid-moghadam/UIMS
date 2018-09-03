@@ -17,6 +17,7 @@ namespace UIMS.Web.Services
     {
         public CourseService(DataContext context, IMapper mapper) : base(context, mapper)
         {
+            SearchQuery = (st) => Entity.Where(x => x.Name.Contains(st) || x.Code.Contains(st));
         }
 
         public List<CourseInsertViewModel> GetAllByExcel(IFormFile file)

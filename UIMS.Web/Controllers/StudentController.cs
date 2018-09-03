@@ -41,11 +41,11 @@ namespace UIMS.Web.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(typeof(PaginationViewModel<StudentViewModel>), 200)]
-        public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
+        public async Task<IActionResult> GetAll([FromBody]FilterInputViewModel filterInputVM)
         {
-            var students = await _studentService.GetAllAsync(page, pageSize);
+            var students = await _studentService.GetAllAsync(filterInputVM);
 
             return Ok(students);
         }

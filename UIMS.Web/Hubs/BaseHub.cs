@@ -10,6 +10,7 @@ namespace UIMS.Web.Hubs
 {
     public class BaseHub : Hub
     {
+        protected const string SUCCESSFUL_MESSAGE= "اطلاع رسانی با موفقیت انجام شد";
 
         protected readonly SemesterService _SemesterService;
         protected readonly UserService _userService;
@@ -43,7 +44,7 @@ namespace UIMS.Web.Hubs
             List<NotificationReceiver> receivers = new List<NotificationReceiver>();
             foreach (var id in ids)
             {
-                receivers.Add(new NotificationReceiver() { Id = int.Parse(id) });
+                receivers.Add(new NotificationReceiver() {UserId= int.Parse(id) });
             }
             return receivers;
         }
@@ -53,7 +54,7 @@ namespace UIMS.Web.Hubs
             List<NotificationReceiver> receivers = new List<NotificationReceiver>();
             foreach (var id in ids)
             {
-                receivers.Add(new NotificationReceiver() { Id = id });
+                receivers.Add(new NotificationReceiver() { UserId = id });
             }
             return receivers;
         }

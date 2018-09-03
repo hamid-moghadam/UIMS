@@ -28,7 +28,7 @@ namespace UIMS.Web.DTO
 
         public BuildingClassViewModel BuildingClass { get; set; }
 
-        public bool Enable { get; set; }
+        //public bool Enable { get; set; }
 
     }
 }

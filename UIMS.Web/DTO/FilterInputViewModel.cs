@@ -9,6 +9,6 @@ namespace UIMS.Web.DTO
     {
         public string[] Filters { get; set; }
 
-        //public string SearchText { get; set; }
+        public string SearchQuery { get; set; } = "";
     }
 }

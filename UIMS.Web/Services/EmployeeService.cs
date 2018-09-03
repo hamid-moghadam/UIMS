@@ -22,6 +22,7 @@ namespace UIMS.Web.Services
         public EmployeeService(DataContext context, IMapper mapper, UserService userService) : base(context, mapper)
         {
             _userService = userService;
+            SearchQuery = (st) => Entity.Where(x => x.User.FullName.Contains(st) || x.User.MelliCode.Contains(st) || x.Post.Contains(st));
         }
 
         public override async Task<Employee> GetAsync(Expression<Func<Employee, bool>> expression)

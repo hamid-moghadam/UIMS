@@ -57,10 +57,10 @@ namespace UIMS.Web.Controllers
         }
 
         [SwaggerResponse(200, typeof(PaginationViewModel<CourseViewModel>))]
-        [HttpGet]
-        public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
+        [HttpPost]
+        public async Task<IActionResult> GetAll([FromBody]FilterInputViewModel filterInputVM)
         {
-            return Ok(await _courseService.GetAllAsync(page, pageSize));
+            return Ok(await _courseService.GetAllAsync(filterInputVM));
         }
 
         [HttpPost]

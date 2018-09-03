@@ -17,10 +17,10 @@ namespace UIMS.Web.Services
         {
         }
 
-        public async Task<List<NotificationAccessViewModel>> GetAllByRoleAsync(string role)
+        public async Task<List<NotificationAccessViewModel>> GetAllByRoleAsync(int roleId)
         {
             return await Entity
-                .Where(x => x.AppRole.Name == role)
+                .Where(x => x.AppRole.Id == roleId)
                 .ProjectTo<NotificationAccessViewModel>()
                 .ToListAsync();
         }

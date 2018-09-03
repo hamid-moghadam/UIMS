@@ -22,6 +22,7 @@ namespace UIMS.Web.Services
         public ProfessorService(DataContext context, IMapper mapper, UserService userService) : base(context, mapper)
         {
             _userService = userService;
+            SearchQuery = (text) => Entity.Where(x => x.User.FullName.Contains(text));
         }
 
         public override async Task<Professor> GetAsync(Expression<Func<Professor, bool>> expression)

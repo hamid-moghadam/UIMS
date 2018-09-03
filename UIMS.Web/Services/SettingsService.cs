@@ -6,6 +6,7 @@ using AutoMapper;
 using UIMS.Web.Data;
 using UIMS.Web.DTO;
 using UIMS.Web.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace UIMS.Web.Services
 {
@@ -13,6 +14,16 @@ namespace UIMS.Web.Services
     {
         public SettingsService(DataContext context, IMapper mapper) : base(context, mapper)
         {
+        }
+
+
+        public async Task<string> GetValueAsync(string accessName)
+        {
+            var settings = await Entity.SingleOrDefaultAsync(x => x.AccessName == accessName);
+            if (settings == null)
+                return null;
+
+            return settings.Value;
         }
     }
 }

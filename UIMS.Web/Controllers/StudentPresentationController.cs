@@ -38,7 +38,7 @@ namespace UIMS.Web.Controllers
 
         [HttpGet]
         [Authorize(Roles ="student")]
-        [SwaggerResponse(200,typeof(List<PresentationPartialViewModel>))]
+        [SwaggerResponse(200,typeof(List<StudentPresentationViewModel>))]
         public async Task<IActionResult> GetAll(string semester)
         {
             //var user = await _userService.GetAsync(x => x.Id == UserId);

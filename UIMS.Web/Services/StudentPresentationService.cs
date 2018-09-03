@@ -21,10 +21,10 @@ namespace UIMS.Web.Services
         }
 
 
-        public async Task<List<PresentationPartialViewModel>> GetAll(int studentId,string semester)
+        public async Task<List<StudentPresentationViewModel>> GetAll(int studentId,string semester)
         {
-            //return await Entity.Where(x => x.StudentId == studentId && x.Presentation.Semester.Name == semester).Select(x=>x.Presentation).ProjectTo<StudentPresentationViewModel>().ToListAsync();
-            return await Entity.Where(x => x.StudentId == studentId && x.Presentation.Semester.Name == semester).Select(x=>x.Presentation).ProjectTo<PresentationPartialViewModel>().ToListAsync();
+            return await Entity.Where(x => x.StudentId == studentId && x.Presentation.Semester.Name == semester).ProjectTo<StudentPresentationViewModel>().ToListAsync();
+            //return await Entity.Where(x => x.StudentId == studentId && x.Presentation.Semester.Name == semester).Select(x=>x.Presentation).ProjectTo<PresentationPartialViewModel>().ToListAsync();
         }
 
         public List<StudentPresentationInsertViewModel> GetAllByExcel(IFormFile file)

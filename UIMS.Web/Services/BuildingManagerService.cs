@@ -22,6 +22,7 @@ namespace UIMS.Web.Services
         public BuildingManagerService(DataContext context, IMapper mapper, UserService userService) : base(context, mapper)
         {
             _userService = userService;
+            SearchQuery = (st) => Entity.Where(x => x.User.FullName.Contains(st) || x.User.MelliCode.Contains(st));
         }
 
         public override async Task<BuildingManager> GetAsync(Expression<Func<BuildingManager, bool>> expression)

@@ -66,10 +66,10 @@ namespace UIMS.Web.Controllers
         }
             
 
-        [HttpPost("{notifReceiverId}")]
-        public async Task<IActionResult> MarkSeenMessage(int notifReceiverId)
+        [HttpPost("{notifId}")]
+        public async Task<IActionResult> MarkSeenMessage(int notifId)
         {
-            await _notificationService.MarkNotifAsSeenAsync(notifReceiverId);
+            await _notificationService.MarkNotifAsSeenAsync(notifId,UserId);
             await _notificationService.SaveChangesAsync();
             return Ok();
         }

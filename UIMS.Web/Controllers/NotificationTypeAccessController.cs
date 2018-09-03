@@ -30,18 +30,18 @@ namespace UIMS.Web.Controllers
 
         // GET: api/values
         [SwaggerResponse(200, typeof(List<NotificationAccessViewModel>))]
-        [HttpGet]
-        public IEnumerable<NotificationAccessViewModel> GetAll()
+        [HttpPost]
+        public async Task<PaginationViewModel<NotificationAccessViewModel>> GetAll([FromBody]FilterInputViewModel filterInputVM)
         {
-            return _notificationAccessService.GetAll();
+            return await _notificationAccessService.GetAllAsync(filterInputVM.Filters,filterInputVM.Page,filterInputVM.PageSize);
         }
 
 
         [SwaggerResponse(200, typeof(List<NotificationAccessViewModel>))]
-        [HttpGet("{role}")]
-        public async Task<List<NotificationAccessViewModel>> GetAll(string role)
+        [HttpGet("{roleId}")]
+        public async Task<List<NotificationAccessViewModel>> GetAll(int roleId)
         {
-            return await _notificationAccessService.GetAllByRoleAsync(role);
+            return await _notificationAccessService.GetAllByRoleAsync(roleId);
         }
 
         [HttpPost]

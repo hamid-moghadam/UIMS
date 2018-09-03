@@ -94,5 +94,15 @@ namespace UIMS.Web.Data.Helpers
             roles.ForEach(x => _roleManager.CreateAsync(x).Wait());
             return await _dataContext.SaveChangesAsync();
         }
+
+        //public async Task<int> SeedSettings()
+        //{
+        //    var roles = new List<Settings>()
+        //    {
+        //        new Settings(){AccessName=""}
+        //    };
+        //    roles.ForEach(x => _roleManager.CreateAsync(x).Wait());
+        //    return await _dataContext.SaveChangesAsync();
+        //}
     }
 }

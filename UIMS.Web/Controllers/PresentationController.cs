@@ -93,11 +93,23 @@ namespace UIMS.Web.Controllers
 
         }
 
-        [HttpGet]
-        [SwaggerResponse(200, typeof(PaginationViewModel<PresentationViewModel>))]
-        public async Task<IActionResult> GetAll(int pageSize = 5, int page = 1)
+        [HttpGet("{id}")]
+        [SwaggerResponse(200, typeof(PresentationViewModel))]
+        public async Task<IActionResult> DashboardInfo(int id)
         {
-            return Ok(await _presentationService.GetAllAsync(page, pageSize));
+            var present = await _presentationService.GetAsync(id);
+
+            if (present == null)
+                return NotFound();
+            return Ok(present);
+
+        }
+
+        [HttpPost]
+        [SwaggerResponse(200, typeof(PaginationViewModel<PresentationViewModel>))]
+        public async Task<IActionResult> GetAll([FromBody] FilterInputViewModel filterInputVM)
+        {
+            return Ok(await _presentationService.GetAllAsync(filterInputVM));
         }
 
         [Authorize]

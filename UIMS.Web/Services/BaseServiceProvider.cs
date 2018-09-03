@@ -17,6 +17,7 @@ namespace UIMS.Web.Services
         protected readonly IMapper _mapper;
         protected DbSet<TModel> Entity { get; set; }
         protected IQueryable<TModel> BaseQuery { get; set; }
+        protected Func<string, IQueryable<TModel>> SearchQuery { get; set; }
         protected Dictionary<string, Expression<Func<TModel, bool>>> Filters { get; set; }
         protected Expression<Func<TModel, bool>> this[string index]
         {
@@ -34,6 +35,7 @@ namespace UIMS.Web.Services
             _mapper = mapper;
             Entity = context.Set<TModel>();
             BaseQuery = Entity.AsQueryable();
+            SearchQuery = (st)=> Entity.AsQueryable();
             Filters = new Dictionary<string, Expression<Func<TModel, bool>>>();
         }
 
