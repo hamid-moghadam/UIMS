@@ -39,7 +39,7 @@ namespace UIMS.Web.Controllers
         [ProducesResponseType(typeof(PaginationViewModel<UserViewModel>), 200)]
         public async Task<IActionResult> GetAll([FromBody] UserGetAllInputViewModel userGetAllInputVM)
         {
-            var users = await _userService.GetAll(userGetAllInputVM.Role,userGetAllInputVM.Page,userGetAllInputVM.PageSize);
+            var users = await _userService.GetAll(userGetAllInputVM.Role,userGetAllInputVM.Page,userGetAllInputVM.PageSize,userGetAllInputVM.SearchQuery);
 
             return Ok(users);
         }

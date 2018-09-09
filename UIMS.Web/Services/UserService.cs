@@ -22,6 +22,7 @@ namespace UIMS.Web.Services
         public UserService(DataContext context, IMapper mapper, UserManager<AppUser> userManager) : base(context, mapper)
         {
             _userManager = userManager;
+            SearchQuery = (search) => Entity.Where(x => x.FullName.Contains(search) || x.MelliCode.Contains(search) || x.PhoneNumber.Contains(search));
             BaseQuery = BaseQuery.Where(x => x.Enable);
 
         }
@@ -41,10 +42,10 @@ namespace UIMS.Web.Services
         //{
         //    return base.GetAll<TModel>(page, pageSize);
         //}
-        public async Task<PaginationViewModel<UserViewModel>> GetAll(string role,int page, int pageSize)
+        public async Task<PaginationViewModel<UserViewModel>> GetAll(string role,int page, int pageSize,string searchQuery)
         {
             if (role == "")
-                return await GetAllAsync(page, pageSize);
+                return await SearchQuery(searchQuery).ProjectTo<UserViewModel>().ToPageAsync(page, pageSize);
 
             var users = await _userManager.GetUsersInRoleAsync(role);
             var usersVM = _mapper.Map<List<UserViewModel>>(users.OrderByDescending(x=>x.Created).ToList());

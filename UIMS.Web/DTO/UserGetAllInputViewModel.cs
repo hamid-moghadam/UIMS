@@ -9,5 +9,7 @@ namespace UIMS.Web.DTO
     public class UserGetAllInputViewModel:Pagination
     {
         public string Role { get; set; } = "admin";
+
+        public string SearchQuery { get; set; } = "";
     }
 }
