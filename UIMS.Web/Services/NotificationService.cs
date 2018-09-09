@@ -15,26 +15,37 @@ namespace UIMS.Web.Services
     public class NotificationService : BaseService<Notification, NotificationInsertViewModel, NotificationUpdateViewModel, NotificationViewModel>
     {
         private readonly DbSet<NotificationReceiver> _messageReceiver;
+        private readonly DbSet<NotificationType> _notificationType;
 
 
         public NotificationService(DataContext context, IMapper mapper) : base(context, mapper)
         {
             _messageReceiver = context.Set<NotificationReceiver>();
+            _notificationType = context.Set<NotificationType>();
         }
 
-        public async Task<PaginationViewModel<NotificationViewModel>> GetAll(int typeId,string semester,int page, int pageSize,int userId)
+        public async Task<PaginationViewModel<NotificationViewModel>> GetAll(int typeId,string semester,int page, int pageSize,int userId,string notificationTypeName)
         {
-            if (typeId == 0)
-                return await _messageReceiver
-                .Where(x => x.Notification.Semester.Name == semester && x.UserId == userId)
-                .OrderByDescending(x => x.Created)
-                .ThenBy(x => !x.HasSeen)
-                .Select(x => x.Notification)
-                .ProjectTo<NotificationViewModel>()
-                .ToPageAsync(pageSize, page);
+            IQueryable<NotificationReceiver> query = _messageReceiver.Where(x => x.Notification.NotificationTypeId == typeId && x.Notification.Semester.Name == semester && x.UserId == userId);
 
-            return await _messageReceiver
-                .Where(x => x.Notification.NotificationTypeId == typeId && x.Notification.Semester.Name == semester && x.UserId == userId)
+            if (notificationTypeName != null && notificationTypeName != "")
+            {
+                var notifType = await _notificationType.SingleOrDefaultAsync(x => x.Type == notificationTypeName);
+
+                if (notifType != null)
+                {
+                    query = _messageReceiver.Where(x => x.Notification.Semester.Name == semester && x.UserId == userId && x.Notification.NotificationTypeId == notifType.Id);
+                }
+
+            }
+
+
+            if (typeId == 0)
+            {
+                query = _messageReceiver.Where(x => x.Notification.Semester.Name == semester && x.UserId == userId);
+            }
+
+            return await query
                 .OrderByDescending(x => x.Created)
                 .ThenBy(x => !x.HasSeen)
                 .Select(x => x.Notification)

@@ -12,5 +12,7 @@ namespace UIMS.Web.DTO
 
         //[Required]
         public int NotificationTypeId { get; set; } = 0;
+
+        public string NotificationTypeName { get; set; }
     }
 }

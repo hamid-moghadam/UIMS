@@ -80,7 +80,7 @@ namespace UIMS.Web.Hubs
             //var type =  _notificationTypeService.CreateIfNotExists("اختصاصی");
             var type =  _notificationTypeService.Get(x=>x.Id == sendSpecificVM.NotificationTypeId);
             if (type == null)
-                return;
+                type = _notificationTypeService.CreateIfNotExists("اختصاصی");
 
             var receivers = GetReceiversByIds(sendSpecificVM.Ids);
             var t = await GetNotificationAsync(sendSpecificVM.Content, sendSpecificVM.Title, type.Id, receivers, sendSpecificVM.Subtitle);
