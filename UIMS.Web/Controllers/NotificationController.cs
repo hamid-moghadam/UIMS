@@ -31,7 +31,7 @@ namespace UIMS.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAll(NotificationGetAllViewModel messageGetAllVM)
         {
-            return Ok(await _notificationService.GetAll(messageGetAllVM.NotificationTypeId, messageGetAllVM.Semester, messageGetAllVM.Page, messageGetAllVM.PageSize, UserId));
+            return Ok(await _notificationService.GetAll(messageGetAllVM.NotificationTypeId, messageGetAllVM.Semester, messageGetAllVM.Page, messageGetAllVM.PageSize, UserId,messageGetAllVM.NotificationTypeName));
         }
 
         [SwaggerResponse(200, typeof(PaginationViewModel<NotificationViewModel>))]

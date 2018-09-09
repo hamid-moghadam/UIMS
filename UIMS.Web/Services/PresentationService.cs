@@ -34,18 +34,20 @@ namespace UIMS.Web.Services
             return await Entity.Where(x => x.ProfessorId == id && x.Semester.Name == semester).ProjectTo<PresentationProfessorViewModel>().ToListAsync();
         }
 
-        //public async Task<PresentationDashboardDataViewModel> GetDashboardInfo()
-        //{
-        //    var suspendedNotifications = await _notificationService.GetAsync(x => x.NotificationType.Type == "عدم تشکیل کلاس");
+        public async Task<PresentationDashboardDataViewModel> GetDashboardInfo(string semester)
+        {
+            var lastWeekSuspendedPresentations = await _notificationService.GetLastWeekSuspendedPresentationCount(semester);
+            var todaySuspendedPresentations = await _notificationService.GetTodaySuspendedPresentations(semester);
+            var todayPresentations = await Entity.CountAsync(x => (int)x.Day == DateTime.Now.Day && x.Enable && x.Semester.Name == semester);
 
-        //    var todayPresentations = await Entity.CountAsync(x => (int)x.Day == DateTime.Now.Day && x.Enable);
-        //    var todaySuspendedPresentations = await Entity.CountAsync(x => (int)x.Day == DateTime.Now.Day);
 
-        //    return await new PresentationDashboardDataViewModel()
-        //    {
-        //        TodayPresentations = await Entity.CountAsync(x=>(int)x.Day == DateTime.Now.Day)
-        //    }
-        //}
+            return new PresentationDashboardDataViewModel()
+            {
+                TodayPresentations = todayPresentations,
+                LastWeekSuspendPresentations = lastWeekSuspendedPresentations,
+                TodaySuspendedPresentations = todaySuspendedPresentations
+            };
+        }
 
         public async Task<PaginationViewModel<PresentationViewModel>> GetFieldPresentations(string semester,List<int> fieldIds,int page,int pageSize)
         {

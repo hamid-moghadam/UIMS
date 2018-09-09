@@ -60,14 +60,21 @@ namespace UIMS.Web.Services
                 .CountAsync();
         }
 
-        //public async Task<int> GetTodaySuspendedPresentationCount()
-        //{
-        //    var suspendedNotifications = Entity.Where(x=>x.NotificationType.Type == "عدم تشکیل کلاس" && x.Created);
-        //    return await _messageReceiver
-        //        .Where(x => x.UserId == userId && x.Notification.Semester.Name == semester && !x.HasSeen)
-        //        .CountAsync();
-        //}
+        public async Task<int> GetLastWeekSuspendedPresentationCount(string semester)
+        {
+            return await Entity.CountAsync(x => x.NotificationType.Type == "لغو کلاس ها" && x.Semester.Name == semester && x.Created >= DateTime.Now.AddDays(-7));
+            //return await _messageReceiver
+            //    .Where(x => x.UserId == userId && x.Notification.Semester.Name == semester && !x.HasSeen)
+            //    .CountAsync();
+        }
 
+        public async Task<int> GetTodaySuspendedPresentations(string semester)
+        {
+            return await Entity.CountAsync(x => x.NotificationType.Type == "لغو کلاس ها" && x.Semester.Name == semester && x.Created.IsToday());
+            //return await _messageReceiver
+            //    .Where(x => x.UserId == userId && x.Notification.Semester.Name == semester && !x.HasSeen)
+            //    .CountAsync();
+        }
 
         public async Task<PaginationViewModel<NotificationViewModel>> GetSentNotifications(int typeId, string semester, int page, int pageSize, int userId)
         {

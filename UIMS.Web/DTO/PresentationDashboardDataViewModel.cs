@@ -11,6 +11,8 @@ namespace UIMS.Web.DTO
 
         public int TodayPresentations { get; set; }
 
+        public int LastWeekSuspendPresentations { get; set; }
+
 
     }
 }

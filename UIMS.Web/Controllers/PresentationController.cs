@@ -20,16 +20,18 @@ namespace UIMS.Web.Controllers
         private readonly IMapper _mapper;
 
         private readonly PresentationService _presentationService;
+        private readonly NotificationService _notificationService;
         private readonly SemesterService _semesterService;
         private readonly CourseFieldService _courseFieldService;
         private readonly ProfessorService _professorService;
         private readonly BuildingClassService _buildingClassService;
 
-        public PresentationController(IMapper mapper, PresentationService presentationService, SemesterService semesterService, CourseFieldService courseFieldService, ProfessorService professorService, BuildingClassService buildingClassService)
+        public PresentationController(IMapper mapper, PresentationService presentationService, SemesterService semesterService, CourseFieldService courseFieldService, ProfessorService professorService, BuildingClassService buildingClassService, NotificationService notificationService)
         {
             _mapper = mapper;
             _presentationService = presentationService;
             _semesterService = semesterService;
+            _notificationService = notificationService;
             _courseFieldService = courseFieldService;
             _professorService = professorService;
             _buildingClassService = buildingClassService;
@@ -93,16 +95,11 @@ namespace UIMS.Web.Controllers
 
         }
 
-        [HttpGet("{id}")]
-        [SwaggerResponse(200, typeof(PresentationViewModel))]
-        public async Task<IActionResult> DashboardInfo(int id)
+        [HttpGet("{semester}")]
+        [SwaggerResponse(200, typeof(PresentationDashboardDataViewModel))]
+        public async Task<IActionResult> DashboardInfo(string semester)
         {
-            var present = await _presentationService.GetAsync(id);
-
-            if (present == null)
-                return NotFound();
-            return Ok(present);
-
+            return Ok(await _presentationService.GetDashboardInfo(semester));
         }
 
         [HttpPost]
