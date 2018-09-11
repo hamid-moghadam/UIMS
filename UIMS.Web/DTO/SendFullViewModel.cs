@@ -9,7 +9,7 @@ namespace UIMS.Web.DTO
     {
         public string[] Ids { get; set; }
 
-        public int NotificationTypeId { get; set; }
+        //public int NotificationTypeId { get; set; }
 
 
         public override bool IsValid()
