@@ -27,6 +27,7 @@ namespace UIMS.Web.Services
             {
                 var result = AddAsync(new NotificationType() { Type = type }).Result;
                 SaveChanges();
+                notifType = result;
             }
             return notifType;
         }
