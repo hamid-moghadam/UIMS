@@ -165,7 +165,7 @@ namespace UIMS.Web.Hubs
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, role);
             }
-            await Clients.Groups("admin", "supervisor").SendAsync("ReceiveOnlineUsers", _usersCount);
+            await Clients.All.SendAsync("ReceiveOnlineUsers", _usersCount);
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)

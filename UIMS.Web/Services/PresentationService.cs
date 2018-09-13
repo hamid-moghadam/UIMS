@@ -38,7 +38,7 @@ namespace UIMS.Web.Services
         {
             var lastWeekSuspendedPresentations = await _notificationService.GetLastWeekSuspendedPresentationCount(semester);
             var todaySuspendedPresentations = await _notificationService.GetTodaySuspendedPresentations(semester);
-            var todayPresentations = await Entity.CountAsync(x => (int)x.Day == DateTime.Now.Day && x.Enable && x.Semester.Name == semester);
+            var todayPresentations = await Entity.CountAsync(x => (int)x.Day == (int)DateTime.Now.DayOfWeek && x.Enable && x.Semester.Name == semester);
 
 
             return new PresentationDashboardDataViewModel()

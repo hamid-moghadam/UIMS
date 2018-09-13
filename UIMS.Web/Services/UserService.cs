@@ -45,7 +45,7 @@ namespace UIMS.Web.Services
         public async Task<PaginationViewModel<UserViewModel>> GetAll(string role,int page, int pageSize,string searchQuery)
         {
             if (role == "")
-                return await SearchQuery(searchQuery).ProjectTo<UserViewModel>().ToPageAsync(page, pageSize);
+                return await SearchQuery(searchQuery).ProjectTo<UserViewModel>().ToPageAsync(pageSize, page);
 
             var users = await _userManager.GetUsersInRoleAsync(role);
             users = users.Where(x=>x.FullName.Contains(searchQuery) || x.MelliCode.Contains(searchQuery) || x.PhoneNumber.Contains(searchQuery)).ToList();
