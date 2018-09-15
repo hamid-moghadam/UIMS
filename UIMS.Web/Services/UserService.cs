@@ -22,7 +22,7 @@ namespace UIMS.Web.Services
         public UserService(DataContext context, IMapper mapper, UserManager<AppUser> userManager) : base(context, mapper)
         {
             _userManager = userManager;
-            SearchQuery = (search) => Entity.Where(x => x.FullName.Contains(search) || x.MelliCode.Contains(search) || x.PhoneNumber.Contains(search));
+            SearchQuery = (search) => Entity.Where(x => x.FullName.Contains(search) || x.MelliCode.Contains(search) || x.PhoneNumber != null && x.PhoneNumber.Contains(search));
             BaseQuery = BaseQuery.Where(x => x.Enable);
 
         }
