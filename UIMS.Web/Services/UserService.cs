@@ -48,7 +48,7 @@ namespace UIMS.Web.Services
                 return await SearchQuery(searchQuery).ProjectTo<UserViewModel>().ToPageAsync(pageSize, page);
 
             var users = await _userManager.GetUsersInRoleAsync(role);
-            users = users.Where(x=>x.FullName.Contains(searchQuery) || x.MelliCode.Contains(searchQuery) || x.PhoneNumber.Contains(searchQuery)).ToList();
+            users = users.Where(x=>x.FullName.Contains(searchQuery) || x.MelliCode.Contains(searchQuery) || (x.PhoneNumber != null && x.PhoneNumber.Contains(searchQuery))).ToList();
             var usersVM = _mapper.Map<List<UserViewModel>>(users.OrderByDescending(x=>x.Created).ToList());
             return usersVM.ToPage(pageSize, page);
         }
