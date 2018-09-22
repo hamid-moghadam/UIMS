@@ -18,7 +18,7 @@ namespace UIMS.Web.Models
         [MaxLength(5)]
         public string End { get; set; }
 
-        public DayOfWeek Day { get; set; }
+        public DayOfWeek? Day { get; set; }
 
 
         public int SemesterId { get; set; }
