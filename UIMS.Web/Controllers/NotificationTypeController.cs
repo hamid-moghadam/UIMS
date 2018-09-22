@@ -27,10 +27,10 @@ namespace UIMS.Web.Controllers
             _notifTypeService = notifTypeService;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<NotificationTypeViewModel>> GetAll()
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<NotificationTypeViewModel>>> GetAll(FilterInputViewModel filterInputVM)
         {
-            return Ok(_notifTypeService.GetAll());
+            return Ok(await _notifTypeService.GetAllAsync(filterInputVM));
         }
 
         [HttpGet]

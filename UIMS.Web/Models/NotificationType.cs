@@ -12,6 +12,8 @@ namespace UIMS.Web.Models
 
         public int Priority { get; set; }
 
+        public bool ShowInMainPage { get; set; }
+
         public virtual ICollection<Notification> Notifications { get; set; }
 
         public virtual ICollection<NotificationAccess> Roles { get; set; }

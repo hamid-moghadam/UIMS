@@ -18,6 +18,8 @@ namespace UIMS.Web.Services
         {
             _userService = userService;
             _notificationAccessService = notificationAccessService;
+            Filters.Add("ShowInMainPage", x => x.ShowInMainPage);
+            SearchQuery = search => Entity.Where(x => x.Type.Contains(search) || x.Priority.ToString() == search);
         }
 
         public NotificationType CreateIfNotExists(string type)
