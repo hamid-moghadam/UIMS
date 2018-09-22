@@ -147,9 +147,14 @@ namespace UIMS.Web.Models.AutoMapperConfigurations
 
 
             CreateMap<Notification, NotificationInsertViewModel>().ReverseMap();
-            CreateMap<Notification, NotificationViewModel>();
+            CreateMap<Notification, NotificationViewModel>(MemberList.Source);
             CreateMap<NotificationUpdateViewModel, Notification>().ReverseMap();
 
+            CreateMap<NotificationReceiver, NotificationViewModel>(MemberList.Source);
+                //.ConstructUsing(s => Mapper.Map<NotificationViewModel>(s.Notification))
+                //.ForMember(x => x.HasSeen, source => source.MapFrom(x => x.HasSeen));
+                //.ProjectUsing(s => Mapper.Map<NotificationViewModel>(s.Notification));
+            //.ForSourceMember(m => m.Notification, opt => opt.Ignore());
             CreateMap<NotificationReceiver, NotificationReceiverViewModel>();
             CreateMap<NotificationReceiver, NotificationReceiverPartialViewModel>();
 

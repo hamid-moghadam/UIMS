@@ -26,6 +26,7 @@ namespace UIMS.Web.DTO
 
         public SemesterViewModel Semester { get; set; }
 
+        public bool HasSeen { get; set; }
         //public ICollection<NotificationReceiverPartialViewModel> Receivers { get; set; }
 
     }

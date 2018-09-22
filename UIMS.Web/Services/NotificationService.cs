@@ -26,7 +26,11 @@ namespace UIMS.Web.Services
 
         public async Task<PaginationViewModel<NotificationViewModel>> GetAll(int typeId,string semester,int page, int pageSize,int userId,string notificationTypeName)
         {
-            IQueryable<NotificationReceiver> query = _messageReceiver.Where(x => x.Notification.NotificationTypeId == typeId && x.Notification.Semester.Name == semester && x.UserId == userId);
+            IQueryable<NotificationReceiver> query = _messageReceiver
+                .Where(x => x.Notification.NotificationTypeId == typeId && x.Notification.Semester.Name == semester && x.UserId == userId)
+                .Include(x=>x.Notification)
+                .Include(x=>x.Notification.Semester)
+                .Include(x=>x.Notification.Sender);
 
             if (notificationTypeName != null && notificationTypeName != "")
             {
@@ -48,8 +52,21 @@ namespace UIMS.Web.Services
             return await query
                 .OrderByDescending(x => x.Created)
                 .ThenBy(x => !x.HasSeen)
-                .Select(x => x.Notification)
-                .ProjectTo<NotificationViewModel>()
+                .Select(x => new NotificationViewModel()
+                {
+                    HasSeen = x.HasSeen,
+                    SenderId = x.Notification.SenderId,
+                    Sender = _mapper.Map<UserPartialViewModel>(x.Notification.Sender),
+                    Content = x.Notification.Content,
+                    Created = x.Created,
+                    Subtitle = x.Notification.Subtitle,
+                    Title = x.Notification.Title,
+                    Enable = x.Notification.Enable,
+                    Id = x.Id,
+                    SemesterId = x.Notification.SemesterId,
+                    Semester = _mapper.Map<SemesterViewModel>(x.Notification.Semester)
+                })
+                //.ProjectTo<NotificationViewModel>()
                 .ToPageAsync(pageSize, page);
         }
 
