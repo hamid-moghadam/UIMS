@@ -9,7 +9,6 @@ namespace UIMS.Web.DTO
     {
         public bool HasSeen { get; set; }
 
-
         public UserPartialViewModel User { get; set; }
 
         public int UserId { get; set; }

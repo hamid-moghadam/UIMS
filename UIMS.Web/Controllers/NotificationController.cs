@@ -58,7 +58,7 @@ namespace UIMS.Web.Controllers
             return Ok();
         }
 
-        [SwaggerResponse(200, typeof(PaginationViewModel<NotificationViewModel>))]
+        [SwaggerResponse(200, typeof(List<NotificationReceiverPartialViewModel>))]
         [HttpGet("{notifId}")]
         public async Task<IActionResult> GetReceivers(int notifId)
         {
