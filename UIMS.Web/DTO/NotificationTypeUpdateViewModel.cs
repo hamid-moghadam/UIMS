@@ -12,5 +12,7 @@ namespace UIMS.Web.DTO
 
         public int? Priority { get; set; }
 
+        public bool? ShowInMainPage { get; set; }
+
     }
 }

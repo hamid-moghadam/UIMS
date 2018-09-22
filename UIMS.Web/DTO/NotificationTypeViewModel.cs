@@ -11,5 +11,7 @@ namespace UIMS.Web.DTO
         public string Type { get; set; }
 
         public int Priority { get; set; }
+
+        public bool ShowInMainPage { get; set; }
     }
 }
