@@ -28,7 +28,7 @@ namespace UIMS.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<NotificationTypeViewModel>>> GetAll(FilterInputViewModel filterInputVM)
+        public async Task<ActionResult<PaginationViewModel<NotificationTypeViewModel>>> GetAll(FilterInputViewModel filterInputVM)
         {
             return Ok(await _notifTypeService.GetAllAsync(filterInputVM));
         }
