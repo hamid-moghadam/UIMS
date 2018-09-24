@@ -163,13 +163,13 @@ namespace UIMS.Web.Controllers
                 return BadRequest(ModelState);
 
             
-            if (await _presentationService.IsExistsAsync(x => x.Code == presentationUpdateVM.Code && x.Id != presentationUpdateVM.Id))
+            if (presentationUpdateVM.Code != null && await _presentationService.IsExistsAsync(x => x.Code == presentationUpdateVM.Code && x.Id != presentationUpdateVM.Id))
             {
                 ModelState.AddModelError("Errors", "این کلاس طبق کد وارد شده قبلا در سیستم ثبت شده است");
                 return BadRequest(ModelState);
             }
 
-            if (!await _buildingClassService.IsExistsAsync(x => x.Id == presentationUpdateVM.BuildingClassId.Value))
+            if (presentationUpdateVM.BuildingClassId.HasValue && !await _buildingClassService.IsExistsAsync(x => x.Id == presentationUpdateVM.BuildingClassId.Value))
             {
                 ModelState.AddModelError("Errors", "کلاس مورد نظر در سیستم یافت نشد");
                 return BadRequest(ModelState);

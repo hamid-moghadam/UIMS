@@ -26,7 +26,7 @@ namespace UIMS.Web.DTO
 
         //public int? CourseFieldId { get; set; }
 
-        //public int? ProfessorId { get; set; }
+        public int? ProfessorId { get; set; }
 
         public int? BuildingClassId { get; set; }
     }

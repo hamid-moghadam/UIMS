@@ -31,12 +31,12 @@ namespace UIMS.Web.Models
         public virtual CourseField CourseField { get; set; }
 
 
-        public int ProfessorId { get; set; }
+        public int? ProfessorId { get; set; }
 
         public virtual Professor Professor { get; set; }
 
 
-        public int BuildingClassId { get; set; }
+        public int? BuildingClassId { get; set; }
 
         public virtual BuildingClass BuildingClass { get; set; }
 
