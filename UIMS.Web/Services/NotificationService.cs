@@ -62,7 +62,7 @@ namespace UIMS.Web.Services
                     Subtitle = x.Notification.Subtitle,
                     Title = x.Notification.Title,
                     Enable = x.Notification.Enable,
-                    Id = x.Id,
+                    Id = x.NotificationId,
                     SemesterId = x.Notification.SemesterId,
                     Semester = _mapper.Map<SemesterViewModel>(x.Notification.Semester)
                 })

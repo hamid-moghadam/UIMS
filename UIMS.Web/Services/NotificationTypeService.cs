@@ -39,7 +39,7 @@ namespace UIMS.Web.Services
             var user = _userService.Get(x => x.Id == userId);
             var roles = await _userService.GetRolesAsync(user);
             var notifAccesses = await _notificationAccessService.GetAllByRolesAsync(roles);
-            return notifAccesses.Select(x => x.NotificationType).OrderBy(x=>x.Priority).ToList();
+            return notifAccesses.Select(x => x.NotificationType).OrderBy(x=>x.Priority).ToList().Distinct(new NotificationTypeEquality()).ToList();
         }
 
 

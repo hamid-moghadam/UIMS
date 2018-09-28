@@ -14,4 +14,17 @@ namespace UIMS.Web.DTO
 
         public bool ShowInMainPage { get; set; }
     }
+
+    public class NotificationTypeEquality : IEqualityComparer<NotificationTypeViewModel>
+    {
+        public bool Equals(NotificationTypeViewModel x, NotificationTypeViewModel y)
+        {
+            return x.Type == y.Type;
+        }
+
+        public int GetHashCode(NotificationTypeViewModel obj)
+        {
+            return obj.Type.GetHashCode();
+        }
+    }
 }
