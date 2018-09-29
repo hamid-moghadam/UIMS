@@ -38,9 +38,7 @@ namespace UIMS.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<List<NotificationTypeViewModel>>> GetAllAttached()
         {
-            //GlobalHost
-            var notifTypeVm = await _notifTypeService.GetAttachedNotificationTypesAsync(UserId);
-            return Ok(notifTypeVm.ToList());
+            return Ok(await _notifTypeService.GetAttachedNotificationTypesAsync(UserId));
         }
 
         // GET: api/values

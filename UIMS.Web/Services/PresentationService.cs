@@ -22,6 +22,7 @@ namespace UIMS.Web.Services
             _studentPresentation = context.Set<StudentPresentation>();
             _notificationService = notificationService;
             SearchQuery = (text) => Entity.Where(x => x.Code.Contains(text) || x.BuildingClass.Name.Contains(text) || x.Professor.User.FullName.Contains(text) || x.CourseField.Course.Name.Contains(text) || x.CourseField.Field.Name.Contains(text));
+            Filters.Add("Today", x => x.Enable && x.Day == DateTime.Now.DayOfWeek);
         }
 
         public override void Remove(Presentation model)
