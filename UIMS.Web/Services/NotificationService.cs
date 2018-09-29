@@ -22,6 +22,8 @@ namespace UIMS.Web.Services
         {
             _messageReceiver = context.Set<NotificationReceiver>();
             _notificationType = context.Set<NotificationType>();
+
+            Filters.Add("LastWeek", x => x.Created >= DateTime.Now.AddDays(-7));
         }
 
         public async Task<PaginationViewModel<NotificationViewModel>> GetAll(int typeId,string semester,int page, int pageSize,int userId,string notificationTypeName)

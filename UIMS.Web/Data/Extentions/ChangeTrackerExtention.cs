@@ -16,7 +16,7 @@ namespace UIMS.Web.Data.Extentions
             foreach (var entry in changeTracker.Entries())
             {
                 if (!(entry.Entity is ITracker baseAudit)) continue;
-                var now = DateTime.UtcNow;
+                var now = DateTime.Now;
                 switch (entry.State)
                 {
                     case EntityState.Modified:

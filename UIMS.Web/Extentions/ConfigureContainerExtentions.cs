@@ -151,6 +151,7 @@ namespace UIMS.Web.Extentions
             serviceCollection.AddScoped<SettingsService>();
             serviceCollection.AddScoped<RoleService>();
             serviceCollection.AddScoped<NotificationAccessService>();
+            serviceCollection.AddScoped<NotificationHubService>();
 
 
 

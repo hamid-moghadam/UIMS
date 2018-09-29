@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using UIMS.Web.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.SignalR;
 using UIMS.Web.Hubs;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -22,21 +21,12 @@ namespace UIMS.Web.Controllers
 
         private readonly NotificationTypeService _notifTypeService;
         private readonly IMapper _mapper;
-        private readonly IHubContext<NotificationHub> _hobContext;
 
 
-        public NotificationTypeController(NotificationTypeService notifTypeService, IMapper mapper, IHubContext<NotificationHub> hobContext)
+        public NotificationTypeController(NotificationTypeService notifTypeService, IMapper mapper)
         {
-            _hobContext = hobContext;
             _mapper = mapper;
             _notifTypeService = notifTypeService;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<PaginationViewModel<NotificationTypeViewModel>>> Test()
-        {
-
-            return Ok(_hobContext.Clients.All.SendAsync("test", "hello world"));
         }
 
         [HttpPost]
